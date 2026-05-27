@@ -14,9 +14,15 @@ struct ReviewView: View {
 
     @State private var cdaShareURL: URL?
     @State private var cdaError: String?
-    @State private var cdaImportSuccess = false
+
+    @State private var showAddValue = false
+    @State private var addName = ""
+    @State private var addCode = ""
+    @State private var addDisplayValue = ""
+    @State private var addUnit = ""
 
     @FocusState private var anyFieldFocused: Bool
+    @Environment(\.dismiss) private var dismiss
 
     private let cdaService = CDAExportService()
 
@@ -70,10 +76,8 @@ struct ReviewView: View {
                     .ignoresSafeArea()
             }
         }
-        .alert("Saved to Health Records", isPresented: $cdaImportSuccess) {
-            Button("OK") {}
-        } message: {
-            Text("The lab report has been saved as a CDA document in Apple Health.")
+        .sheet(isPresented: $showAddValue) {
+            addValueSheet
         }
         .alert("Export Error", isPresented: .constant(cdaError != nil)) {
             Button("OK") { cdaError = nil }
@@ -179,9 +183,22 @@ struct ReviewView: View {
         Section {
             ForEach($labValues) { $value in
                 if LabMapping.loincCode(for: value.code) != nil {
-                    LabValueRowView(value: $value, anyFieldFocused: $anyFieldFocused)
+                    LabValueRowView(value: $value)
+                        .swipeActions(edge: .trailing) {
+                            Button(role: .destructive) {
+                                labValues.removeAll { $0.id == value.id }
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                        }
                 }
             }
+            Button {
+                showAddValue = true
+            } label: {
+                Label("Add Value", systemImage: "plus.circle")
+            }
+            .foregroundStyle(Color.accentColor)
         } header: {
             Text("Lab Values — tap values to correct them")
         }
@@ -211,6 +228,13 @@ struct ReviewView: View {
                         }
                     }
                     .padding(.vertical, 2)
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            labValues.removeAll { $0.id == value.id }
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
                 }
             } header: {
                 Text("Not supported for export")
@@ -220,7 +244,46 @@ struct ReviewView: View {
         }
     }
 
-    // MARK: - Bottom buttons
+    // MARK: - Add Value Sheet
+
+    private var addValueSheet: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    TextField("Name", text: $addName)
+                        .autocorrectionDisabled()
+                    TextField("Code (optional)", text: $addCode)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.characters)
+                }
+                Section {
+                    TextField("Value", text: $addDisplayValue)
+                        .keyboardType(.decimalPad)
+                    TextField("Unit (optional)", text: $addUnit)
+                        .autocorrectionDisabled()
+                }
+            }
+            .navigationTitle("Add Value")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Cancel") {
+                        showAddValue = false
+                        resetAddForm()
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Add") {
+                        commitAddValue()
+                    }
+                    .fontWeight(.semibold)
+                    .disabled(addName.isEmpty || addDisplayValue.isEmpty)
+                }
+            }
+        }
+    }
+
+    // MARK: - Bottom Buttons
 
     private var bottomButtons: some View {
         VStack(spacing: 10) {
@@ -251,6 +314,7 @@ struct ReviewView: View {
                         endPoint: UnitPoint(x: 0.5, y: 0.3)
                     )
                 }
+                .ignoresSafeArea(edges: .bottom)
         }
     }
 
@@ -302,6 +366,31 @@ struct ReviewView: View {
         hkSex = chars.biologicalSexRaw
     }
 
+    private func resetAddForm() {
+        addName = ""
+        addCode = ""
+        addDisplayValue = ""
+        addUnit = ""
+    }
+
+    private func commitAddValue() {
+        let code = addCode.isEmpty
+            ? "MANUAL"
+            : addCode.uppercased().trimmingCharacters(in: .whitespaces)
+        let normalized = addDisplayValue.replacingOccurrences(of: ",", with: ".")
+        let num = Double(normalized)
+        let newValue = LabValue(
+            code: code,
+            name: addName.trimmingCharacters(in: .whitespaces),
+            displayValue: addDisplayValue,
+            numericValue: num,
+            unit: addUnit.trimmingCharacters(in: .whitespaces)
+        )
+        labValues.append(newValue)
+        showAddValue = false
+        resetAddForm()
+    }
+
     // MARK: - CDA
 
     private func shareCDA() {
@@ -330,7 +419,7 @@ struct ReviewView: View {
         )
         do {
             try await HealthKitService.shared.importCDADocument(xml, date: reportDate)
-            cdaImportSuccess = true
+            dismiss()
         } catch {
             cdaError = error.localizedDescription
         }

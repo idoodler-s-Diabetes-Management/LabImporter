@@ -24,9 +24,6 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             content
-                .overlay {
-                    if isProcessing { ProcessingHUD() }
-                }
                 .navigationDestination(isPresented: $showReview) {
                     ReviewView(
                         labValues: labValues,
@@ -45,6 +42,9 @@ struct HomeView: View {
                 } message: {
                     Text(errorMessage ?? "")
                 }
+        }
+        .overlay {
+            if isProcessing { ProcessingHUD() }
         }
         .task { await loadReports() }
         .onChange(of: photosPickerItem) { _, item in
@@ -76,6 +76,7 @@ struct HomeView: View {
                 photosPickerItem: $photosPickerItem,
                 onCamera: { showCamera = true },
                 onPaste: pasteFromClipboard,
+                onManual: createManually,
                 clipboardAvailable: clipboardHasContent,
                 isProcessing: isProcessing
             )
@@ -85,6 +86,7 @@ struct HomeView: View {
                 photosPickerItem: $photosPickerItem,
                 onCamera: { showCamera = true },
                 onPaste: pasteFromClipboard,
+                onManual: createManually,
                 clipboardAvailable: clipboardHasContent,
                 isProcessing: isProcessing
             )
@@ -116,6 +118,16 @@ struct HomeView: View {
         } else if let text = pasteboard.string, !text.isEmpty {
             Task { await processText(text) }
         }
+    }
+
+    // MARK: - Manual creation
+
+    private func createManually() {
+        labValues = []
+        parsedReportDate = nil
+        parsedPatientName = nil
+        parsedAuthorName = nil
+        showReview = true
     }
 
     // MARK: - Shared URL (share sheet / open with)

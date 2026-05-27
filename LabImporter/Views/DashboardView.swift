@@ -9,6 +9,7 @@ struct DashboardView: View {
     @Binding var photosPickerItem: PhotosPickerItem?
     let onCamera: () -> Void
     let onPaste: () -> Void
+    let onManual: () -> Void
     let clipboardAvailable: Bool
     let isProcessing: Bool
 
@@ -66,6 +67,9 @@ struct DashboardView: View {
                 Label("Paste from Clipboard", systemImage: "doc.on.clipboard")
             }
             .disabled(!clipboardAvailable)
+            Button(action: onManual) {
+                Label("Create Report Manually", systemImage: "square.and.pencil")
+            }
         } label: {
             Image(systemName: "plus")
                 .fontWeight(.semibold)

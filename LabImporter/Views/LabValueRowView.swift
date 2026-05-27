@@ -2,7 +2,6 @@ import SwiftUI
 
 struct LabValueRowView: View {
     @Binding var value: LabValue
-    var anyFieldFocused: FocusState<Bool>.Binding
 
     @State private var editedValue: String = ""
     @FocusState private var isFocused: Bool
@@ -56,15 +55,10 @@ struct LabValueRowView: View {
             }
         }
         .padding(.vertical, 2)
-        .onAppear { editedValue = value.displayValue }
+        .onAppear { editedValue = strippedDisplayValue }
         .onChange(of: value.displayValue) { _, new in
-            if editedValue != new { editedValue = new }
-        }
-        .onChange(of: isFocused) { _, focused in
-            if focused { anyFieldFocused.wrappedValue = true }
-        }
-        .onChange(of: anyFieldFocused.wrappedValue) { _, globalFocused in
-            if !globalFocused { isFocused = false }
+            let stripped = strippedValue(new)
+            if editedValue != stripped { editedValue = stripped }
         }
     }
 
@@ -87,6 +81,22 @@ struct LabValueRowView: View {
                 }
         }
     }
+
+    // Strips the unit suffix from displayValue so it shows only the number.
+    private var strippedDisplayValue: String {
+        strippedValue(value.displayValue)
+    }
+
+    private func strippedValue(_ raw: String) -> String {
+        guard !value.unit.isEmpty else { return raw }
+        for suffix in [" \(value.unit)", value.unit] {
+            if raw.lowercased().hasSuffix(suffix.lowercased()) {
+                return String(raw.dropLast(suffix.count))
+                    .trimmingCharacters(in: .whitespaces)
+            }
+        }
+        return raw
+    }
 }
 
 // MARK: - Preview
@@ -99,8 +109,7 @@ struct LabValueRowView: View {
         numericValue: 0.91,
         unit: "mg/dl"
     )
-    @Previewable @FocusState var focused: Bool
     List {
-        LabValueRowView(value: $value, anyFieldFocused: $focused)
+        LabValueRowView(value: $value)
     }
 }

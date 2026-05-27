@@ -52,6 +52,26 @@
         }
       }
     },
+    "Add" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzufügen"
+          }
+        }
+      }
+    },
+    "Add Value" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wert hinzufügen"
+          }
+        }
+      }
+    },
     "Analyzing lab report…" : {
       "localizations" : {
         "de" : {
@@ -78,6 +98,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Geburtstag"
+          }
+        }
+      }
+    },
+    "Code (optional)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code (optional)"
+          }
+        }
+      }
+    },
+    "Create Report Manually" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bericht manuell erstellen"
           }
         }
       }
@@ -138,6 +178,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Anpassen"
+          }
+        }
+      }
+    },
+    "Delete" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen"
           }
         }
       }
@@ -638,6 +688,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Loslösen"
+          }
+        }
+      }
+    },
+    "Unit (optional)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einheit (optional)"
           }
         }
       }

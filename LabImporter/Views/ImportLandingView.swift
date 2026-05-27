@@ -5,6 +5,7 @@ struct ImportLandingView: View {
     @Binding var photosPickerItem: PhotosPickerItem?
     let onCamera: () -> Void
     let onPaste: () -> Void
+    let onManual: () -> Void
     let clipboardAvailable: Bool
     let isProcessing: Bool
 
@@ -81,6 +82,16 @@ struct ImportLandingView: View {
             .buttonStyle(.bordered)
             .controlSize(.large)
             .disabled(!clipboardAvailable)
+
+            Divider()
+                .padding(.vertical, 2)
+
+            Button(action: onManual) {
+                Label("Create Report Manually", systemImage: "square.and.pencil")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.large)
         }
         .padding(24)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 28))
