@@ -250,9 +250,9 @@ private struct LabOrderSheet: View {
         var seen = Set<String>()
         var initial: [CodeName] = []
         for code in currentPrefs.orderedCodes where !hidden.contains(code) {
-            if let item = allCodes.first(where: { $0.code == code }), seen.insert(code).inserted {
-                initial.append(item)
-            }
+            guard let item = allCodes.first(where: { $0.code == code }),
+                  seen.insert(code).inserted else { continue }
+            initial.append(item)
         }
         for item in allCodes where !hidden.contains(item.code) && seen.insert(item.code).inserted {
             initial.append(item)
