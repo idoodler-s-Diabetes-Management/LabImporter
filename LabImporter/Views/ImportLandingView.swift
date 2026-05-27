@@ -27,22 +27,22 @@ struct ImportLandingView: View {
         VStack(spacing: 20) {
             ZStack {
                 Circle()
-                    .fill(.white.opacity(0.12))
+                    .fill(Color.primary.opacity(0.08))
                     .frame(width: 110, height: 110)
-                    .shadow(color: .black.opacity(0.25), radius: 24, y: 8)
+                    .shadow(color: .black.opacity(0.15), radius: 24, y: 8)
                 Image(systemName: "waveform.path.ecg.rectangle.fill")
                     .font(.system(size: 52))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
             }
 
             VStack(spacing: 8) {
                 Text("Lab Importer")
                     .font(.largeTitle.bold())
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
                 Text("Photograph your lab report and\nsave it directly to Apple Health.")
                     .font(.body)
                     .multilineTextAlignment(.center)
-                    .foregroundStyle(.white.opacity(0.75))
+                    .foregroundStyle(.secondary)
             }
         }
     }
@@ -53,7 +53,7 @@ struct ImportLandingView: View {
         VStack(alignment: .leading, spacing: 14) {
             Text("IMPORT REPORT")
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(.white.opacity(0.55))
+                .foregroundStyle(.secondary)
                 .kerning(1)
 
             PhotosPicker(selection: $photosPickerItem, matching: .images) {
@@ -69,7 +69,6 @@ struct ImportLandingView: View {
             }
             .buttonStyle(.bordered)
             .controlSize(.large)
-            .tint(.white)
             .disabled(!UIImagePickerController.isSourceTypeAvailable(.camera))
 
             Button(action: onPaste) {
@@ -78,14 +77,13 @@ struct ImportLandingView: View {
             }
             .buttonStyle(.bordered)
             .controlSize(.large)
-            .tint(.white)
             .disabled(!clipboardAvailable)
         }
         .padding(24)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 28))
         .overlay(
             RoundedRectangle(cornerRadius: 28)
-                .stroke(.white.opacity(0.18), lineWidth: 0.5)
+                .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
         )
     }
 }

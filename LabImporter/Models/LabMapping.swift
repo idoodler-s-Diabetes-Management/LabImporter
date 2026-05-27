@@ -64,6 +64,13 @@ enum LabMapping {
         }
     }
 
+    // Maps a LOINC code back to an internal lab code for reference-range lookups.
+    static func internalCode(forLoinc loinc: String) -> String? {
+        let candidates = ["BZ", "KREA", "MDRD", "CKD-EPI", "CHOL", "HDL", "NONHDL", "LDL",
+                          "TRIG", "GPT", "G-GT", "HB-A1C", "HB-A1", "TSH", "DIABOL", "EGFR"]
+        return candidates.first { loincCode(for: $0)?.loinc == loinc }
+    }
+
     // Standard clinical reference ranges.
     // Borderline values fall between normal and clearly abnormal.
     // swiftlint:disable:next cyclomatic_complexity

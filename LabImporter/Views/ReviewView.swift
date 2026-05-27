@@ -1,5 +1,4 @@
 import SwiftUI
-import HealthKit
 
 struct ReviewView: View {
     @State var labValues: [LabValue]
@@ -13,7 +12,6 @@ struct ReviewView: View {
 
     @FocusState private var anyFieldFocused: Bool
 
-    private let healthKitService = HealthKitService()
     private let cdaService = CDAExportService()
 
     init(labValues: [LabValue], reportDate: Date = Date()) {
@@ -152,45 +150,23 @@ struct ReviewView: View {
                 patientName: patientName,
                 authorName: authorName
             )
-            saveToHistory()
         } catch {
             cdaError = error.localizedDescription
         }
     }
 
     private func performCDAImport() async {
-        let xml = cdaService.generateCDA(labValues: labValues, date: reportDate, patientName: patientName, authorName: authorName)
+        let xml = cdaService.generateCDA(
+            labValues: labValues,
+            date: reportDate,
+            patientName: patientName,
+            authorName: authorName
+        )
         do {
-            try await healthKitService.importCDADocument(xml, date: reportDate)
-            saveToHistory()
+            try await HealthKitService.shared.importCDADocument(xml, date: reportDate)
             cdaImportSuccess = true
         } catch {
             cdaError = error.localizedDescription
-        }
-    }
-
-    // MARK: - History
-
-    private func saveToHistory() {
-        let entries = labValues.map { value in
-            LabReport.Entry(
-                id: UUID(),
-                code: value.code,
-                name: value.name,
-                displayValue: value.displayValue,
-                numericValue: value.numericValue,
-                unit: value.unit
-            )
-        }
-        let report = LabReport(
-            id: UUID(),
-            date: reportDate,
-            patientName: patientName,
-            authorName: authorName,
-            entries: entries
-        )
-        Task {
-            try? await ReportHistoryService.shared.save(report)
         }
     }
 }

@@ -83,15 +83,15 @@ struct DashboardView: View {
                 Spacer()
                 Image(systemName: "chevron.right")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(.white.opacity(0.5))
+                    .foregroundStyle(.secondary)
             }
-            .foregroundStyle(.white.opacity(0.9))
+            .foregroundStyle(.primary)
             .padding(.horizontal, 18)
             .padding(.vertical, 14)
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(.white.opacity(0.15), lineWidth: 0.5)
+                    .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
             )
         }
     }
@@ -101,7 +101,7 @@ struct DashboardView: View {
         if let date = reports.max(by: { $0.date < $1.date })?.date {
             Text("Last updated \(date.formatted(date: .abbreviated, time: .omitted))")
                 .font(.caption)
-                .foregroundStyle(.white.opacity(0.45))
+                .foregroundStyle(.secondary)
         }
     }
 
@@ -161,7 +161,7 @@ private struct MetricCard: View {
         case .normal: return Color.green
         case .borderline: return Color.orange
         case .abnormal: return Color.red
-        case .none: return Color.white.opacity(0.5)
+        case .none: return Color.secondary
         }
     }
 
@@ -178,20 +178,20 @@ private struct MetricCard: View {
         VStack(alignment: .leading, spacing: 6) {
             Text(metric.entry.name)
                 .font(.caption)
-                .foregroundStyle(.white.opacity(0.7))
+                .foregroundStyle(.secondary)
                 .lineLimit(2)
                 .fixedSize(horizontal: false, vertical: true)
 
             HStack(alignment: .firstTextBaseline, spacing: 3) {
                 Text(metric.entry.displayValue)
                     .font(.title2.bold())
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                 if !metric.entry.unit.isEmpty {
                     Text(metric.entry.unit)
                         .font(.caption)
-                        .foregroundStyle(.white.opacity(0.65))
+                        .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
             }
@@ -218,7 +218,7 @@ private struct MetricCard: View {
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
         .overlay(
             RoundedRectangle(cornerRadius: 20)
-                .stroke(.white.opacity(0.15), lineWidth: 0.5)
+                .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
         )
     }
 

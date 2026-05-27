@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct HistoryView: View {
+    @Environment(\.colorScheme) private var colorScheme
     @State private var reports: [LabReport] = []
     @State private var loadError: String?
 
@@ -12,9 +13,8 @@ struct HistoryView: View {
                     ContentUnavailableView(
                         "No Reports Yet",
                         systemImage: "doc.text.magnifyingglass",
-                        description: Text("Import or export a lab report to see it here.")
+                        description: Text("Import a lab report and save it to Apple Health to see it here.")
                     )
-                    .foregroundStyle(.white)
                 } else {
                     reportList
                 }
@@ -42,10 +42,11 @@ struct HistoryView: View {
 
     private var backgroundGradient: some View {
         LinearGradient(
-            colors: [
-                Color(hue: 0.65, saturation: 0.6, brightness: 0.35),
-                Color(hue: 0.75, saturation: 0.7, brightness: 0.25)
-            ],
+            colors: colorScheme == .dark
+                ? [Color(hue: 0.65, saturation: 0.60, brightness: 0.35),
+                   Color(hue: 0.75, saturation: 0.70, brightness: 0.25)]
+                : [Color(hue: 0.65, saturation: 0.20, brightness: 0.95),
+                   Color(hue: 0.75, saturation: 0.25, brightness: 0.92)],
             startPoint: .top,
             endPoint: .bottom
         )
@@ -73,7 +74,7 @@ struct HistoryView: View {
         VStack(alignment: .leading, spacing: 3) {
             Text(report.date.formatted(date: .abbreviated, time: .omitted))
                 .font(.headline)
-                .foregroundStyle(.white)
+                .foregroundStyle(.primary)
 
             let meta = [report.patientName, report.authorName]
                 .filter { !$0.isEmpty }
@@ -81,12 +82,12 @@ struct HistoryView: View {
             if !meta.isEmpty {
                 Text(meta)
                     .font(.caption)
-                    .foregroundStyle(.white.opacity(0.7))
+                    .foregroundStyle(.secondary)
             }
 
             Text("\(report.entries.count) value\(report.entries.count == 1 ? "" : "s")")
                 .font(.caption2)
-                .foregroundStyle(.white.opacity(0.5))
+                .foregroundStyle(.secondary)
         }
         .padding(.vertical, 10)
         .padding(.horizontal, 16)
@@ -94,13 +95,13 @@ struct HistoryView: View {
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(.white.opacity(0.15), lineWidth: 0.5)
+                .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
         )
     }
 
     private func loadReports() async {
         do {
-            reports = try await ReportHistoryService.shared.loadAll()
+            reports = try await HealthKitService.shared.loadCDADocuments()
         } catch {
             loadError = error.localizedDescription
         }
@@ -111,7 +112,7 @@ struct HistoryView: View {
         reports.remove(atOffsets: offsets)
         Task {
             for reportId in toDelete {
-                try? await ReportHistoryService.shared.delete(id: reportId)
+                try? await HealthKitService.shared.deleteCDADocument(id: reportId)
             }
         }
     }

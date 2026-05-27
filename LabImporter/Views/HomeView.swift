@@ -2,6 +2,8 @@ import SwiftUI
 import PhotosUI
 
 struct HomeView: View {
+    @Environment(\.colorScheme) private var colorScheme
+
     // Report state
     @State private var reports: [LabReport] = []
     @State private var isLoaded = false
@@ -63,7 +65,7 @@ struct HomeView: View {
     private var content: some View {
         if !isLoaded {
             ProgressView()
-                .tint(.white)
+                .tint(.primary)
                 .scaleEffect(1.4)
         } else if reports.isEmpty {
             ImportLandingView(
@@ -85,10 +87,11 @@ struct HomeView: View {
 
     private var backgroundGradient: some View {
         LinearGradient(
-            colors: [
-                Color(hue: 0.65, saturation: 0.6, brightness: 0.35),
-                Color(hue: 0.75, saturation: 0.7, brightness: 0.25)
-            ],
+            colors: colorScheme == .dark
+                ? [Color(hue: 0.65, saturation: 0.60, brightness: 0.35),
+                   Color(hue: 0.75, saturation: 0.70, brightness: 0.25)]
+                : [Color(hue: 0.65, saturation: 0.20, brightness: 0.95),
+                   Color(hue: 0.75, saturation: 0.25, brightness: 0.92)],
             startPoint: .top,
             endPoint: .bottom
         )
@@ -99,9 +102,9 @@ struct HomeView: View {
 
     private func loadReports() async {
         do {
-            reports = try await ReportHistoryService.shared.loadAll()
+            reports = try await HealthKitService.shared.loadCDADocuments()
         } catch {
-            errorMessage = error.localizedDescription
+            // Silently ignore authorization errors on first launch before user grants access
         }
         isLoaded = true
     }

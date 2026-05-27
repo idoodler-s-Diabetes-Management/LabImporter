@@ -4,6 +4,7 @@ import Charts
 struct TrendsView: View {
     let reports: [LabReport]
 
+    @Environment(\.colorScheme) private var colorScheme
     @State private var selectedCode: String = ""
 
     private struct DataPoint: Identifiable {
@@ -67,10 +68,11 @@ struct TrendsView: View {
 
     private var backgroundGradient: some View {
         LinearGradient(
-            colors: [
-                Color(hue: 0.65, saturation: 0.6, brightness: 0.35),
-                Color(hue: 0.75, saturation: 0.7, brightness: 0.25)
-            ],
+            colors: colorScheme == .dark
+                ? [Color(hue: 0.65, saturation: 0.60, brightness: 0.35),
+                   Color(hue: 0.75, saturation: 0.70, brightness: 0.25)]
+                : [Color(hue: 0.65, saturation: 0.20, brightness: 0.95),
+                   Color(hue: 0.75, saturation: 0.25, brightness: 0.92)],
             startPoint: .top,
             endPoint: .bottom
         )
@@ -83,7 +85,6 @@ struct TrendsView: View {
             systemImage: "chart.line.uptrend.xyaxis",
             description: Text("Import reports with numeric lab values to see trends.")
         )
-        .foregroundStyle(.white)
     }
 
     private var codePicker: some View {
@@ -93,7 +94,6 @@ struct TrendsView: View {
             }
         }
         .pickerStyle(.menu)
-        .tint(.white)
         .padding([.horizontal, .top])
     }
 
@@ -105,7 +105,6 @@ struct TrendsView: View {
                 systemImage: "chart.xyaxis.line",
                 description: Text("Import at least two reports containing this value to see a trend.")
             )
-            .foregroundStyle(.white)
         } else {
             ScrollView {
                 trendChart
@@ -120,31 +119,31 @@ struct TrendsView: View {
                 x: .value("Date", point.date),
                 y: .value(currentUnit, point.value)
             )
-            .foregroundStyle(.white.opacity(0.9))
+            .foregroundStyle(Color.accentColor.opacity(0.9))
 
             PointMark(
                 x: .value("Date", point.date),
                 y: .value(currentUnit, point.value)
             )
-            .foregroundStyle(.white)
+            .foregroundStyle(Color.accentColor)
 
             AreaMark(
                 x: .value("Date", point.date),
                 y: .value(currentUnit, point.value)
             )
-            .foregroundStyle(.white.opacity(0.1))
+            .foregroundStyle(Color.accentColor.opacity(0.15))
         }
         .chartXAxis {
             AxisMarks(values: .automatic) { _ in
-                AxisGridLine().foregroundStyle(.white.opacity(0.2))
+                AxisGridLine().foregroundStyle(Color.primary.opacity(0.15))
                 AxisValueLabel(format: .dateTime.month(.abbreviated).day())
-                    .foregroundStyle(.white.opacity(0.7))
+                    .foregroundStyle(.secondary)
             }
         }
         .chartYAxis {
             AxisMarks { _ in
-                AxisGridLine().foregroundStyle(.white.opacity(0.2))
-                AxisValueLabel().foregroundStyle(.white.opacity(0.7))
+                AxisGridLine().foregroundStyle(Color.primary.opacity(0.15))
+                AxisValueLabel().foregroundStyle(.secondary)
             }
         }
         .chartYAxisLabel(currentUnit)
@@ -153,7 +152,7 @@ struct TrendsView: View {
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
         .overlay(
             RoundedRectangle(cornerRadius: 20)
-                .stroke(.white.opacity(0.15), lineWidth: 0.5)
+                .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
         )
     }
 }
