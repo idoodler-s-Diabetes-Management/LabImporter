@@ -243,7 +243,8 @@ platform :ios do
       end
     end
 
-    file_path = File.expand_path('new_certificate_needed.txt')
+    workspace = ENV['GITHUB_WORKSPACE'] || Dir.pwd
+    file_path = File.join(workspace, 'new_certificate_needed.txt')
     File.write(file_path, new_certificate_needed ? 'true' : 'false')
     puts "Certificate renewal needed: #{File.read(file_path)}"
   end
