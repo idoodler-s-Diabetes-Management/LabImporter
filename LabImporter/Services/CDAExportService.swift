@@ -5,11 +5,14 @@ struct CDAExportService {
     // Returns a C-CDA R2.1 Lab Report XML string.
     // Values without a LOINC mapping, numeric result, or that are deselected are omitted.
     // swiftlint:disable:next function_body_length
-    func generateCDA(labValues: [LabValue], date: Date, patientName: String = "") -> String {
+    func generateCDA(labValues: [LabValue], date: Date, patientName: String = "", authorName: String = "") -> String {
         let dateStr = hl7Date(date)
         let docId   = uuid()
         let orgId   = uuid()
         let patientFamily = esc(patientName.trimmingCharacters(in: .whitespaces).isEmpty ? "Unknown" : patientName)
+        let authorTrimmed = authorName.trimmingCharacters(in: .whitespaces)
+        // swiftlint:disable:next line_length
+        let authorOrgXML = authorTrimmed.isEmpty ? "" : "\n      <representedOrganization>\n        <name>\(esc(authorTrimmed))</name>\n      </representedOrganization>"
 
         let exportable = labValues.filter {
             $0.isSelected && $0.numericValue != nil && LabMapping.loincCode(for: $0.code) != nil
@@ -56,7 +59,7 @@ struct CDAExportService {
       <id nullFlavor="UNK"/>
       <assignedAuthoringDevice>
         <softwareName>LabImporter</softwareName>
-      </assignedAuthoringDevice>
+      </assignedAuthoringDevice>\(authorOrgXML)
     </assignedAuthor>
   </author>
   <custodian>
@@ -107,8 +110,9 @@ struct CDAExportService {
     }
 
     // Writes the CDA to a temp file and returns the URL for sharing.
-    func exportToTempFile(labValues: [LabValue], date: Date, patientName: String = "") throws -> URL {
-        let xml = generateCDA(labValues: labValues, date: date, patientName: patientName)
+    // swiftlint:disable:next line_length
+    func exportToTempFile(labValues: [LabValue], date: Date, patientName: String = "", authorName: String = "") throws -> URL {
+        let xml = generateCDA(labValues: labValues, date: date, patientName: patientName, authorName: authorName)
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         let name = "LabResults-\(formatter.string(from: date)).xml"

@@ -24,6 +24,13 @@ struct HomeView: View {
             }
             .padding()
             .navigationTitle("")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink(destination: HistoryView()) {
+                        Image(systemName: "clock.arrow.circlepath")
+                    }
+                }
+            }
             .onAppear { refreshClipboardState() }
             .onChange(of: photosPickerItem) { _, item in
                 guard let item else { return }

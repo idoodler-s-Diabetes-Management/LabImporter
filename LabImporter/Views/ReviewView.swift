@@ -5,6 +5,7 @@ struct ReviewView: View {
     @State var labValues: [LabValue]
     @State private var reportDate: Date
     @AppStorage("patientName") private var patientName: String = ""
+    @AppStorage("authorName") private var authorName: String = ""
 
     @State private var isImporting = false
     @State private var importResult: ImportResult?
@@ -73,6 +74,10 @@ struct ReviewView: View {
             TextField("Full Name (optional)", text: $patientName)
                 .autocorrectionDisabled()
                 .textContentType(.name)
+                .focused($anyFieldFocused)
+            TextField("Lab / Doctor (optional)", text: $authorName)
+                .autocorrectionDisabled()
+                .textContentType(.organizationName)
                 .focused($anyFieldFocused)
         }
     }
@@ -203,17 +208,21 @@ struct ReviewView: View {
             cdaShareURL = try cdaService.exportToTempFile(
                 labValues: labValues,
                 date: reportDate,
-                patientName: patientName
+                patientName: patientName,
+                authorName: authorName
             )
+            saveToHistory()
         } catch {
             cdaError = error.localizedDescription
         }
     }
 
     private func performCDAImport() async {
-        let xml = cdaService.generateCDA(labValues: labValues, date: reportDate, patientName: patientName)
+        // swiftlint:disable:next line_length
+        let xml = cdaService.generateCDA(labValues: labValues, date: reportDate, patientName: patientName, authorName: authorName)
         do {
             try await healthKitService.importCDADocument(xml, date: reportDate)
+            saveToHistory()
         } catch {
             cdaError = error.localizedDescription
         }
@@ -229,8 +238,32 @@ struct ReviewView: View {
             try await healthKitService.requestAuthorization(for: labValues)
             let result = try await healthKitService.importValues(labValues, date: reportDate)
             importResult = result
+            saveToHistory()
         } catch {
             importError = error
+        }
+    }
+
+    private func saveToHistory() {
+        let entries = labValues.map { value in
+            LabReport.Entry(
+                id: UUID(),
+                code: value.code,
+                name: value.name,
+                displayValue: value.displayValue,
+                numericValue: value.numericValue,
+                unit: value.unit
+            )
+        }
+        let report = LabReport(
+            id: UUID(),
+            date: reportDate,
+            patientName: patientName,
+            authorName: authorName,
+            entries: entries
+        )
+        Task {
+            try? await ReportHistoryService.shared.save(report)
         }
     }
 }
