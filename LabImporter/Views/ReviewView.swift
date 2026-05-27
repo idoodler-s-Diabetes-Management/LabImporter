@@ -100,7 +100,6 @@ struct ReviewView: View {
         if !excluded.isEmpty {
             Section {
                 Label(
-                    // swiftlint:disable:next line_length
                     "\(excluded.count) value\(excluded.count == 1 ? "" : "s") without a LOINC code — not included in CDA export",
                     systemImage: "info.circle"
                 )
@@ -160,7 +159,6 @@ struct ReviewView: View {
     }
 
     private func performCDAImport() async {
-        // swiftlint:disable:next line_length
         let xml = cdaService.generateCDA(labValues: labValues, date: reportDate, patientName: patientName, authorName: authorName)
         do {
             try await healthKitService.importCDADocument(xml, date: reportDate)

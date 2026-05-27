@@ -110,7 +110,6 @@ struct CDAExportService {
     }
 
     // Writes the CDA to a temp file and returns the URL for sharing.
-    // swiftlint:disable:next line_length
     func exportToTempFile(labValues: [LabValue], date: Date, patientName: String = "", authorName: String = "") throws -> URL {
         let xml = generateCDA(labValues: labValues, date: date, patientName: patientName, authorName: authorName)
         let formatter = DateFormatter()
