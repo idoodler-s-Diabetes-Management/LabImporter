@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera is used to photograph your lab report so values can be extracted automatically.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photo library access lets you select an existing photo or screenshot of your lab report.</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Lab Importer reads existing health records to avoid duplicate entries.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Lab Importer saves your lab results to Apple Health so you can track them over time.</string>
+	<key>UILaunchScreen</key>
+	<dict/>
+</dict>
+</plist>

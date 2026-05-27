@@ -1,0 +1,423 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AABB000000000000000040AA /* LabImporterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000020AA /* LabImporterApp.swift */; };
+		AABB000000000000000041AA /* LabValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000021AA /* LabValue.swift */; };
+		AABB000000000000000042AA /* LabMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000022AA /* LabMapping.swift */; };
+		AABB000000000000000043AA /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000023AA /* OCRService.swift */; };
+		AABB000000000000000044AA /* LabParserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000024AA /* LabParserService.swift */; };
+		AABB000000000000000045AA /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000025AA /* HealthKitService.swift */; };
+		AABB000000000000000046AA /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000026AA /* HomeView.swift */; };
+		AABB000000000000000047AA /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000027AA /* ReviewView.swift */; };
+		AABB000000000000000048AA /* LabValueRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000028AA /* LabValueRowView.swift */; };
+		AABB000000000000000049AA /* ProcessingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000029AA /* ProcessingView.swift */; };
+		AABB000000000000000050AA /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000030AA /* CameraView.swift */; };
+		AABB000000000000000051AA /* ImportResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000031AA /* ImportResultView.swift */; };
+		AABB000000000000000052AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000032AA /* Assets.xcassets */; };
+		AABB000000000000000053AA /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABB000000000000000035AA /* HealthKit.framework */; };
+		AABB000000000000000054AA /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABB000000000000000036AA /* Vision.framework */; };
+		AABB000000000000000055AA /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABB000000000000000037AA /* FoundationModels.framework */; };
+		AABB000000000000000056AA /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABB000000000000000038AA /* PhotosUI.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		AABB000000000000000019AA /* LabImporter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LabImporter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AABB000000000000000020AA /* LabImporterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabImporterApp.swift; sourceTree = "<group>"; };
+		AABB000000000000000021AA /* LabValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabValue.swift; sourceTree = "<group>"; };
+		AABB000000000000000022AA /* LabMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabMapping.swift; sourceTree = "<group>"; };
+		AABB000000000000000023AA /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
+		AABB000000000000000024AA /* LabParserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabParserService.swift; sourceTree = "<group>"; };
+		AABB000000000000000025AA /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
+		AABB000000000000000026AA /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		AABB000000000000000027AA /* ReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
+		AABB000000000000000028AA /* LabValueRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabValueRowView.swift; sourceTree = "<group>"; };
+		AABB000000000000000029AA /* ProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingView.swift; sourceTree = "<group>"; };
+		AABB000000000000000030AA /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		AABB000000000000000031AA /* ImportResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportResultView.swift; sourceTree = "<group>"; };
+		AABB000000000000000032AA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AABB000000000000000033AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AABB000000000000000034AA /* LabImporter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LabImporter.entitlements; sourceTree = "<group>"; };
+		AABB000000000000000035AA /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		AABB000000000000000036AA /* Vision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vision.framework; path = System/Library/Frameworks/Vision.framework; sourceTree = SDKROOT; };
+		AABB000000000000000037AA /* FoundationModels.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FoundationModels.framework; path = System/Library/Frameworks/FoundationModels.framework; sourceTree = SDKROOT; };
+		AABB000000000000000038AA /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AABB000000000000000017AA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AABB000000000000000053AA /* HealthKit.framework in Frameworks */,
+				AABB000000000000000054AA /* Vision.framework in Frameworks */,
+				AABB000000000000000055AA /* FoundationModels.framework in Frameworks */,
+				AABB000000000000000056AA /* PhotosUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AABB000000000000000009AA /* LabImporter */ = {
+			isa = PBXGroup;
+			children = (
+				AABB000000000000000011AA /* LabImporter */,
+				AABB000000000000000015AA /* Frameworks */,
+				AABB000000000000000010AA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AABB000000000000000010AA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AABB000000000000000019AA /* LabImporter.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AABB000000000000000011AA /* LabImporter */ = {
+			isa = PBXGroup;
+			children = (
+				AABB000000000000000020AA /* LabImporterApp.swift */,
+				AABB000000000000000012AA /* Models */,
+				AABB000000000000000013AA /* Services */,
+				AABB000000000000000014AA /* Views */,
+				AABB000000000000000032AA /* Assets.xcassets */,
+				AABB000000000000000033AA /* Info.plist */,
+				AABB000000000000000034AA /* LabImporter.entitlements */,
+			);
+			path = LabImporter;
+			sourceTree = "<group>";
+		};
+		AABB000000000000000012AA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AABB000000000000000021AA /* LabValue.swift */,
+				AABB000000000000000022AA /* LabMapping.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		AABB000000000000000013AA /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				AABB000000000000000023AA /* OCRService.swift */,
+				AABB000000000000000024AA /* LabParserService.swift */,
+				AABB000000000000000025AA /* HealthKitService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		AABB000000000000000014AA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AABB000000000000000026AA /* HomeView.swift */,
+				AABB000000000000000027AA /* ReviewView.swift */,
+				AABB000000000000000028AA /* LabValueRowView.swift */,
+				AABB000000000000000029AA /* ProcessingView.swift */,
+				AABB000000000000000030AA /* CameraView.swift */,
+				AABB000000000000000031AA /* ImportResultView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AABB000000000000000015AA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AABB000000000000000035AA /* HealthKit.framework */,
+				AABB000000000000000036AA /* Vision.framework */,
+				AABB000000000000000037AA /* FoundationModels.framework */,
+				AABB000000000000000038AA /* PhotosUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AABB000000000000000005AA /* LabImporter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AABB000000000000000008AA /* Build configuration list for PBXNativeTarget "LabImporter" */;
+			buildPhases = (
+				AABB000000000000000016AA /* Sources */,
+				AABB000000000000000017AA /* Frameworks */,
+				AABB000000000000000018AA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LabImporter;
+			productName = LabImporter;
+			productReference = AABB000000000000000019AA /* LabImporter.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AABB000000000000000001AA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1700;
+				TargetAttributes = {
+					AABB000000000000000005AA = {
+						CreatedOnToolsVersion = 17.0;
+					};
+				};
+			};
+			buildConfigurationList = AABB000000000000000004AA /* Build configuration list for PBXProject "LabImporter" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AABB000000000000000009AA;
+			productRefGroup = AABB000000000000000010AA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AABB000000000000000005AA /* LabImporter */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AABB000000000000000018AA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AABB000000000000000052AA /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AABB000000000000000016AA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AABB000000000000000040AA /* LabImporterApp.swift in Sources */,
+				AABB000000000000000041AA /* LabValue.swift in Sources */,
+				AABB000000000000000042AA /* LabMapping.swift in Sources */,
+				AABB000000000000000043AA /* OCRService.swift in Sources */,
+				AABB000000000000000044AA /* LabParserService.swift in Sources */,
+				AABB000000000000000045AA /* HealthKitService.swift in Sources */,
+				AABB000000000000000046AA /* HomeView.swift in Sources */,
+				AABB000000000000000047AA /* ReviewView.swift in Sources */,
+				AABB000000000000000048AA /* LabValueRowView.swift in Sources */,
+				AABB000000000000000049AA /* ProcessingView.swift in Sources */,
+				AABB000000000000000050AA /* CameraView.swift in Sources */,
+				AABB000000000000000051AA /* ImportResultView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		AABB000000000000000002AA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_CYCLE = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AABB000000000000000003AA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_CYCLE = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AABB000000000000000006AA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LabImporter/LabImporter.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LabImporter/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.idoodler.LabImporter";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AABB000000000000000007AA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LabImporter/LabImporter.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LabImporter/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.idoodler.LabImporter";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AABB000000000000000004AA /* Build configuration list for PBXProject "LabImporter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AABB000000000000000002AA /* Debug */,
+				AABB000000000000000003AA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AABB000000000000000008AA /* Build configuration list for PBXNativeTarget "LabImporter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AABB000000000000000006AA /* Debug */,
+				AABB000000000000000007AA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = AABB000000000000000001AA /* Project object */;
+}

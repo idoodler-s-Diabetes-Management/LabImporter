@@ -1,0 +1,91 @@
+import SwiftUI
+
+struct LabValueRowView: View {
+    @Binding var value: LabValue
+
+    @State private var editedValue: String = ""
+    @FocusState private var isFocused: Bool
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 12) {
+            selectionControl
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(value.name)
+                    .font(.body)
+                    .foregroundStyle(value.canImportToHealth ? .primary : .secondary)
+
+                Text(value.code)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                    .textCase(.uppercase)
+            }
+
+            Spacer()
+
+            HStack(spacing: 6) {
+                valueField
+
+                if !value.unit.isEmpty {
+                    Text(value.unit)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                        .fixedSize()
+                }
+            }
+        }
+        .padding(.vertical, 2)
+        .onAppear { editedValue = value.displayValue }
+        .onChange(of: value.displayValue) { _, new in
+            if editedValue != new { editedValue = new }
+        }
+    }
+
+    @ViewBuilder
+    private var selectionControl: some View {
+        if value.canImportToHealth {
+            Toggle("", isOn: $value.isSelected)
+                .labelsHidden()
+        } else {
+            Image(systemName: "info.circle")
+                .foregroundStyle(.secondary)
+                .help("This value type is not yet supported by Apple Health")
+        }
+    }
+
+    @ViewBuilder
+    private var valueField: some View {
+        if value.displayValue == "-" {
+            Text("–")
+                .font(.body)
+                .foregroundStyle(.secondary)
+        } else {
+            TextField("Value", text: $editedValue)
+                .multilineTextAlignment(.trailing)
+                .keyboardType(.decimalPad)
+                .focused($isFocused)
+                .frame(minWidth: 44, maxWidth: 80)
+                .onChange(of: editedValue) { _, newRaw in
+                    value.displayValue = newRaw
+                    let normalized = newRaw.replacingOccurrences(of: ",", with: ".")
+                    value.numericValue = Double(normalized)
+                }
+        }
+    }
+}
+
+// MARK: - Preview
+
+#Preview {
+    @Previewable @State var value = LabValue(
+        code: "KREA",
+        name: "Creatinine",
+        displayValue: "0.91",
+        numericValue: 0.91,
+        unit: "mg/dl"
+    )
+    List {
+        LabValueRowView(value: $value)
+    }
+}
