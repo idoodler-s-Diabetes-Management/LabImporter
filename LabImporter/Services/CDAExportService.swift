@@ -207,6 +207,6 @@ enum CDAExportError: LocalizedError {
     case noExportableValues
 
     var errorDescription: String? {
-        "No values can be exported. Make sure at least one value is enabled and has a numeric result."
+        String(localized: "No values can be exported. Make sure at least one value is enabled and has a numeric result.")
     }
 }

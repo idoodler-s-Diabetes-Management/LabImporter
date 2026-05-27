@@ -5,8 +5,12 @@ struct ReviewView: View {
     @State private var reportDate: Date
     @AppStorage("patientName") private var patientName: String = ""
     @AppStorage("authorName") private var authorName: String = ""
+    @AppStorage("patientBirthdateInterval") private var birthdateInterval: Double = 0
+    @AppStorage("patientSexRaw") private var patientSexRaw: Int = 0
     @State private var extractedPatientName: String?
     @State private var extractedAuthorName: String?
+    @State private var hkBirthdate: Date?
+    @State private var hkSex: Int?
 
     @State private var cdaShareURL: URL?
     @State private var cdaError: String?
@@ -56,6 +60,7 @@ struct ReviewView: View {
         .safeAreaInset(edge: .bottom, spacing: 0) {
             bottomButtons
         }
+        .task { await loadHKCharacteristics() }
         .sheet(isPresented: Binding(
             get: { cdaShareURL != nil },
             set: { if !$0 { cdaShareURL = nil } }
@@ -106,10 +111,45 @@ struct ReviewView: View {
                     authorName = extracted
                 }
             }
+
+            if birthdateInterval != 0 {
+                HStack {
+                    DatePicker(
+                        "Birthday",
+                        selection: birthdateBinding,
+                        in: ...Date.now,
+                        displayedComponents: .date
+                    )
+                    Button { birthdateInterval = 0 } label: {
+                        Image(systemName: "xmark.circle.fill")
+                    }
+                    .foregroundStyle(Color.secondary)
+                    .buttonStyle(.plain)
+                }
+            }
+
+            if let hkDob = hkBirthdate, hkBirthdateDiffers {
+                suggestionRow(label: "Detected in Health: \"\(hkDob.formatted(date: .abbreviated, time: .omitted))\"") {
+                    birthdateInterval = hkDob.timeIntervalSinceReferenceDate
+                }
+            }
+
+            Picker("Gender", selection: $patientSexRaw) {
+                Text("–").tag(0)
+                Text("Female").tag(1)
+                Text("Male").tag(2)
+                Text("Other").tag(3)
+            }
+
+            if let hkSexRaw = hkSex, hkSexRaw != 0, hkSexRaw != patientSexRaw {
+                suggestionRow(label: "Detected in Health: \"\(hkSexName(hkSexRaw))\"") {
+                    patientSexRaw = hkSexRaw
+                }
+            }
         }
     }
 
-    private func suggestionRow(label: String, onUse: @escaping () -> Void) -> some View {
+    private func suggestionRow(label: LocalizedStringKey, onUse: @escaping () -> Void) -> some View {
         HStack {
             Text(label)
                 .font(.footnote)
@@ -229,6 +269,37 @@ struct ReviewView: View {
                 .fontWeight(.semibold)
             }
         }
+    }
+
+    // MARK: - Helpers
+
+    private var birthdateBinding: Binding<Date> {
+        Binding(
+            get: { Date(timeIntervalSinceReferenceDate: birthdateInterval) },
+            set: { birthdateInterval = $0.timeIntervalSinceReferenceDate }
+        )
+    }
+
+    private var hkBirthdateDiffers: Bool {
+        guard let hkDob = hkBirthdate else { return false }
+        guard birthdateInterval != 0 else { return true }
+        let stored = Date(timeIntervalSinceReferenceDate: birthdateInterval)
+        return !Calendar.current.isDate(stored, inSameDayAs: hkDob)
+    }
+
+    private func hkSexName(_ raw: Int) -> String {
+        switch raw {
+        case 1: return "Female"
+        case 2: return "Male"
+        case 3: return "Other"
+        default: return "–"
+        }
+    }
+
+    private func loadHKCharacteristics() async {
+        guard let chars = try? await HealthKitService.shared.readPatientCharacteristics() else { return }
+        hkBirthdate = chars.dateOfBirth
+        hkSex = chars.biologicalSexRaw
     }
 
     // MARK: - CDA

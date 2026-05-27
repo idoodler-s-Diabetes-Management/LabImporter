@@ -370,7 +370,7 @@ private struct MetricCard: View {
         }
     }
 
-    private var statusLabel: String {
+    private var statusLabel: LocalizedStringKey {
         switch metric.status {
         case .normal:    return "Normal"
         case .borderline: return "Borderline"

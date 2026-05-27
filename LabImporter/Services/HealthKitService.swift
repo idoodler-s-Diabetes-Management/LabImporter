@@ -64,6 +64,32 @@ actor HealthKitService {
         }
     }
 
+    // MARK: - Characteristics
+
+    struct PatientCharacteristics {
+        let dateOfBirth: Date?
+        let biologicalSexRaw: Int?
+    }
+
+    func readPatientCharacteristics() async throws -> PatientCharacteristics {
+        var typesToRead = Set<HKObjectType>()
+        if let dobType = HKObjectType.characteristicType(forIdentifier: .dateOfBirth) {
+            typesToRead.insert(dobType)
+        }
+        if let sexType = HKObjectType.characteristicType(forIdentifier: .biologicalSex) {
+            typesToRead.insert(sexType)
+        }
+        guard !typesToRead.isEmpty else {
+            return PatientCharacteristics(dateOfBirth: nil, biologicalSexRaw: nil)
+        }
+        try await store.requestAuthorization(toShare: [], read: typesToRead)
+        let dobComps = try? store.dateOfBirthComponents()
+        let dob = dobComps.flatMap { Calendar.current.date(from: $0) }
+        let sexWrapper = try? store.biologicalSex()
+        let sexRaw = sexWrapper.map { $0.biologicalSex.rawValue }.flatMap { $0 == 0 ? nil : $0 }
+        return PatientCharacteristics(dateOfBirth: dob, biologicalSexRaw: sexRaw)
+    }
+
     // MARK: - Delete
 
     func deleteCDADocument(id: UUID) async throws {

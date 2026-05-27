@@ -127,7 +127,7 @@ struct HomeView: View {
         }
         guard let data = try? Data(contentsOf: url),
               let image = UIImage(data: data) else {
-            errorMessage = "Could not open the shared image."
+            errorMessage = String(localized: "Could not open the shared image.")
             return
         }
         await processImage(image)
@@ -139,7 +139,7 @@ struct HomeView: View {
         guard let data = try? await item.loadTransferable(type: Data.self),
               let image = UIImage(data: data)
         else {
-            errorMessage = "Could not load the selected image."
+            errorMessage = String(localized: "Could not load the selected image.")
             return
         }
         await processImage(image)
@@ -154,7 +154,7 @@ struct HomeView: View {
             let result = try await parserService.parseLabValues(from: text)
 
             if result.values.isEmpty {
-                errorMessage = "No lab values were found in this image. Make sure the report is clearly visible."
+                errorMessage = String(localized: "No lab values were found in this image. Make sure the report is clearly visible.")
                 return
             }
 
@@ -176,7 +176,7 @@ struct HomeView: View {
             let result = try await parserService.parseLabValues(from: text)
 
             if result.values.isEmpty {
-                errorMessage = "No lab values were found in the clipboard text."
+                errorMessage = String(localized: "No lab values were found in the clipboard text.")
                 return
             }
 

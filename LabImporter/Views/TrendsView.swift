@@ -113,19 +113,19 @@ struct TrendsView: View {
     private var trendChart: some View {
         Chart(dataPoints) { point in
             LineMark(
-                x: .value("Date", point.date),
+                x: .value(String(localized: "Date"), point.date),
                 y: .value(currentUnit, point.value)
             )
             .foregroundStyle(Color.accentColor.opacity(0.9))
 
             PointMark(
-                x: .value("Date", point.date),
+                x: .value(String(localized: "Date"), point.date),
                 y: .value(currentUnit, point.value)
             )
             .foregroundStyle(Color.accentColor)
 
             AreaMark(
-                x: .value("Date", point.date),
+                x: .value(String(localized: "Date"), point.date),
                 y: .value(currentUnit, point.value)
             )
             .foregroundStyle(Color.accentColor.opacity(0.15))

@@ -30,6 +30,7 @@
 		AABB000000000000000070AA /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000071AA /* DashboardView.swift */; };
 		AABB000000000000000072AA /* ImportLandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000073AA /* ImportLandingView.swift */; };
 		AABB000000000000000074AA /* LabDisplayPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000075AA /* LabDisplayPreferences.swift */; };
+		AABB000000000000000077AA /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000076AA /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,7 @@
 		AABB000000000000000071AA /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		AABB000000000000000073AA /* ImportLandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportLandingView.swift; sourceTree = "<group>"; };
 		AABB000000000000000075AA /* LabDisplayPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabDisplayPreferences.swift; sourceTree = "<group>"; };
+		AABB000000000000000076AA /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				AABB000000000000000013AA /* Services */,
 				AABB000000000000000014AA /* Views */,
 				AABB000000000000000032AA /* Assets.xcassets */,
+				AABB000000000000000076AA /* Localizable.xcstrings */,
 				AABB000000000000000033AA /* Info.plist */,
 				AABB000000000000000034AA /* LabImporter.entitlements */,
 			);
@@ -199,6 +202,7 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
 			);
 			mainGroup = AABB000000000000000009AA;
 			productRefGroup = AABB000000000000000010AA /* Products */;
@@ -216,6 +220,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AABB000000000000000052AA /* Assets.xcassets in Resources */,
+				AABB000000000000000077AA /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

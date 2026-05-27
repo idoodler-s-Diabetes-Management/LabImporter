@@ -61,7 +61,7 @@ struct HistoryView: View {
                     .foregroundStyle(.secondary)
             }
 
-            Text("\(report.entries.count) value\(report.entries.count == 1 ? "" : "s")")
+            Text("\(report.entries.count) values")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }
