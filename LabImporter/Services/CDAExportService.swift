@@ -111,6 +111,12 @@ struct CDAExportService {
 
     // Writes the CDA to a temp file and returns the URL for sharing.
     func exportToTempFile(labValues: [LabValue], date: Date, patientName: String = "", authorName: String = "") throws -> URL {
+        let exportable = labValues.filter {
+            $0.isSelected && $0.numericValue != nil && LabMapping.loincCode(for: $0.code) != nil
+        }
+        guard !exportable.isEmpty else {
+            throw CDAExportError.noExportableValues
+        }
         let xml = generateCDA(labValues: labValues, date: date, patientName: patientName, authorName: authorName)
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
@@ -195,5 +201,13 @@ struct CDAExportService {
               .replacingOccurrences(of: "<", with: "&lt;")
               .replacingOccurrences(of: ">", with: "&gt;")
               .replacingOccurrences(of: "\"", with: "&quot;")
+    }
+}
+
+enum CDAExportError: LocalizedError {
+    case noExportableValues
+
+    var errorDescription: String? {
+        "No values can be exported. Make sure at least one value is enabled and has a numeric result."
     }
 }

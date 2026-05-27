@@ -14,6 +14,12 @@ struct ReviewView: View {
 
     private let cdaService = CDAExportService()
 
+    private var exportableCount: Int {
+        labValues.filter {
+            $0.isSelected && $0.numericValue != nil && LabMapping.loincCode(for: $0.code) != nil
+        }.count
+    }
+
     init(labValues: [LabValue], reportDate: Date = Date()) {
         _labValues = State(initialValue: labValues)
         _reportDate = State(initialValue: reportDate)
@@ -94,15 +100,26 @@ struct ReviewView: View {
 
     @ViewBuilder
     private var infoSection: some View {
-        let excluded = labValues.filter { LabMapping.loincCode(for: $0.code) == nil }
-        if !excluded.isEmpty {
+        if exportableCount == 0 {
             Section {
                 Label(
-                    "\(excluded.count) value\(excluded.count == 1 ? "" : "s") without a LOINC code — not included in CDA export",
-                    systemImage: "info.circle"
+                    "No values will be exported — enable values and ensure they have numeric results.",
+                    systemImage: "exclamationmark.triangle"
                 )
                 .font(.footnote)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.orange)
+            }
+        } else {
+            let noLoinc = labValues.filter { $0.isSelected && LabMapping.loincCode(for: $0.code) == nil }
+            if !noLoinc.isEmpty {
+                Section {
+                    Label(
+                        "\(noLoinc.count) value\(noLoinc.count == 1 ? "" : "s") without a LOINC code — not included in CDA export",
+                        systemImage: "info.circle"
+                    )
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                }
             }
         }
     }
@@ -117,12 +134,14 @@ struct ReviewView: View {
                 } label: {
                     Label("Save to Health Records", systemImage: "doc.badge.plus")
                 }
+                .disabled(exportableCount == 0)
 
                 Button {
                     shareCDA()
                 } label: {
                     Label("Share CDA File", systemImage: "doc.badge.arrow.up")
                 }
+                .disabled(exportableCount == 0)
             } label: {
                 Image(systemName: "square.and.arrow.up")
                     .fontWeight(.semibold)
@@ -156,6 +175,10 @@ struct ReviewView: View {
     }
 
     private func performCDAImport() async {
+        guard exportableCount > 0 else {
+            cdaError = CDAExportError.noExportableValues.errorDescription
+            return
+        }
         let xml = cdaService.generateCDA(
             labValues: labValues,
             date: reportDate,
