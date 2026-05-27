@@ -98,6 +98,7 @@ struct ReviewView: View {
                         .font(.caption)
                         .foregroundStyle(.tertiary)
 
+                    // swiftlint:disable:next line_length
                     Text("Apple Health's writable API currently supports only a limited set of lab values. The values above are recorded in this report but cannot be imported.")
                         .font(.caption)
                         .foregroundStyle(.tertiary)
@@ -156,9 +157,11 @@ struct ReviewView: View {
     // MARK: - Clipboard
 
     private func copyUnsupportedToClipboard(_ values: [LabValue]) {
-        let lines = values.map { v in
-            let val = v.displayValue == "-" ? "negative" : "\(v.displayValue) \(v.unit)".trimmingCharacters(in: .whitespaces)
-            return "\(v.name): \(val)"
+        let lines = values.map { labValue in
+            let val = labValue.displayValue == "-"
+                ? "negative"
+                : "\(labValue.displayValue) \(labValue.unit)".trimmingCharacters(in: .whitespaces)
+            return "\(labValue.name): \(val)"
         }
         UIPasteboard.general.string = lines.joined(separator: "\n")
         unsupportedCopied = true

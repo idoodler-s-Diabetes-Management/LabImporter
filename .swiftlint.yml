@@ -4,6 +4,8 @@ disabled_rules:
 opt_in_rules:
   - empty_count
   - explicit_init
+
+analyzer_rules:
   - unused_import
 
 line_length:

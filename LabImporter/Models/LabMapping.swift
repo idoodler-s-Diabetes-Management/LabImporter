@@ -21,6 +21,7 @@ enum LabMapping {
         }
     }
 
+    // swiftlint:disable:next cyclomatic_complexity
     static func displayName(for code: String) -> String {
         switch code.uppercased() {
         case "DIABOL", "DIAB0L":        return "Diabetes Screening"
@@ -43,36 +44,37 @@ enum LabMapping {
     }
 
     // LOINC codes for CDA export — covers all recognised lab codes.
+    // swiftlint:disable:next cyclomatic_complexity
     static func loincCode(for code: String) -> (loinc: String, display: String)? {
         switch code.uppercased() {
         case "BZ", "GLUCOSE", "GLU", "BLOOD-GLUCOSE":
-            return ("2345-7",  "Glucose [Mass/volume] in Serum or Plasma")
+            return ("2345-7", "Glucose [Mass/volume] in Serum or Plasma")
         case "KREA", "CREATININE":
-            return ("2160-0",  "Creatinine [Mass/volume] in Serum or Plasma")
+            return ("2160-0", "Creatinine [Mass/volume] in Serum or Plasma")
         case "MDRD", "EGFR", "KREA-GFR":
             return ("33914-3", "GFR/BSA pred MDRD")
         case "CKD-EPI":
             return ("62238-1", "GFR/BSA pred CKD-EPI")
         case "CHOL", "TC":
-            return ("2093-3",  "Cholesterol [Mass/volume] in Serum or Plasma")
+            return ("2093-3", "Cholesterol [Mass/volume] in Serum or Plasma")
         case "HDL":
-            return ("2085-9",  "Cholesterol in HDL [Mass/volume] in Serum or Plasma")
+            return ("2085-9", "Cholesterol in HDL [Mass/volume] in Serum or Plasma")
         case "NONHDL", "NON-HDL":
             return ("43396-1", "Cholesterol non HDL [Mass/volume] in Serum or Plasma")
         case "LDL":
-            return ("2089-1",  "Cholesterol in LDL [Mass/volume] in Serum or Plasma")
+            return ("2089-1", "Cholesterol in LDL [Mass/volume] in Serum or Plasma")
         case "TRIG", "TG":
-            return ("2571-8",  "Triglyceride [Mass/volume] in Serum or Plasma")
+            return ("2571-8", "Triglyceride [Mass/volume] in Serum or Plasma")
         case "GPT", "ALT":
-            return ("1742-6",  "Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma")
+            return ("1742-6", "Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma")
         case "G-GT", "GGT", "GGTP":
-            return ("2324-2",  "Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma")
+            return ("2324-2", "Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma")
         case "HB-A1C", "HBAIC", "HBA1C", "HBA1C%":
-            return ("4548-4",  "Hemoglobin A1c/Hemoglobin.total in Blood")
+            return ("4548-4", "Hemoglobin A1c/Hemoglobin.total in Blood")
         case "HB-A1", "HBA1":
             return ("59261-8", "Hemoglobin A1c/Hemoglobin.total in Blood by IFCC protocol")
         case "TSH-0", "TSH":
-            return ("3016-3",  "Thyrotropin [Units/volume] in Serum or Plasma")
+            return ("3016-3", "Thyrotropin [Units/volume] in Serum or Plasma")
         case "DIABOL", "DIAB0L":
             return ("14647-2", "Glucose [Mass/volume] in Serum or Plasma --fasting")
         default:

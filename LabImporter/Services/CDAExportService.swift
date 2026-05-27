@@ -4,6 +4,7 @@ struct CDAExportService {
 
     // Returns a C-CDA R2.1 Lab Report XML string.
     // Values without a LOINC mapping or numeric result are omitted.
+    // swiftlint:disable:next function_body_length
     func generateCDA(labValues: [LabValue], date: Date) -> String {
         let dateStr = hl7Date(date)
         let docId   = uuid()
@@ -13,8 +14,8 @@ struct CDAExportService {
             $0.numericValue != nil && LabMapping.loincCode(for: $0.code) != nil
         }
 
-        let narrativeRows = exportable.map { v in
-            "<tr><td>\(esc(v.name))</td><td>\(esc(v.displayValue)) \(esc(v.unit))</td></tr>"
+        let narrativeRows = exportable.map { labValue in
+            "<tr><td>\(esc(labValue.name))</td><td>\(esc(labValue.displayValue)) \(esc(labValue.unit))</td></tr>"
         }.joined(separator: "\n              ")
 
         let components = exportable.compactMap { observationXML($0, date: dateStr) }
@@ -115,11 +116,11 @@ struct CDAExportService {
 
     // MARK: - Private helpers
 
-    private func observationXML(_ v: LabValue, date: String) -> String? {
-        guard let num = v.numericValue,
-              let (loincCode, loincDisplay) = LabMapping.loincCode(for: v.code) else { return nil }
+    private func observationXML(_ value: LabValue, date: String) -> String? {
+        guard let num = value.numericValue,
+              let (loincCode, loincDisplay) = LabMapping.loincCode(for: value.code) else { return nil }
 
-        let unit = ucum(v.unit)
+        let unit = ucum(value.unit)
         // Format as integer when possible, otherwise 4 significant figures
         let valueStr = num.truncatingRemainder(dividingBy: 1) == 0
             ? String(format: "%.0f", num)
@@ -159,19 +160,19 @@ struct CDAExportService {
     }
 
     private func hl7Date(_ date: Date) -> String {
-        let f = DateFormatter()
-        f.dateFormat = "yyyyMMdd"
-        return f.string(from: date)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        return formatter.string(from: date)
     }
 
     private func uuid() -> String {
         UUID().uuidString.lowercased()
     }
 
-    private func esc(_ s: String) -> String {
-        s.replacingOccurrences(of: "&",  with: "&amp;")
-         .replacingOccurrences(of: "<",  with: "&lt;")
-         .replacingOccurrences(of: ">",  with: "&gt;")
-         .replacingOccurrences(of: "\"", with: "&quot;")
+    private func esc(_ string: String) -> String {
+        string.replacingOccurrences(of: "&", with: "&amp;")
+              .replacingOccurrences(of: "<", with: "&lt;")
+              .replacingOccurrences(of: ">", with: "&gt;")
+              .replacingOccurrences(of: "\"", with: "&quot;")
     }
 }

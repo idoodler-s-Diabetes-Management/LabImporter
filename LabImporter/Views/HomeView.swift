@@ -108,15 +108,15 @@ struct HomeView: View {
     // MARK: - Clipboard
 
     private func refreshClipboardState() {
-        let pb = UIPasteboard.general
-        clipboardHasContent = pb.hasImages || pb.hasStrings
+        let pasteboard = UIPasteboard.general
+        clipboardHasContent = pasteboard.hasImages || pasteboard.hasStrings
     }
 
     private func pasteFromClipboard() {
-        let pb = UIPasteboard.general
-        if let image = pb.image {
+        let pasteboard = UIPasteboard.general
+        if let image = pasteboard.image {
             Task { await processImage(image) }
-        } else if let text = pb.string, !text.isEmpty {
+        } else if let text = pasteboard.string, !text.isEmpty {
             Task { await processText(text) }
         }
     }
