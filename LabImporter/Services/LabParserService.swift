@@ -10,6 +10,12 @@ struct AILabReport {
 
     @Guide(description: "Report or blood draw date in yyyy-MM-dd format (e.g. 2026-05-06). Empty string if no date is visible.")
     var reportDate: String
+
+    @Guide(description: "Patient full name as printed on the report. Empty string if not visible.")
+    var patientName: String
+
+    @Guide(description: "Lab or doctor name as printed on the report. Empty string if not visible.")
+    var authorName: String
 }
 
 @Generable
@@ -24,21 +30,36 @@ struct AILabEntry {
     var unit: String
 }
 
+// MARK: - Result
+
+struct ParseResult {
+    let values: [LabValue]
+    let reportDate: Date?
+    let patientName: String?
+    let authorName: String?
+}
+
 // MARK: - Parser
 
 actor LabParserService {
 
-    func parseLabValues(from text: String) async throws -> (values: [LabValue], reportDate: Date?) {
+    func parseLabValues(from text: String) async throws -> ParseResult {
         let entries: [AILabEntry]
         var reportDate: Date?
+        var patientName: String?
+        var authorName: String?
 
         if SystemLanguageModel.default.isAvailable {
             let report = try await parseWithFoundationModels(text: text)
             entries = report.entries
             reportDate = parseDate(report.reportDate)
+            patientName = report.patientName.isEmpty ? nil : report.patientName
+            authorName = report.authorName.isEmpty ? nil : report.authorName
         } else {
             entries = parseWithRegex(text: text)
             reportDate = extractDate(from: text)
+            patientName = extractPatientName(from: text)
+            authorName = extractAuthorName(from: text)
         }
 
         let values = entries.map { entry in
@@ -57,7 +78,7 @@ actor LabParserService {
             )
         }
 
-        return (values, reportDate)
+        return ParseResult(values: values, reportDate: reportDate, patientName: patientName, authorName: authorName)
     }
 
     // MARK: - Foundation Models path
@@ -69,6 +90,8 @@ actor LabParserService {
             Lab reports follow the pattern: CODE: value unit; CODE2: value2 unit2; ...
             Preserve codes exactly as printed. Use '-' as rawValue when the result is negative or not detected.
             If you can see a report date or blood draw date, return it in yyyy-MM-dd format; otherwise return an empty string.
+            Extract the patient's full name if visible; otherwise return an empty string for patientName.
+            Extract the lab or doctor name if visible; otherwise return an empty string for authorName.
             """
         )
 
@@ -84,10 +107,7 @@ actor LabParserService {
 
     // Handles: "CODE: value unit;" or "CODE: - ;" patterns from semicolon-separated German lab reports
     private func parseWithRegex(text: String) -> [AILabEntry] {
-        // Split on semicolons to isolate individual entries
         let segments = text.components(separatedBy: ";")
-
-        // Pattern: one or more UPPERCASE letters/digits/hyphens, colon, then value and optional unit
         let entryPattern = /([A-Z][A-Z0-9\-]+)\s*:\s*(-|[\d]+[,\.]?[\d]*)\s*(.*)/
 
         return segments.compactMap { segment in
@@ -102,9 +122,24 @@ actor LabParserService {
         }
     }
 
+    // MARK: - Name extraction helpers
+
+    private func extractPatientName(from text: String) -> String? {
+        let pattern = /Patientin?\s*:\s*([^\n;,]{3,60})/
+        guard let match = text.firstMatch(of: pattern) else { return nil }
+        let name = String(match.1).trimmingCharacters(in: .whitespacesAndNewlines)
+        return name.isEmpty ? nil : name
+    }
+
+    private func extractAuthorName(from text: String) -> String? {
+        let pattern = /(?:Labor|Arzt(?:praxis)?)\s*:\s*([^\n;]{3,60})/
+        guard let match = text.firstMatch(of: pattern) else { return nil }
+        let name = String(match.1).trimmingCharacters(in: .whitespacesAndNewlines)
+        return name.isEmpty ? nil : name
+    }
+
     // MARK: - Date helpers
 
-    // Scans free text for German (dd.MM.yyyy) or ISO (yyyy-MM-dd) date patterns.
     private func extractDate(from text: String) -> Date? {
         let germanPattern = /\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b/
         if let match = text.firstMatch(of: germanPattern) {

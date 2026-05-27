@@ -3,6 +3,7 @@ import Foundation
 struct LabDisplayPreferences: Codable, RawRepresentable {
     var pinnedCodes: [String] = []
     var orderedCodes: [String] = []
+    var hiddenCodes: [String] = []
 
     init() {}
 
@@ -18,4 +19,5 @@ struct LabDisplayPreferences: Codable, RawRepresentable {
     }
 
     var pinnedSet: Set<String> { Set(pinnedCodes) }
+    var hiddenSet: Set<String> { Set(hiddenCodes) }
 }

@@ -31,5 +31,8 @@ struct LabValue: Identifiable, Equatable, @unchecked Sendable {
 
     static func == (lhs: LabValue, rhs: LabValue) -> Bool {
         lhs.id == rhs.id
+            && lhs.isSelected == rhs.isSelected
+            && lhs.displayValue == rhs.displayValue
+            && lhs.numericValue == rhs.numericValue
     }
 }

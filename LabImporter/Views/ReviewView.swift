@@ -5,6 +5,8 @@ struct ReviewView: View {
     @State private var reportDate: Date
     @AppStorage("patientName") private var patientName: String = ""
     @AppStorage("authorName") private var authorName: String = ""
+    @State private var extractedPatientName: String?
+    @State private var extractedAuthorName: String?
 
     @State private var cdaShareURL: URL?
     @State private var cdaError: String?
@@ -20,9 +22,24 @@ struct ReviewView: View {
         }.count
     }
 
-    init(labValues: [LabValue], reportDate: Date = Date()) {
+    private var supportedIndices: [Int] {
+        labValues.indices.filter { LabMapping.loincCode(for: labValues[$0].code) != nil }
+    }
+
+    private var unsupportedValues: [LabValue] {
+        labValues.filter { LabMapping.loincCode(for: $0.code) == nil }
+    }
+
+    init(
+        labValues: [LabValue],
+        reportDate: Date = Date(),
+        extractedPatientName: String? = nil,
+        extractedAuthorName: String? = nil
+    ) {
         _labValues = State(initialValue: labValues)
         _reportDate = State(initialValue: reportDate)
+        _extractedPatientName = State(initialValue: extractedPatientName)
+        _extractedAuthorName = State(initialValue: extractedAuthorName)
     }
 
     var body: some View {
@@ -30,7 +47,7 @@ struct ReviewView: View {
             patientSection
             dateSection
             valuesSection
-            infoSection
+            unsupportedSection
         }
         .scrollDismissesKeyboard(.interactively)
         .scrollContentBackground(.hidden)
@@ -38,8 +55,10 @@ struct ReviewView: View {
         .navigationTitle("Review Values")
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
-            exportButton
             keyboardDoneButton
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            bottomButtons
         }
         .sheet(isPresented: Binding(
             get: { cdaShareURL != nil },
@@ -70,10 +89,42 @@ struct ReviewView: View {
                 .autocorrectionDisabled()
                 .textContentType(.name)
                 .focused($anyFieldFocused)
+
+            if let extracted = extractedPatientName,
+               !extracted.isEmpty,
+               extracted != patientName {
+                suggestionRow(label: "Detected in report: \"\(extracted)\"") {
+                    patientName = extracted
+                }
+            }
+
             TextField("Lab / Doctor (optional)", text: $authorName)
                 .autocorrectionDisabled()
                 .textContentType(.organizationName)
                 .focused($anyFieldFocused)
+
+            if let extracted = extractedAuthorName,
+               !extracted.isEmpty,
+               extracted != authorName {
+                suggestionRow(label: "Detected in report: \"\(extracted)\"") {
+                    authorName = extracted
+                }
+            }
+        }
+    }
+
+    private func suggestionRow(label: String, onUse: @escaping () -> Void) -> some View {
+        HStack {
+            Text(label)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .lineLimit(2)
+            Spacer()
+            Button("Use", action: onUse)
+                .buttonStyle(.plain)
+                .foregroundStyle(Color.accentColor)
+                .fontWeight(.semibold)
+                .font(.footnote)
         }
     }
 
@@ -90,8 +141,8 @@ struct ReviewView: View {
 
     private var valuesSection: some View {
         Section {
-            ForEach($labValues) { $value in
-                LabValueRowView(value: $value, anyFieldFocused: $anyFieldFocused)
+            ForEach(supportedIndices, id: \.self) { idx in
+                LabValueRowView(value: $labValues[idx], anyFieldFocused: $anyFieldFocused)
             }
         } header: {
             Text("Lab Values — tap values to correct them")
@@ -99,62 +150,84 @@ struct ReviewView: View {
     }
 
     @ViewBuilder
-    private var infoSection: some View {
-        if exportableCount == 0 {
+    private var unsupportedSection: some View {
+        if !unsupportedValues.isEmpty {
             Section {
-                Label(
-                    "No values will be exported — enable values and ensure they have numeric results.",
-                    systemImage: "exclamationmark.triangle"
-                )
-                .font(.footnote)
-                .foregroundStyle(.orange)
-            }
-        } else {
-            let noLoinc = labValues.filter { $0.isSelected && LabMapping.loincCode(for: $0.code) == nil }
-            if !noLoinc.isEmpty {
-                Section {
-                    Label(
-                        "\(noLoinc.count) value\(noLoinc.count == 1 ? "" : "s") without a LOINC code — not included in CDA export",
-                        systemImage: "info.circle"
-                    )
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                ForEach(unsupportedValues) { value in
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(value.name).font(.body)
+                            Text(value.code)
+                                .font(.caption2)
+                                .foregroundStyle(.tertiary)
+                                .textCase(.uppercase)
+                        }
+                        Spacer()
+                        HStack(spacing: 6) {
+                            Text(value.displayValue).font(.body)
+                            if !value.unit.isEmpty {
+                                Text(value.unit)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                    .padding(.vertical, 2)
                 }
+            } header: {
+                Text("Not supported for export")
+            } footer: {
+                Text("These values don't have a LOINC code and won't be saved to Apple Health.")
             }
+        }
+    }
+
+    // MARK: - Bottom buttons
+
+    private var bottomButtons: some View {
+        VStack(spacing: 0) {
+            LinearGradient(
+                colors: [.clear, Color(UIColor.systemBackground)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: 32)
+            .allowsHitTesting(false)
+
+            VStack(spacing: 10) {
+                Button("Save to Health Records") {
+                    Task { await performCDAImport() }
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+                .frame(maxWidth: .infinity)
+                .disabled(exportableCount == 0)
+
+                Button("Share CDA File") { shareCDA() }
+                    .buttonStyle(.bordered)
+                    .controlSize(.large)
+                    .frame(maxWidth: .infinity)
+                    .disabled(exportableCount == 0)
+            }
+            .padding([.horizontal, .bottom])
+            .padding(.top, 8)
+            .background(.regularMaterial)
         }
     }
 
     // MARK: - Toolbar
 
-    private var exportButton: some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
-            Menu {
-                Button {
-                    Task { await performCDAImport() }
-                } label: {
-                    Label("Save to Health Records", systemImage: "doc.badge.plus")
-                }
-                .disabled(exportableCount == 0)
-
-                Button {
-                    shareCDA()
-                } label: {
-                    Label("Share CDA File", systemImage: "doc.badge.arrow.up")
-                }
-                .disabled(exportableCount == 0)
-            } label: {
-                Image(systemName: "square.and.arrow.up")
-                    .fontWeight(.semibold)
-            }
-        }
-    }
-
     private var keyboardDoneButton: some ToolbarContent {
         ToolbarItem(placement: .keyboard) {
             HStack {
                 Spacer()
-                Button("Done") { anyFieldFocused = false }
-                    .fontWeight(.semibold)
+                Button("Done") {
+                    UIApplication.shared.sendAction(
+                        #selector(UIResponder.resignFirstResponder),
+                        to: nil, from: nil, for: nil
+                    )
+                }
+                .fontWeight(.semibold)
             }
         }
     }
@@ -210,12 +283,16 @@ private struct ShareSheet: UIViewControllerRepresentable {
 
 #Preview {
     NavigationStack {
-        ReviewView(labValues: [
-            LabValue(code: "BZ", name: "Blood Glucose", displayValue: "95", numericValue: 95, unit: "mg/dl"),
-            LabValue(code: "KREA", name: "Creatinine", displayValue: "0.91", numericValue: 0.91, unit: "mg/dl"),
-            LabValue(code: "HB-A1C", name: "HbA1c (%)", displayValue: "6.5", numericValue: 6.5, unit: "%"),
-            LabValue(code: "DIABOL", name: "Diabetes Screening", displayValue: "-", numericValue: nil, unit: ""),
-            LabValue(code: "CHOL", name: "Total Cholesterol", displayValue: "162", numericValue: 162, unit: "mg/dl"),
-        ])
+        ReviewView(
+            labValues: [
+                LabValue(code: "BZ", name: "Blood Glucose", displayValue: "95", numericValue: 95, unit: "mg/dl"),
+                LabValue(code: "KREA", name: "Creatinine", displayValue: "0.91", numericValue: 0.91, unit: "mg/dl"),
+                LabValue(code: "HB-A1C", name: "HbA1c (%)", displayValue: "6.5", numericValue: 6.5, unit: "%"),
+                LabValue(code: "DIABOL", name: "Diabetes Screening", displayValue: "-", numericValue: nil, unit: ""),
+                LabValue(code: "CHOL", name: "Total Cholesterol", displayValue: "162", numericValue: 162, unit: "mg/dl"),
+            ],
+            extractedPatientName: "Max Mustermann",
+            extractedAuthorName: "Labor München"
+        )
     }
 }

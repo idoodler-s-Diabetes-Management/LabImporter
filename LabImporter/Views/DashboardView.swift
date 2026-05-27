@@ -1,7 +1,6 @@
 import SwiftUI
 import Charts
 import PhotosUI
-import UniformTypeIdentifiers
 
 // MARK: - Dashboard
 
@@ -14,16 +13,16 @@ struct DashboardView: View {
     let isProcessing: Bool
 
     @AppStorage("labDisplayPrefs") private var prefs = LabDisplayPreferences()
-    @State private var draggingCode: String?
-    @State private var wiggle = false
+    @State private var showOrderSheet = false
 
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 if isProcessing {
-                    processingBanner
+                    processingCard
+                } else {
+                    metricsGrid
                 }
-                metricsGrid
                 trendsLink
                 footer
             }
@@ -40,27 +39,36 @@ struct DashboardView: View {
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    showOrderSheet = true
+                } label: {
+                    Image(systemName: "slider.horizontal.3")
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
                 importMenu
             }
         }
+        .sheet(isPresented: $showOrderSheet) {
+            LabOrderSheet(prefs: $prefs, allCodes: allCodeNames)
+        }
     }
 
-    // MARK: - Processing banner
+    // MARK: - Processing card
 
-    private var processingBanner: some View {
-        HStack(spacing: 12) {
-            ProgressView().controlSize(.small)
+    private var processingCard: some View {
+        VStack(spacing: 16) {
+            ProgressView()
+                .controlSize(.extraLarge)
             Text("Analyzing lab report…")
-                .font(.subheadline.weight(.medium))
-            Spacer()
+                .font(.headline)
+            Text("Using on-device AI")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
-        .overlay(
-            RoundedRectangle(cornerRadius: 14)
-                .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
-        )
+        .frame(maxWidth: .infinity)
+        .padding(40)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 24))
     }
 
     // MARK: - Import menu
@@ -93,30 +101,7 @@ struct DashboardView: View {
             spacing: 14
         ) {
             ForEach(sortedMetrics) { metric in
-                let isDragging = draggingCode == metric.entry.code
-                let isOtherDragging = draggingCode != nil && !isDragging
                 MetricCard(metric: metric, isPinned: prefs.pinnedSet.contains(metric.entry.code))
-                    .scaleEffect(isDragging ? 1.05 : 1.0)
-                    .opacity(isDragging ? 0.6 : 1.0)
-                    .rotationEffect(.degrees(isOtherDragging ? (wiggle ? 1.5 : -1.5) : 0))
-                    .animation(
-                        isOtherDragging
-                            ? .easeInOut(duration: 0.15).repeatForever(autoreverses: true)
-                            : .default,
-                        value: wiggle
-                    )
-                    .onDrag {
-                        draggingCode = metric.entry.code
-                        return NSItemProvider(object: metric.entry.code as NSString)
-                    }
-                    .onDrop(
-                        of: [UTType.text],
-                        delegate: MetricDropDelegate(
-                            targetCode: metric.entry.code,
-                            draggingCode: $draggingCode,
-                            reorder: reorderMetric
-                        )
-                    )
                     .contextMenu {
                         let pinned = prefs.pinnedSet.contains(metric.entry.code)
                         Button { togglePin(metric.entry.code) } label: {
@@ -127,9 +112,6 @@ struct DashboardView: View {
                         }
                     }
             }
-        }
-        .onChange(of: draggingCode) { _, newValue in
-            wiggle = newValue != nil
         }
     }
 
@@ -196,37 +178,35 @@ struct DashboardView: View {
 
     private var sortedMetrics: [MetricData] {
         let pinned = prefs.pinnedSet
+        let hidden = prefs.hiddenSet
         var orderMap: [String: Int] = [:]
         for (idx, code) in prefs.orderedCodes.enumerated() where orderMap[code] == nil {
             orderMap[code] = idx
         }
-        return metrics.sorted { lhs, rhs in
-            let aPin = pinned.contains(lhs.entry.code)
-            let bPin = pinned.contains(rhs.entry.code)
-            if aPin != bPin { return aPin }
-            let aOrd = orderMap[lhs.entry.code] ?? Int.max
-            let bOrd = orderMap[rhs.entry.code] ?? Int.max
-            if aOrd != bOrd { return aOrd < bOrd }
-            return lhs.entry.name < rhs.entry.name
-        }
+        return metrics
+            .filter { !hidden.contains($0.entry.code) }
+            .sorted { lhs, rhs in
+                let aPin = pinned.contains(lhs.entry.code)
+                let bPin = pinned.contains(rhs.entry.code)
+                if aPin != bPin { return aPin }
+                let aOrd = orderMap[lhs.entry.code] ?? Int.max
+                let bOrd = orderMap[rhs.entry.code] ?? Int.max
+                if aOrd != bOrd { return aOrd < bOrd }
+                return lhs.entry.name < rhs.entry.name
+            }
     }
 
-    // MARK: - Drag-to-reorder
+    // MARK: - Code names for order sheet
 
-    private func reorderMetric(from fromCode: String, into toCode: String) {
-        var codes = prefs.orderedCodes
-        for code in sortedMetrics.map(\.entry.code) where !codes.contains(code) {
-            codes.append(code)
+    private var allCodeNames: [CodeName] {
+        var seen = Set<String>()
+        var result: [CodeName] = []
+        for report in reports {
+            for entry in report.entries where seen.insert(entry.code).inserted {
+                result.append(CodeName(code: entry.code, name: entry.name))
+            }
         }
-        guard let fromIdx = codes.firstIndex(of: fromCode),
-              let toIdx = codes.firstIndex(of: toCode),
-              fromIdx != toIdx else { return }
-        codes.move(fromOffsets: IndexSet(integer: fromIdx), toOffset: toIdx > fromIdx ? toIdx + 1 : toIdx)
-        var updated = prefs
-        updated.orderedCodes = codes
-        withAnimation(.spring(duration: 0.25)) {
-            prefs = updated
-        }
+        return result
     }
 
     // MARK: - Pin helpers
@@ -245,28 +225,6 @@ struct DashboardView: View {
     }
 }
 
-// MARK: - Drop delegate
-
-private struct MetricDropDelegate: DropDelegate {
-    let targetCode: String
-    @Binding var draggingCode: String?
-    let reorder: (String, String) -> Void
-
-    func dropEntered(info: DropInfo) {
-        guard let from = draggingCode, from != targetCode else { return }
-        reorder(from, targetCode)
-    }
-
-    func dropUpdated(info: DropInfo) -> DropProposal? {
-        DropProposal(operation: .move)
-    }
-
-    func performDrop(info: DropInfo) -> Bool {
-        draggingCode = nil
-        return true
-    }
-}
-
 // MARK: - Supporting types
 
 private struct SparkPoint: Identifiable {
@@ -280,6 +238,142 @@ private struct MetricData: Identifiable {
     let entry: LabReport.Entry
     let history: [SparkPoint]
     let status: RangeStatus?
+}
+
+private struct CodeName: Identifiable {
+    var id: String { code }
+    let code: String
+    let name: String
+}
+
+// MARK: - LabOrderSheet
+
+private struct LabOrderSheet: View {
+    @Binding var prefs: LabDisplayPreferences
+    let allCodes: [CodeName]
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var visibleOrdered: [CodeName]
+    @State private var hiddenSet: Set<String>
+    @State private var pinnedSet: Set<String>
+
+    init(prefs: Binding<LabDisplayPreferences>, allCodes: [CodeName]) {
+        _prefs = prefs
+        self.allCodes = allCodes
+
+        let currentPrefs = prefs.wrappedValue
+        let hidden = currentPrefs.hiddenSet
+
+        var seen = Set<String>()
+        var initial: [CodeName] = []
+        for code in currentPrefs.orderedCodes where !hidden.contains(code) {
+            if let item = allCodes.first(where: { $0.code == code }), seen.insert(code).inserted {
+                initial.append(item)
+            }
+        }
+        for item in allCodes where !hidden.contains(item.code) && seen.insert(item.code).inserted {
+            initial.append(item)
+        }
+
+        _visibleOrdered = State(initialValue: initial)
+        _hiddenSet = State(initialValue: hidden)
+        _pinnedSet = State(initialValue: currentPrefs.pinnedSet)
+    }
+
+    var body: some View {
+        NavigationStack {
+            List {
+                visibleSection
+                hiddenSection
+            }
+            .environment(\.editMode, .constant(.active))
+            .navigationTitle("Customize")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Cancel") { dismiss() }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") { save(); dismiss() }
+                        .fontWeight(.semibold)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var visibleSection: some View {
+        Section("Visible") {
+            ForEach(visibleOrdered) { item in
+                HStack(spacing: 12) {
+                    Button { togglePin(item.code) } label: {
+                        Image(systemName: pinnedSet.contains(item.code) ? "pin.fill" : "pin")
+                            .foregroundStyle(pinnedSet.contains(item.code) ? Color.accentColor : Color.secondary)
+                            .frame(width: 20)
+                    }
+                    .buttonStyle(.plain)
+                    Text(item.name)
+                    Spacer()
+                    Button { hideCode(item.code) } label: {
+                        Image(systemName: "eye.slash")
+                            .foregroundStyle(Color.secondary)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .onMove { from, to in visibleOrdered.move(fromOffsets: from, toOffset: to) }
+        }
+    }
+
+    @ViewBuilder
+    private var hiddenSection: some View {
+        let hiddenItems = allCodes.filter { hiddenSet.contains($0.code) }
+        if !hiddenItems.isEmpty {
+            Section("Hidden") {
+                ForEach(hiddenItems) { item in
+                    HStack {
+                        Text(item.name)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Button("Restore") { restoreCode(item.code) }
+                            .buttonStyle(.plain)
+                            .foregroundStyle(Color.accentColor)
+                            .fontWeight(.medium)
+                    }
+                    .moveDisabled(true)
+                }
+            }
+        }
+    }
+
+    private func togglePin(_ code: String) {
+        if pinnedSet.contains(code) {
+            pinnedSet.remove(code)
+        } else {
+            pinnedSet.insert(code)
+        }
+    }
+
+    private func hideCode(_ code: String) {
+        hiddenSet.insert(code)
+        visibleOrdered.removeAll { $0.code == code }
+    }
+
+    private func restoreCode(_ code: String) {
+        hiddenSet.remove(code)
+        if let item = allCodes.first(where: { $0.code == code }) {
+            visibleOrdered.append(item)
+        }
+    }
+
+    private func save() {
+        let hiddenOrdered = allCodes.filter { hiddenSet.contains($0.code) }
+        var updated = prefs
+        updated.orderedCodes = visibleOrdered.map(\.code) + hiddenOrdered.map(\.code)
+        updated.pinnedCodes = Array(pinnedSet)
+        updated.hiddenCodes = Array(hiddenSet)
+        prefs = updated
+    }
 }
 
 // MARK: - MetricCard

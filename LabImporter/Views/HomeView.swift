@@ -12,6 +12,8 @@ struct HomeView: View {
     @State private var isProcessing = false
     @State private var labValues: [LabValue] = []
     @State private var parsedReportDate: Date?
+    @State private var parsedPatientName: String?
+    @State private var parsedAuthorName: String?
     @State private var showReview = false
     @State private var errorMessage: String?
     @State private var clipboardHasContent = false
@@ -23,7 +25,12 @@ struct HomeView: View {
         NavigationStack {
             content
                 .navigationDestination(isPresented: $showReview) {
-                    ReviewView(labValues: labValues, reportDate: parsedReportDate ?? Date())
+                    ReviewView(
+                        labValues: labValues,
+                        reportDate: parsedReportDate ?? Date(),
+                        extractedPatientName: parsedPatientName,
+                        extractedAuthorName: parsedAuthorName
+                    )
                 }
                 .sheet(isPresented: $showCamera) {
                     CameraView { image in
@@ -141,15 +148,17 @@ struct HomeView: View {
 
         do {
             let text = try await ocrService.extractText(from: image)
-            let (values, parsedDate) = try await parserService.parseLabValues(from: text)
+            let result = try await parserService.parseLabValues(from: text)
 
-            if values.isEmpty {
+            if result.values.isEmpty {
                 errorMessage = "No lab values were found in this image. Make sure the report is clearly visible."
                 return
             }
 
-            labValues = values
-            parsedReportDate = parsedDate
+            labValues = result.values
+            parsedReportDate = result.reportDate
+            parsedPatientName = result.patientName
+            parsedAuthorName = result.authorName
             showReview = true
         } catch {
             errorMessage = error.localizedDescription
@@ -161,15 +170,17 @@ struct HomeView: View {
         defer { isProcessing = false }
 
         do {
-            let (values, parsedDate) = try await parserService.parseLabValues(from: text)
+            let result = try await parserService.parseLabValues(from: text)
 
-            if values.isEmpty {
+            if result.values.isEmpty {
                 errorMessage = "No lab values were found in the clipboard text."
                 return
             }
 
-            labValues = values
-            parsedReportDate = parsedDate
+            labValues = result.values
+            parsedReportDate = result.reportDate
+            parsedPatientName = result.patientName
+            parsedAuthorName = result.authorName
             showReview = true
         } catch {
             errorMessage = error.localizedDescription
