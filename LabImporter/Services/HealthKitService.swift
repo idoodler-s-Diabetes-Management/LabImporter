@@ -102,22 +102,29 @@ actor HealthKitService {
 
 // MARK: - CDA XML Parser
 
+private struct CDAObservation {
+    let loinc: String
+    let display: String
+    let value: Double
+    let unit: String
+}
+
 private final class CDADocumentParser: NSObject, XMLParserDelegate {
 
     private var reportDate: Date?
     private var patientFamily = ""
     private var authorOrg = ""
-    private var observations: [(loinc: String, display: String, value: Double, unit: String)] = []
+    private var observations: [CDAObservation] = []
 
     private var elementStack: [String] = []
     private var currentText = ""
     private var documentDateSet = false
 
     private var inObservation = false
-    private var currentLoinc: String?
-    private var currentDisplay: String?
-    private var currentValue: Double?
-    private var currentUnit: String?
+    private var obsLoinc: String?
+    private var obsDisplay: String?
+    private var obsValue: Double?
+    private var obsUnit: String?
 
     static func parse(data: Data, id: UUID) -> LabReport? {
         let delegate = CDADocumentParser()
@@ -168,20 +175,20 @@ private final class CDADocumentParser: NSObject, XMLParserDelegate {
 
         case "observation" where attrs["classCode"] == "OBS":
             inObservation = true
-            currentLoinc = nil; currentDisplay = nil
-            currentValue = nil; currentUnit = nil
+            obsLoinc = nil; obsDisplay = nil
+            obsValue = nil; obsUnit = nil
 
         case "code" where inObservation:
             if attrs["codeSystem"] == "2.16.840.1.113883.6.1" {
-                currentLoinc = attrs["code"]
-                currentDisplay = attrs["displayName"]
+                obsLoinc = attrs["code"]
+                obsDisplay = attrs["displayName"]
             }
 
         case "value" where inObservation:
             let xsiType = attrs["xsi:type"] ?? ""
             if xsiType == "PQ" {
-                if let raw = attrs["value"], let num = Double(raw) { currentValue = num }
-                currentUnit = attrs["unit"] ?? ""
+                if let raw = attrs["value"], let num = Double(raw) { obsValue = num }
+                obsUnit = attrs["unit"] ?? ""
             }
 
         default:
@@ -210,9 +217,9 @@ private final class CDADocumentParser: NSObject, XMLParserDelegate {
             if !trimmed.isEmpty && trimmed != "LabImporter" { authorOrg = trimmed }
 
         case "observation" where inObservation:
-            if let loinc = currentLoinc, let display = currentDisplay,
-               let value = currentValue, let unit = currentUnit {
-                observations.append((loinc: loinc, display: display, value: value, unit: unit))
+            if let loinc = obsLoinc, let display = obsDisplay,
+               let value = obsValue, let unit = obsUnit {
+                observations.append(CDAObservation(loinc: loinc, display: display, value: value, unit: unit))
             }
             inObservation = false
 
