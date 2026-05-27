@@ -13,6 +13,7 @@
 		AABB000000000000000043AA /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000023AA /* OCRService.swift */; };
 		AABB000000000000000044AA /* LabParserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000024AA /* LabParserService.swift */; };
 		AABB000000000000000045AA /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000025AA /* HealthKitService.swift */; };
+		AABB000000000000000057AA /* CDAExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000058AA /* CDAExportService.swift */; };
 		AABB000000000000000046AA /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000026AA /* HomeView.swift */; };
 		AABB000000000000000047AA /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000027AA /* ReviewView.swift */; };
 		AABB000000000000000048AA /* LabValueRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000028AA /* LabValueRowView.swift */; };
@@ -34,6 +35,7 @@
 		AABB000000000000000023AA /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
 		AABB000000000000000024AA /* LabParserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabParserService.swift; sourceTree = "<group>"; };
 		AABB000000000000000025AA /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
+		AABB000000000000000058AA /* CDAExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDAExportService.swift; sourceTree = "<group>"; };
 		AABB000000000000000026AA /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		AABB000000000000000027AA /* ReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
 		AABB000000000000000028AA /* LabValueRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabValueRowView.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				AABB000000000000000023AA /* OCRService.swift */,
 				AABB000000000000000024AA /* LabParserService.swift */,
 				AABB000000000000000025AA /* HealthKitService.swift */,
+				AABB000000000000000058AA /* CDAExportService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 				AABB000000000000000043AA /* OCRService.swift in Sources */,
 				AABB000000000000000044AA /* LabParserService.swift in Sources */,
 				AABB000000000000000045AA /* HealthKitService.swift in Sources */,
+				AABB000000000000000057AA /* CDAExportService.swift in Sources */,
 				AABB000000000000000046AA /* HomeView.swift in Sources */,
 				AABB000000000000000047AA /* ReviewView.swift in Sources */,
 				AABB000000000000000048AA /* LabValueRowView.swift in Sources */,

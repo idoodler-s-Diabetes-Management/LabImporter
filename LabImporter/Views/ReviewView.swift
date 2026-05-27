@@ -8,11 +8,14 @@ struct ReviewView: View {
     @State private var importResult: ImportResult?
     @State private var importError: Error?
     @State private var unsupportedCopied = false
+    @State private var cdaExportURL: URL?
+    @State private var cdaExportError: String?
 
     @FocusState private var anyFieldFocused: Bool
     @Environment(\.dismiss) private var dismiss
 
     private let healthKitService = HealthKitService()
+    private let cdaService = CDAExportService()
 
     private var importableCount: Int {
         labValues.filter { $0.isSelected && $0.canImportToHealth }.count
@@ -35,10 +38,24 @@ struct ReviewView: View {
         .sheet(item: $importResult) { result in
             ImportResultView(result: result)
         }
+        .sheet(isPresented: Binding(
+            get: { cdaExportURL != nil },
+            set: { if !$0 { cdaExportURL = nil } }
+        )) {
+            if let url = cdaExportURL {
+                ShareSheet(url: url)
+                    .ignoresSafeArea()
+            }
+        }
         .alert("Import Error", isPresented: .constant(importError != nil)) {
             Button("OK") { importError = nil }
         } message: {
             Text(importError?.localizedDescription ?? "")
+        }
+        .alert("Export Error", isPresented: .constant(cdaExportError != nil)) {
+            Button("OK") { cdaExportError = nil }
+        } message: {
+            Text(cdaExportError ?? "")
         }
     }
 
@@ -107,13 +124,23 @@ struct ReviewView: View {
 
     private var importButton: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
-            Button {
-                Task { await performImport() }
+            Menu {
+                Button {
+                    Task { await performImport() }
+                } label: {
+                    Label("Import to Apple Health", systemImage: "heart.fill")
+                }
+                .disabled(importableCount == 0 || isImporting)
+
+                Button {
+                    exportCDA()
+                } label: {
+                    Label("Export as CDA (Clinical Document)", systemImage: "doc.badge.arrow.up")
+                }
             } label: {
                 Text(importableCount > 0 ? "Import \(importableCount)" : "Import")
+                    .fontWeight(.semibold)
             }
-            .disabled(importableCount == 0 || isImporting)
-            .fontWeight(.semibold)
         }
     }
 
@@ -142,6 +169,16 @@ struct ReviewView: View {
         }
     }
 
+    // MARK: - CDA Export
+
+    private func exportCDA() {
+        do {
+            cdaExportURL = try cdaService.exportToTempFile(labValues: labValues, date: reportDate)
+        } catch {
+            cdaExportError = error.localizedDescription
+        }
+    }
+
     // MARK: - Import
 
     private func performImport() async {
@@ -156,6 +193,18 @@ struct ReviewView: View {
             importError = error
         }
     }
+}
+
+// MARK: - Share sheet wrapper
+
+private struct ShareSheet: UIViewControllerRepresentable {
+    let url: URL
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: [url], applicationActivities: nil)
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 
 // MARK: - Preview
