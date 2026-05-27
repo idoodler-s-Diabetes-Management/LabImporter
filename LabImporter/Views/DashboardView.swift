@@ -156,14 +156,14 @@ struct DashboardView: View {
     private var sortedMetrics: [MetricData] {
         let pinned = prefs.pinnedSet
         let orderMap = Dictionary(uniqueKeysWithValues: prefs.orderedCodes.enumerated().map { ($1, $0) })
-        return metrics.sorted { a, b in
-            let aPin = pinned.contains(a.entry.code)
-            let bPin = pinned.contains(b.entry.code)
+        return metrics.sorted { lhs, rhs in
+            let aPin = pinned.contains(lhs.entry.code)
+            let bPin = pinned.contains(rhs.entry.code)
             if aPin != bPin { return aPin }
-            let aOrd = orderMap[a.entry.code] ?? Int.max
-            let bOrd = orderMap[b.entry.code] ?? Int.max
+            let aOrd = orderMap[lhs.entry.code] ?? Int.max
+            let bOrd = orderMap[rhs.entry.code] ?? Int.max
             if aOrd != bOrd { return aOrd < bOrd }
-            return a.entry.name < b.entry.name
+            return lhs.entry.name < rhs.entry.name
         }
     }
 
@@ -334,7 +334,7 @@ private struct LabOrderSheet: View {
                         Spacer()
                     }
                 }
-                .onMove { from, to in items.move(fromOffsets: from, toOffset: to) }
+                .onMove { from, destination in items.move(fromOffsets: from, toOffset: destination) }
             }
             .environment(\.editMode, .constant(.active))
             .navigationTitle("Edit Order")
@@ -355,14 +355,14 @@ private struct LabOrderSheet: View {
     private func initItems() {
         let pinned = prefs.pinnedSet
         let orderMap = Dictionary(uniqueKeysWithValues: prefs.orderedCodes.enumerated().map { ($1, $0) })
-        items = availableCodes.sorted { a, b in
-            let aPin = pinned.contains(a.code)
-            let bPin = pinned.contains(b.code)
+        items = availableCodes.sorted { lhs, rhs in
+            let aPin = pinned.contains(lhs.code)
+            let bPin = pinned.contains(rhs.code)
             if aPin != bPin { return aPin }
-            let aOrd = orderMap[a.code] ?? Int.max
-            let bOrd = orderMap[b.code] ?? Int.max
+            let aOrd = orderMap[lhs.code] ?? Int.max
+            let bOrd = orderMap[rhs.code] ?? Int.max
             if aOrd != bOrd { return aOrd < bOrd }
-            return a.name < b.name
+            return lhs.name < rhs.name
         }
     }
 

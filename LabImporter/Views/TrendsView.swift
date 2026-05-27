@@ -26,14 +26,14 @@ struct TrendsView: View {
         }
         let pinned = prefs.pinnedSet
         let orderMap = Dictionary(uniqueKeysWithValues: prefs.orderedCodes.enumerated().map { ($1, $0) })
-        return result.sorted { a, b in
-            let aPin = pinned.contains(a.code)
-            let bPin = pinned.contains(b.code)
+        return result.sorted { lhs, rhs in
+            let aPin = pinned.contains(lhs.code)
+            let bPin = pinned.contains(rhs.code)
             if aPin != bPin { return aPin }
-            let aOrd = orderMap[a.code] ?? Int.max
-            let bOrd = orderMap[b.code] ?? Int.max
+            let aOrd = orderMap[lhs.code] ?? Int.max
+            let bOrd = orderMap[rhs.code] ?? Int.max
             if aOrd != bOrd { return aOrd < bOrd }
-            return a.name < b.name
+            return lhs.name < rhs.name
         }
     }
 
