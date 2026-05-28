@@ -377,9 +377,9 @@ private extension ReviewView {
 
     func hkSexName(_ raw: Int) -> String {
         switch raw {
-        case 1: return "Female"
-        case 2: return "Male"
-        case 3: return "Other"
+        case 1: return String(localized: "Female")
+        case 2: return String(localized: "Male")
+        case 3: return String(localized: "Other")
         default: return "–"
         }
     }

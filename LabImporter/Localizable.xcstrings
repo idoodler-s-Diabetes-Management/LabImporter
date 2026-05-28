@@ -862,6 +862,266 @@
         }
       }
     },
+    "Apple Intelligence reads your report privately — nothing leaves your device." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Intelligence liest deinen Bericht privat – nichts verlässt dein Gerät."
+          }
+        }
+      }
+    },
+    "Blood Glucose" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blutzucker"
+          }
+        }
+      }
+    },
+    "Close" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schließen"
+          }
+        }
+      }
+    },
+    "Creatinine" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kreatinin"
+          }
+        }
+      }
+    },
+    "Diabetes Screening" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diabetes-Screening"
+          }
+        }
+      }
+    },
+    "eGFR (CKD-EPI)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "eGFR (CKD-EPI)"
+          }
+        }
+      }
+    },
+    "eGFR (MDRD)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "eGFR (MDRD)"
+          }
+        }
+      }
+    },
+    "Gamma-GT (GGT)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gamma-GT (GGT)"
+          }
+        }
+      }
+    },
+    "Get Started" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loslegen"
+          }
+        }
+      }
+    },
+    "GPT (ALT)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GPT (ALT)"
+          }
+        }
+      }
+    },
+    "HbA1 (mmol/mol)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HbA1 (mmol/mol)"
+          }
+        }
+      }
+    },
+    "HbA1c (%)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HbA1c (%)"
+          }
+        }
+      }
+    },
+    "HDL Cholesterol" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HDL-Cholesterin"
+          }
+        }
+      }
+    },
+    "Import Any Lab Report" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jeden Laborbericht importieren"
+          }
+        }
+      }
+    },
+    "LDL Cholesterol" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LDL-Cholesterin"
+          }
+        }
+      }
+    },
+    "Non-HDL Cholesterol" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht-HDL-Cholesterin"
+          }
+        }
+      }
+    },
+    "On-Device AI" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KI auf dem Gerät"
+          }
+        }
+      }
+    },
+    "Photograph, paste, or scan a report to extract your values." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fotografiere, füge ein oder scanne einen Bericht, um deine Werte zu extrahieren."
+          }
+        }
+      }
+    },
+    "Reports are stored as clinical CDA records directly in Apple Health." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Berichte werden als klinische CDA-Datensätze direkt in der Gesundheits-App gespeichert."
+          }
+        }
+      }
+    },
+    "Saved to Apple Health" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Apple Health gespeichert"
+          }
+        }
+      }
+    },
+    "See how your values change over time with interactive charts." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verfolge, wie sich deine Werte mit interaktiven Diagrammen über die Zeit verändern."
+          }
+        }
+      }
+    },
+    "Total Cholesterol" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesamtcholesterin"
+          }
+        }
+      }
+    },
+    "Track Your Trends" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine Trends verfolgen"
+          }
+        }
+      }
+    },
+    "Triglycerides" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Triglyzeride"
+          }
+        }
+      }
+    },
+    "TSH (Thyroid)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TSH (Schilddrüse)"
+          }
+        }
+      }
+    },
+    "Welcome to" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Willkommen bei"
+          }
+        }
+      }
+    },
     "View All Trends" : {
       "localizations" : {
         "de" : {

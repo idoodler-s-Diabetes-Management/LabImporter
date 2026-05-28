@@ -3,42 +3,44 @@ import Foundation
 // Maps German lab report codes to human-readable names, LOINC codes, and reference ranges.
 enum LabMapping {
 
-    static let allKnownCodes: [(code: String, name: String)] = [
-        ("BZ", "Blood Glucose"),
-        ("KREA", "Creatinine"),
-        ("MDRD", "eGFR (MDRD)"),
-        ("CKD-EPI", "eGFR (CKD-EPI)"),
-        ("CHOL", "Total Cholesterol"),
-        ("HDL", "HDL Cholesterol"),
-        ("NONHDL", "Non-HDL Cholesterol"),
-        ("LDL", "LDL Cholesterol"),
-        ("TRIG", "Triglycerides"),
-        ("GPT", "GPT (ALT)"),
-        ("G-GT", "Gamma-GT (GGT)"),
-        ("HB-A1C", "HbA1c (%)"),
-        ("HB-A1", "HbA1 (mmol/mol)"),
-        ("TSH", "TSH (Thyroid)"),
-        ("DIABOL", "Diabetes Screening"),
-    ]
+    static var allKnownCodes: [(code: String, name: String)] {
+        [
+            ("BZ",       String(localized: "Blood Glucose")),
+            ("KREA",     String(localized: "Creatinine")),
+            ("MDRD",     String(localized: "eGFR (MDRD)")),
+            ("CKD-EPI",  String(localized: "eGFR (CKD-EPI)")),
+            ("CHOL",     String(localized: "Total Cholesterol")),
+            ("HDL",      String(localized: "HDL Cholesterol")),
+            ("NONHDL",   String(localized: "Non-HDL Cholesterol")),
+            ("LDL",      String(localized: "LDL Cholesterol")),
+            ("TRIG",     String(localized: "Triglycerides")),
+            ("GPT",      String(localized: "GPT (ALT)")),
+            ("G-GT",     String(localized: "Gamma-GT (GGT)")),
+            ("HB-A1C",   String(localized: "HbA1c (%)")),
+            ("HB-A1",    String(localized: "HbA1 (mmol/mol)")),
+            ("TSH",      String(localized: "TSH (Thyroid)")),
+            ("DIABOL",   String(localized: "Diabetes Screening")),
+        ]
+    }
 
     // swiftlint:disable:next cyclomatic_complexity
     static func displayName(for code: String) -> String {
         switch code.uppercased() {
-        case "DIABOL", "DIAB0L":        return "Diabetes Screening"
-        case "KREA", "CREATININE":      return "Creatinine"
-        case "MDRD", "EGFR":            return "eGFR (MDRD)"
-        case "CHOL", "TC":              return "Total Cholesterol"
-        case "HDL":                     return "HDL Cholesterol"
-        case "NONHDL", "NON-HDL":       return "Non-HDL Cholesterol"
-        case "LDL":                     return "LDL Cholesterol"
-        case "TRIG", "TG":              return "Triglycerides"
-        case "GPT", "ALT":              return "GPT (ALT)"
-        case "G-GT", "GGT", "GGTP":    return "Gamma-GT (GGT)"
-        case "HB-A1C", "HBAIC", "HBA1C", "HBA1C%": return "HbA1c (%)"
-        case "HB-A1", "HBA1":          return "HbA1 (mmol/mol)"
-        case "TSH-0", "TSH":           return "TSH (Thyroid)"
-        case "BZ", "GLUCOSE", "GLU":   return "Blood Glucose"
-        case "KREA-GFR", "CKD-EPI":    return "eGFR (CKD-EPI)"
+        case "DIABOL", "DIAB0L":        return String(localized: "Diabetes Screening")
+        case "KREA", "CREATININE":      return String(localized: "Creatinine")
+        case "MDRD", "EGFR":            return String(localized: "eGFR (MDRD)")
+        case "CHOL", "TC":              return String(localized: "Total Cholesterol")
+        case "HDL":                     return String(localized: "HDL Cholesterol")
+        case "NONHDL", "NON-HDL":       return String(localized: "Non-HDL Cholesterol")
+        case "LDL":                     return String(localized: "LDL Cholesterol")
+        case "TRIG", "TG":              return String(localized: "Triglycerides")
+        case "GPT", "ALT":              return String(localized: "GPT (ALT)")
+        case "G-GT", "GGT", "GGTP":    return String(localized: "Gamma-GT (GGT)")
+        case "HB-A1C", "HBAIC", "HBA1C", "HBA1C%": return String(localized: "HbA1c (%)")
+        case "HB-A1", "HBA1":          return String(localized: "HbA1 (mmol/mol)")
+        case "TSH-0", "TSH":           return String(localized: "TSH (Thyroid)")
+        case "BZ", "GLUCOSE", "GLU":   return String(localized: "Blood Glucose")
+        case "KREA-GFR", "CKD-EPI":    return String(localized: "eGFR (CKD-EPI)")
         default:                        return code
         }
     }
