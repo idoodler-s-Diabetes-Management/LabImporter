@@ -255,9 +255,6 @@ struct TrendsView: View {
             updated.pinnedCodes.removeAll { $0 == code }
         } else {
             updated.pinnedCodes.append(code)
-            if !updated.orderedCodes.contains(code) {
-                updated.orderedCodes.append(code)
-            }
         }
         prefs = updated
         impactFeedback.impactOccurred()
