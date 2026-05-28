@@ -151,6 +151,7 @@ private struct CDAObservation {
     let display: String
     let value: Double
     let unit: String
+    let parsedRange: ReferenceRangeOverrides.StoredRange?
 }
 
 private final class CDADocumentParser: NSObject, XMLParserDelegate {
@@ -165,10 +166,13 @@ private final class CDADocumentParser: NSObject, XMLParserDelegate {
     private var documentDateSet = false
 
     private var inObservation = false
+    private var inReferenceRange = false
     private var obsLoinc: String?
     private var obsDisplay: String?
     private var obsValue: Double?
     private var obsUnit: String?
+    private var refLow: Double?
+    private var refHigh: Double?
 
     static func parse(data: Data, id: UUID) -> LabReport? {
         let delegate = CDADocumentParser()
@@ -191,7 +195,8 @@ private final class CDADocumentParser: NSObject, XMLParserDelegate {
                 name: name,
                 displayValue: display,
                 numericValue: obs.value,
-                unit: obs.unit
+                unit: obs.unit,
+                parsedRange: obs.parsedRange
             )
         }
 
@@ -206,6 +211,7 @@ private final class CDADocumentParser: NSObject, XMLParserDelegate {
 
     // MARK: XMLParserDelegate
 
+    // swiftlint:disable:next cyclomatic_complexity
     func parser(_ parser: XMLParser, didStartElement element: String,
                 namespaceURI: String?, qualifiedName: String?,
                 attributes attrs: [String: String] = [:]) {
@@ -221,8 +227,10 @@ private final class CDADocumentParser: NSObject, XMLParserDelegate {
 
         case "observation" where attrs["classCode"] == "OBS":
             inObservation = true
+            inReferenceRange = false
             obsLoinc = nil; obsDisplay = nil
             obsValue = nil; obsUnit = nil
+            refLow = nil; refHigh = nil
 
         case "code" where inObservation:
             if attrs["codeSystem"] == "2.16.840.1.113883.6.1" {
@@ -230,7 +238,16 @@ private final class CDADocumentParser: NSObject, XMLParserDelegate {
                 obsDisplay = attrs["displayName"]
             }
 
-        case "value" where inObservation:
+        case "referenceRange" where inObservation:
+            inReferenceRange = true
+
+        case "low" where inReferenceRange:
+            if let raw = attrs["value"], let num = Double(raw) { refLow = num }
+
+        case "high" where inReferenceRange:
+            if let raw = attrs["value"], let num = Double(raw) { refHigh = num }
+
+        case "value" where inObservation && !inReferenceRange:
             let xsiType = attrs["xsi:type"] ?? ""
             if xsiType == "PQ" {
                 if let raw = attrs["value"], let num = Double(raw) { obsValue = num }
@@ -262,12 +279,22 @@ private final class CDADocumentParser: NSObject, XMLParserDelegate {
             let trimmed = currentText.trimmingCharacters(in: .whitespacesAndNewlines)
             if !trimmed.isEmpty && trimmed != "LabImporter" { authorOrg = trimmed }
 
+        case "referenceRange" where inReferenceRange:
+            inReferenceRange = false
+
         case "observation" where inObservation:
             if let loinc = obsLoinc, let display = obsDisplay,
                let value = obsValue, let unit = obsUnit {
-                observations.append(CDAObservation(loinc: loinc, display: display, value: value, unit: unit))
+                let parsed: ReferenceRangeOverrides.StoredRange? =
+                    (refLow != nil || refHigh != nil)
+                        ? .init(normalLow: refLow, normalHigh: refHigh, borderlineLow: nil, borderlineHigh: nil)
+                        : nil
+                observations.append(
+                    CDAObservation(loinc: loinc, display: display, value: value, unit: unit, parsedRange: parsed)
+                )
             }
             inObservation = false
+            inReferenceRange = false
 
         default:
             break

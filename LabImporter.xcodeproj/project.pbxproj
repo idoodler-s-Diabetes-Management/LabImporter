@@ -41,6 +41,7 @@
 		AABB000000000000000094AA /* loinc.db in Resources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000093AA /* loinc.db */; };
 		AABB000000000000000096AA /* LabOrderEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000095AA /* LabOrderEditorView.swift */; };
 		AABB000000000000000098AA /* LicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000097AA /* LicenseView.swift */; };
+		AABB00000000000000009AAA /* ReferenceRangeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000099AA /* ReferenceRangeParser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -82,6 +83,7 @@
 		AABB000000000000000093AA /* loinc.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = loinc.db; sourceTree = "<group>"; };
 		AABB000000000000000095AA /* LabOrderEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabOrderEditorView.swift; sourceTree = "<group>"; };
 		AABB000000000000000097AA /* LicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseView.swift; sourceTree = "<group>"; };
+		AABB000000000000000099AA /* ReferenceRangeParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferenceRangeParser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +165,7 @@
 				AABB000000000000000025AA /* HealthKitService.swift */,
 				AABB000000000000000058AA /* CDAExportService.swift */,
 				AABB000000000000000090AA /* LoincDirectory.swift */,
+				AABB000000000000000099AA /* ReferenceRangeParser.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -297,6 +300,7 @@
 				AABB000000000000000091AA /* LoincDirectory.swift in Sources */,
 				AABB000000000000000096AA /* LabOrderEditorView.swift in Sources */,
 				AABB000000000000000098AA /* LicenseView.swift in Sources */,
+				AABB00000000000000009AAA /* ReferenceRangeParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

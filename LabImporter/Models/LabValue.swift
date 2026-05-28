@@ -10,6 +10,7 @@ struct LabValue: Identifiable, Equatable, @unchecked Sendable {
     var numericValue: Double?
     var unit: String
     var isSelected: Bool
+    var parsedRange: ReferenceRangeOverrides.StoredRange?
 
     init(
         id: UUID = UUID(),
@@ -18,7 +19,8 @@ struct LabValue: Identifiable, Equatable, @unchecked Sendable {
         displayValue: String,
         numericValue: Double?,
         unit: String,
-        isSelected: Bool = true
+        isSelected: Bool = true,
+        parsedRange: ReferenceRangeOverrides.StoredRange? = nil
     ) {
         self.id = id
         self.code = code
@@ -27,6 +29,7 @@ struct LabValue: Identifiable, Equatable, @unchecked Sendable {
         self.numericValue = numericValue
         self.unit = unit
         self.isSelected = isSelected
+        self.parsedRange = parsedRange
     }
 
     var resolvedName: String {

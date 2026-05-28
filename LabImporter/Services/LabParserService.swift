@@ -28,6 +28,12 @@ struct AILabEntry {
 
     @Guide(description: "Unit of measurement as printed (e.g. mg/dl, %, mmol/mol, U/l, ml/min/1,73m2KOF). Empty string if none.")
     var unit: String
+
+    @Guide(description: """
+    Reference range as printed on the report for this test, exactly as shown — examples:
+    "70-100", "< 200", "> 40", "0.4 - 4.0", "bis 5.7". Empty string if no range is printed.
+    """)
+    var referenceRange: String = ""
 }
 
 // MARK: - Result
@@ -74,7 +80,8 @@ actor LabParserService {
                 name: LabMapping.displayName(for: entry.code),
                 displayValue: entry.rawValue,
                 numericValue: numericValue,
-                unit: entry.unit
+                unit: entry.unit,
+                parsedRange: ReferenceRangeParser.parse(entry.referenceRange)
             )
         }
 
@@ -105,7 +112,8 @@ actor LabParserService {
 
     // MARK: - Regex fallback
 
-    // Handles: "CODE: value unit;" or "CODE: - ;" patterns from semicolon-separated German lab reports
+    // Handles: "CODE: value unit;" or "CODE: - ;" patterns from semicolon-separated German lab reports.
+    // Optionally captures a printed reference range like "(70-100)", "< 200", or "bis 5.7" trailing the unit.
     private func parseWithRegex(text: String) -> [AILabEntry] {
         let segments = text.components(separatedBy: ";")
         let entryPattern = /([A-Z][A-Z0-9\-]+)\s*:\s*(-|[\d]+[,\.]?[\d]*)\s*(.*)/
@@ -116,9 +124,10 @@ actor LabParserService {
 
             let code = String(match.1)
             let rawValue = String(match.2)
-            let unit = String(match.3).trimmingCharacters(in: .whitespacesAndNewlines)
+            let trailing = String(match.3).trimmingCharacters(in: .whitespacesAndNewlines)
 
-            return AILabEntry(code: code, rawValue: rawValue, unit: unit)
+            let (unit, refRange) = ReferenceRangeParser.splitUnitAndRange(trailing)
+            return AILabEntry(code: code, rawValue: rawValue, unit: unit, referenceRange: refRange)
         }
     }
 

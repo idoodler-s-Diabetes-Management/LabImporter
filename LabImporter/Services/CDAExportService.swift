@@ -137,6 +137,8 @@ struct CDAExportService {
             ? String(format: "%.0f", num)
             : String(format: "%.4g", num)
 
+        let referenceRangeXML = referenceRangeXML(for: value.parsedRange, unit: unit)
+
         return """
 <component>
                 <observation classCode="OBS" moodCode="EVN">
@@ -148,10 +150,31 @@ struct CDAExportService {
                         codeSystemName="LOINC"/>
                   <statusCode code="completed"/>
                   <effectiveTime value="\(date)"/>
-                  <value xsi:type="PQ" value="\(valueStr)" unit="\(esc(unit))"/>
+                  <value xsi:type="PQ" value="\(valueStr)" unit="\(esc(unit))"/>\(referenceRangeXML)
                 </observation>
               </component>
 """
+    }
+
+    private func referenceRangeXML(for range: ReferenceRangeOverrides.StoredRange?, unit: String) -> String {
+        guard let range, range.normalLow != nil || range.normalHigh != nil else { return "" }
+        let escapedUnit = esc(unit)
+        let lowXML = range.normalLow.map { "<low value=\"\(formatNumber($0))\" unit=\"\(escapedUnit)\"/>" } ?? ""
+        let highXML = range.normalHigh.map { "<high value=\"\(formatNumber($0))\" unit=\"\(escapedUnit)\"/>" } ?? ""
+        return """
+
+                  <referenceRange>
+                    <observationRange>
+                      <value xsi:type="IVL_PQ">\(lowXML)\(highXML)</value>
+                    </observationRange>
+                  </referenceRange>
+"""
+    }
+
+    private func formatNumber(_ value: Double) -> String {
+        value.truncatingRemainder(dividingBy: 1) == 0
+            ? String(format: "%.0f", value)
+            : String(format: "%.4g", value)
     }
 
     // Maps common German lab unit strings to UCUM codes.

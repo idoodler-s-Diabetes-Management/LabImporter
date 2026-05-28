@@ -145,7 +145,10 @@ struct DashboardView: View {
         return latestEntry.values.map { item in
             let points = (allPoints[item.entry.code] ?? []).sorted { $0.date < $1.date }
             let status = item.entry.numericValue.flatMap { value in
-                LabMapping.referenceRange(for: item.entry.code)?.status(for: value)
+                LabMapping.referenceRange(
+                    for: item.entry.code,
+                    parsedRange: item.entry.parsedRange
+                )?.status(for: value)
             }
             return MetricData(entry: item.entry, history: points, status: status)
         }

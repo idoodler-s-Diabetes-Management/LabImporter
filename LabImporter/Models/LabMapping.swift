@@ -94,15 +94,17 @@ enum LabMapping {
     // UserDefaults key shared with @AppStorage("referenceRangeOverrides") in SettingsView.
     static let overridesUserDefaultsKey = "referenceRangeOverrides"
 
-    // Returns the effective reference range: user override if present, otherwise the clinical default.
-    static func referenceRange(for code: String) -> ReferenceRange? {
+    // Returns the effective reference range.
+    // Resolution order: user override → per-entry parsed range → built-in default → nil.
+    static func referenceRange(
+        for code: String,
+        parsedRange: ReferenceRangeOverrides.StoredRange? = nil
+    ) -> ReferenceRange? {
         if let override = userOverride(for: code) {
-            return ReferenceRange(
-                normalLow: override.normalLow,
-                normalHigh: override.normalHigh,
-                borderlineLow: override.borderlineLow,
-                borderlineHigh: override.borderlineHigh
-            )
+            return ReferenceRange(stored: override)
+        }
+        if let parsed = parsedRange {
+            return ReferenceRange(stored: parsed)
         }
         return defaultReferenceRange(for: code)
     }
@@ -157,6 +159,22 @@ struct ReferenceRange {
     let normalHigh: Double?      // nil = no upper bound
     let borderlineLow: Double?   // low boundary of borderline zone (e.g. eGFR 60–89)
     let borderlineHigh: Double?  // high boundary of borderline zone (e.g. HbA1c 5.7–6.4)
+
+    init(normalLow: Double?, normalHigh: Double?, borderlineLow: Double?, borderlineHigh: Double?) {
+        self.normalLow = normalLow
+        self.normalHigh = normalHigh
+        self.borderlineLow = borderlineLow
+        self.borderlineHigh = borderlineHigh
+    }
+
+    init(stored: ReferenceRangeOverrides.StoredRange) {
+        self.init(
+            normalLow: stored.normalLow,
+            normalHigh: stored.normalHigh,
+            borderlineLow: stored.borderlineLow,
+            borderlineHigh: stored.borderlineHigh
+        )
+    }
 
     func status(for value: Double) -> RangeStatus {
         if let low = normalLow, value < low {
