@@ -73,16 +73,19 @@ struct TrendsView: View {
 
     private var isPinned: Bool { prefs.pinnedSet.contains(selectedCode) }
 
+    private var selectedName: String {
+        availableCodes.first(where: { $0.code == selectedCode })?.name ?? "Trends"
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             if availableCodes.isEmpty {
                 noDataView
             } else {
-                codePicker
                 trendContent
             }
         }
-        .navigationTitle("Trends")
+        .navigationTitle(selectedName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             if let onDismiss {
@@ -130,16 +133,6 @@ struct TrendsView: View {
             systemImage: "chart.line.uptrend.xyaxis",
             description: Text("Import reports with numeric lab values to see trends.")
         )
-    }
-
-    private var codePicker: some View {
-        Picker("Lab Value", selection: $selectedCode) {
-            ForEach(availableCodes, id: \.code) { item in
-                Text(item.name).tag(item.code)
-            }
-        }
-        .pickerStyle(.menu)
-        .padding([.horizontal, .top])
     }
 
     @ViewBuilder
