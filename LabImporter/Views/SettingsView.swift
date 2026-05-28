@@ -79,8 +79,16 @@ struct SettingsView: View {
                 }
 
                 Section("About") {
-                    LabeledContent("Branch", value: AppInfo.branch)
-                    LabeledContent("Commit", value: AppInfo.commit)
+                    LabeledContent {
+                        Text(AppInfo.branch)
+                    } label: {
+                        Label("Branch", systemImage: "arrow.triangle.branch")
+                    }
+                    LabeledContent {
+                        Text(AppInfo.commit)
+                    } label: {
+                        Label("Commit", systemImage: "number")
+                    }
                     NavigationLink {
                         LicenseView()
                     } label: {
