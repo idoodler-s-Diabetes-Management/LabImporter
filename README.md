@@ -2,7 +2,21 @@
 
 A native iOS app that imports lab report values into Apple Health using on-device AI.
 
-Photograph or screenshot your lab report — the app uses Vision OCR and the on-device Foundation Models framework to extract values, lets you review and correct them, then imports supported values directly into Apple Health.
+Photograph or paste your lab report — the app uses Vision OCR and the on-device Foundation Models framework to extract values, lets you review and correct them, then saves them directly into Apple Health as a CDA clinical document.
+
+---
+
+## Features
+
+- **Import** from camera, photo library, or clipboard paste
+- **On-device AI parsing** — Foundation Models + Vision OCR extract lab values without sending any data to a server
+- **Review & correct** — edit values, change codes, add or remove entries before saving
+- **Dashboard** — metric cards with current value, sparkline trend, and normal / borderline / elevated status
+- **Trend charts** — interactive per-metric chart with finger-scrubbing to inspect individual values
+- **History** — full list of imported reports with edit and delete
+- **Customise** — pin metrics to the top, reorder, or hide them from the dashboard
+- **Share** — export any report as a CDA file to send to a doctor or another app
+- **Privacy-first** — all data lives in Apple Health on your device; no account or server required
 
 ---
 
@@ -98,21 +112,29 @@ After the first manual run succeeds, builds are triggered automatically on the *
 
 | Step | Technology |
 |---|---|
-| Image input | `PhotosUI` PhotosPicker or Camera |
+| Image input | `PhotosUI` PhotosPicker, Camera, or Clipboard |
 | Text extraction | `Vision` — `VNRecognizeTextRequest` (German + English) |
 | Lab value parsing | `FoundationModels` — `@Generable` structured output via `LanguageModelSession` |
 | Parsing fallback | Swift regex, splits on `;` separators common in German lab reports |
-| Health import | `HealthKit` — `HKQuantitySample` with user-entered metadata |
-
-### Extending HealthKit support
-
-Apple Health's set of writable clinical quantity types is currently limited. Blood glucose (`HKQuantityTypeIdentifier.bloodGlucose`) is the only lab type wired up today. To add more as Apple expands the API, open `LabImporter/Models/LabMapping.swift` and add cases to `healthKitMapping(for:)`.
+| Health import | `HealthKit` — `HKCDADocumentSample` (CDA R2 clinical document) |
 
 ---
 
 ## Privacy
 
 All processing happens entirely on-device. No lab data is sent to any server. The Foundation Models framework runs the language model locally without any network requests.
+
+---
+
+## AI Disclosure
+
+### On-device AI inside the app
+
+Lab value extraction is powered by Apple's on-device Foundation Models framework (`LanguageModelSession` / `@Generable`). The language model runs entirely on the device — no lab data is transmitted to any external server or API. An Apple Intelligence-capable device (A17 Pro / M1 chip or later, iOS 26+) is required for AI-assisted parsing; the app falls back to a regex parser on unsupported hardware.
+
+### Built with AI assistance
+
+This app was designed and built with the assistance of [Claude Code](https://claude.ai/code) by Anthropic. AI-assisted development was used throughout: app architecture, Swift/SwiftUI implementation, HealthKit and CDA integration, on-device model prompting, and the dashboard, trends, and history features.
 
 ---
 
