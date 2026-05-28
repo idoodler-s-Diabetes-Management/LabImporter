@@ -91,10 +91,32 @@ enum LabMapping {
         return candidates.first { loincCode(for: $0)?.loinc == loinc }
     }
 
+    // UserDefaults key shared with @AppStorage("referenceRangeOverrides") in SettingsView.
+    static let overridesUserDefaultsKey = "referenceRangeOverrides"
+
+    // Returns the effective reference range: user override if present, otherwise the clinical default.
+    static func referenceRange(for code: String) -> ReferenceRange? {
+        if let override = userOverride(for: code) {
+            return ReferenceRange(
+                normalLow: override.normalLow,
+                normalHigh: override.normalHigh,
+                borderlineLow: override.borderlineLow,
+                borderlineHigh: override.borderlineHigh
+            )
+        }
+        return defaultReferenceRange(for: code)
+    }
+
+    static func userOverride(for code: String) -> ReferenceRangeOverrides.StoredRange? {
+        guard let raw = UserDefaults.standard.string(forKey: overridesUserDefaultsKey),
+              let overrides = ReferenceRangeOverrides(rawValue: raw) else { return nil }
+        return overrides.range(for: code)
+    }
+
     // Standard clinical reference ranges.
     // Borderline values fall between normal and clearly abnormal.
     // swiftlint:disable:next cyclomatic_complexity
-    static func referenceRange(for code: String) -> ReferenceRange? {
+    static func defaultReferenceRange(for code: String) -> ReferenceRange? {
         switch code.uppercased() {
         case "BZ", "GLUCOSE", "GLU", "BLOOD-GLUCOSE":
             return ReferenceRange(normalLow: 70, normalHigh: 100, borderlineLow: nil, borderlineHigh: 125)
@@ -146,5 +168,20 @@ struct ReferenceRange {
             return .abnormal
         }
         return .normal
+    }
+
+    var normalSummary: String {
+        let formatter: (Double) -> String = { ReferenceRange.format($0) }
+        switch (normalLow, normalHigh) {
+        case let (low?, high?): return "\(formatter(low))–\(formatter(high))"
+        case let (low?, nil):   return "≥ \(formatter(low))"
+        case let (nil, high?):  return "≤ \(formatter(high))"
+        case (nil, nil):        return "—"
+        }
+    }
+
+    private static func format(_ value: Double) -> String {
+        if value == value.rounded() { return String(Int(value)) }
+        return String(format: "%g", value)
     }
 }

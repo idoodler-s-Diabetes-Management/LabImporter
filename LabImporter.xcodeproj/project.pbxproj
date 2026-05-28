@@ -35,6 +35,8 @@
 		AABB000000000000000074AA /* LabDisplayPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000075AA /* LabDisplayPreferences.swift */; };
 		AABB000000000000000077AA /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000076AA /* Localizable.xcstrings */; };
 		AABB000000000000000078AA /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000079AA /* WelcomeView.swift */; };
+		AABB000000000000000087AA /* ReferenceRangeOverrides.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000086AA /* ReferenceRangeOverrides.swift */; };
+		AABB000000000000000089AA /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000088AA /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +72,8 @@
 		AABB000000000000000075AA /* LabDisplayPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabDisplayPreferences.swift; sourceTree = "<group>"; };
 		AABB000000000000000076AA /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		AABB000000000000000079AA /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		AABB000000000000000086AA /* ReferenceRangeOverrides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferenceRangeOverrides.swift; sourceTree = "<group>"; };
+		AABB000000000000000088AA /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +133,7 @@
 				AABB000000000000000022AA /* LabMapping.swift */,
 				AABB000000000000000061AA /* LabReport.swift */,
 				AABB000000000000000075AA /* LabDisplayPreferences.swift */,
+				AABB000000000000000086AA /* ReferenceRangeOverrides.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -158,6 +163,7 @@
 				AABB000000000000000071AA /* DashboardView.swift */,
 				AABB000000000000000073AA /* ImportLandingView.swift */,
 				AABB000000000000000079AA /* WelcomeView.swift */,
+				AABB000000000000000088AA /* SettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -265,6 +271,8 @@
 				AABB000000000000000072AA /* ImportLandingView.swift in Sources */,
 				AABB000000000000000074AA /* LabDisplayPreferences.swift in Sources */,
 				AABB000000000000000078AA /* WelcomeView.swift in Sources */,
+				AABB000000000000000087AA /* ReferenceRangeOverrides.swift in Sources */,
+				AABB000000000000000089AA /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

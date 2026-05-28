@@ -48,6 +48,11 @@ struct DashboardView: View {
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink(destination: SettingsView()) {
+                    Image(systemName: "gearshape")
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
                 importMenu
             }
         }
