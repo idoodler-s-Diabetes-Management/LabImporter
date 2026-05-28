@@ -437,6 +437,13 @@ private struct MetricCard: View {
                     endPoint: .bottom
                 )
             )
+
+            PointMark(
+                x: .value("Date", point.date),
+                y: .value("Value", point.value)
+            )
+            .foregroundStyle(statusColor)
+            .symbolSize(20)
         }
         .chartXAxis(.hidden)
         .chartYAxis(.hidden)
