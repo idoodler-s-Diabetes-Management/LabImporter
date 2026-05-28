@@ -4,7 +4,11 @@ import SwiftUI
 struct LabImporterApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            if DeviceSupport.isSupported {
+                HomeView()
+            } else {
+                UnsupportedDeviceView()
+            }
         }
     }
 }
