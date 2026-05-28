@@ -19,15 +19,6 @@ struct HistoryView: View {
         }
         .navigationTitle("History")
         .navigationBarTitleDisplayMode(.large)
-        .toolbar {
-            if !reports.isEmpty {
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: TrendsView(reports: reports)) {
-                        Image(systemName: "chart.line.uptrend.xyaxis")
-                    }
-                }
-            }
-        }
         .onAppear { Task { await loadReports() } }
         .sheet(item: $reportToEdit, onDismiss: { Task { await loadReports() } }, content: { report in
             NavigationStack {

@@ -20,7 +20,6 @@ struct DashboardView: View {
         ScrollView {
             VStack(spacing: 20) {
                 metricsGrid
-                trendsLink
                 footer
             }
             .padding(.horizontal, 16)
@@ -84,40 +83,20 @@ struct DashboardView: View {
             spacing: 14
         ) {
             ForEach(sortedMetrics) { metric in
-                MetricCard(metric: metric, isPinned: prefs.pinnedSet.contains(metric.entry.code))
-                    .contextMenu {
-                        let pinned = prefs.pinnedSet.contains(metric.entry.code)
-                        Button { togglePin(metric.entry.code) } label: {
-                            Label(
-                                pinned ? "Unpin" : "Pin to Top",
-                                systemImage: pinned ? "pin.slash" : "pin"
-                            )
-                        }
+                NavigationLink(destination: TrendsView(reports: reports, initialCode: metric.entry.code)) {
+                    MetricCard(metric: metric, isPinned: prefs.pinnedSet.contains(metric.entry.code))
+                }
+                .buttonStyle(.plain)
+                .contextMenu {
+                    let pinned = prefs.pinnedSet.contains(metric.entry.code)
+                    Button { togglePin(metric.entry.code) } label: {
+                        Label(
+                            pinned ? "Unpin" : "Pin to Top",
+                            systemImage: pinned ? "pin.slash" : "pin"
+                        )
                     }
+                }
             }
-        }
-    }
-
-    private var trendsLink: some View {
-        NavigationLink(destination: TrendsView(reports: reports)) {
-            HStack {
-                Image(systemName: "chart.line.uptrend.xyaxis")
-                    .font(.body.weight(.medium))
-                Text("View All Trends")
-                    .font(.body.weight(.medium))
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
-            }
-            .foregroundStyle(.primary)
-            .padding(.horizontal, 18)
-            .padding(.vertical, 14)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
-            )
         }
     }
 

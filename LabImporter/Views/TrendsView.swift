@@ -3,6 +3,7 @@ import Charts
 
 struct TrendsView: View {
     let reports: [LabReport]
+    var initialCode: String? = nil
 
     @AppStorage("trendsSelectedCode") private var selectedCode: String = ""
     @AppStorage("labDisplayPrefs") private var prefs = LabDisplayPreferences()
@@ -66,7 +67,9 @@ struct TrendsView: View {
         .navigationBarTitleDisplayMode(.large)
         .onAppear {
             let codes = availableCodes.map(\.code)
-            if selectedCode.isEmpty || !codes.contains(selectedCode) {
+            if let initial = initialCode, codes.contains(initial) {
+                selectedCode = initial
+            } else if selectedCode.isEmpty || !codes.contains(selectedCode) {
                 selectedCode = codes.first ?? ""
             }
         }
