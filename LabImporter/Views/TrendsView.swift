@@ -144,10 +144,8 @@ struct TrendsView: View {
                 description: Text("Import at least two reports containing this value to see a trend.")
             )
         } else {
-            ScrollView {
-                trendChart
-                    .padding()
-            }
+            trendChart
+                .padding()
         }
     }
 
