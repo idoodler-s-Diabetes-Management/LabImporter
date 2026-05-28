@@ -23,9 +23,21 @@ enum AppInfo {
         return webURL(from: value)
     }
 
-    /// URL that opens the "new issue" composer for `repositoryURL`.
+    /// URL that opens the "new issue" composer for `repositoryURL`, pre-filling
+    /// the body with build metadata to help triage reports.
     static var newIssueURL: URL? {
-        repositoryURL?.appendingPathComponent("issues/new")
+        guard let base = repositoryURL?.appendingPathComponent("issues/new"),
+              var components = URLComponents(url: base, resolvingAgainstBaseURL: false) else { return nil }
+        let body = """
+
+
+        ---
+        Version: \(version) (\(build))
+        Branch: \(branch)
+        Commit: \(commit)
+        """
+        components.queryItems = [URLQueryItem(name: "body", value: body)]
+        return components.url
     }
 
     /// Normalizes a git remote string (`https`, `.git` suffix, or `git@host:owner/repo`
