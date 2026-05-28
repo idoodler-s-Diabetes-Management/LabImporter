@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct CodeName: Identifiable, Hashable {
     var id: String { code }
@@ -150,6 +151,7 @@ struct ReferenceRangeEditorView: View {
     @State private var borderlineLowText: String = ""
     @State private var borderlineHighText: String = ""
     @State private var showResetConfirm = false
+    @State private var showCopiedHint = false
 
     private var defaultRange: ReferenceRange? {
         LabMapping.defaultReferenceRange(for: code)
@@ -157,6 +159,8 @@ struct ReferenceRangeEditorView: View {
 
     var body: some View {
         Form {
+            loincSection
+
             Section {
                 rangeField("Normal Low", text: $normalLowText, defaultValue: defaultRange?.normalLow)
                 rangeField("Normal High", text: $normalHighText, defaultValue: defaultRange?.normalHigh)
@@ -205,6 +209,48 @@ struct ReferenceRangeEditorView: View {
             Button("Cancel", role: .cancel) {}
         }
         .onAppear { loadFields() }
+    }
+
+    @ViewBuilder
+    private var loincSection: some View {
+        if let loinc = LabMapping.loincCode(for: code) {
+            Section {
+                HStack {
+                    Text("Code")
+                    Spacer()
+                    Text(loinc.loinc)
+                        .font(.body.monospaced())
+                        .foregroundStyle(.secondary)
+                        .textSelection(.enabled)
+                }
+                if !loinc.display.isEmpty {
+                    Text(loinc.display)
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .textSelection(.enabled)
+                }
+                Button {
+                    UIPasteboard.general.string = loinc.loinc
+                    UINotificationFeedbackGenerator().notificationOccurred(.success)
+                    showCopiedHint = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        showCopiedHint = false
+                    }
+                } label: {
+                    Label(showCopiedHint ? "Copied" : "Copy LOINC Code",
+                          systemImage: showCopiedHint ? "checkmark" : "doc.on.doc")
+                }
+                if let url = URL(string: "https://loinc.org/\(loinc.loinc)/") {
+                    Link(destination: url) {
+                        Label("View on loinc.org", systemImage: "safari")
+                    }
+                }
+            } header: {
+                Text("LOINC")
+            } footer: {
+                Text("Universal identifier published by Regenstrief Institute. Free to look up at loinc.org.")
+            }
+        }
     }
 
     @ViewBuilder
