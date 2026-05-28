@@ -177,11 +177,20 @@ struct TrendsView: View {
                     .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
                     .annotation(
                         position: .top,
-                        spacing: 6,
+                        spacing: 8,
                         overflowResolution: .init(x: .fit(to: .chart), y: .disabled)
                     ) {
                         scrubCallout(selected)
                     }
+
+                PointMark(
+                    x: .value(String(localized: "Date"), selected.date),
+                    y: .value(currentUnit, selected.value)
+                )
+                .symbolSize(0)
+                .annotation(position: .overlay, spacing: 0) {
+                    selectedPointBubble
+                }
             }
         }
         .chartXSelection(value: $selectedDate)
@@ -212,13 +221,14 @@ struct TrendsView: View {
     }
 
     private func scrubCallout(_ point: DataPoint) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .center, spacing: 1) {
             Text(point.date.formatted(date: .abbreviated, time: .omitted))
                 .font(.caption2)
                 .foregroundStyle(.secondary)
             HStack(alignment: .firstTextBaseline, spacing: 3) {
                 Text(formatValue(point.value))
-                    .font(.caption.bold())
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.primary)
                 if !point.unit.isEmpty {
                     Text(point.unit)
                         .font(.caption2)
@@ -226,9 +236,27 @@ struct TrendsView: View {
                 }
             }
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
-        .glassEffect(in: RoundedRectangle(cornerRadius: 12))
+        .padding(.horizontal, 14)
+        .padding(.vertical, 8)
+        .glassEffect(.regular.tint(Color.accentColor.opacity(0.18)).interactive(), in: Capsule())
+        .overlay(
+            Capsule()
+                .stroke(Color.primary.opacity(0.12), lineWidth: 0.5)
+        )
+        .shadow(color: Color.black.opacity(0.18), radius: 8, x: 0, y: 3)
+    }
+
+    private var selectedPointBubble: some View {
+        Circle()
+            .fill(Color.accentColor)
+            .frame(width: 10, height: 10)
+            .padding(4)
+            .glassEffect(.regular.interactive(), in: Circle())
+            .overlay(
+                Circle()
+                    .stroke(Color.accentColor.opacity(0.6), lineWidth: 1)
+            )
+            .shadow(color: Color.accentColor.opacity(0.45), radius: 6, x: 0, y: 0)
     }
 
     // MARK: - Helpers
