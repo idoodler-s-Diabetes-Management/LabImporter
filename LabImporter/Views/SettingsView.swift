@@ -3,26 +3,35 @@ import SwiftUI
 struct SettingsView: View {
     @AppStorage(LabMapping.overridesUserDefaultsKey) private var overrides = ReferenceRangeOverrides()
     @State private var showResetAllConfirm = false
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        List {
-            aboutSection
-            referenceRangesSection
-            resetSection
-        }
-        .navigationTitle("Settings")
-        .navigationBarTitleDisplayMode(.inline)
-        .confirmationDialog(
-            "Reset all reference ranges to defaults?",
-            isPresented: $showResetAllConfirm,
-            titleVisibility: .visible
-        ) {
-            Button("Reset All", role: .destructive) {
-                overrides = ReferenceRangeOverrides()
+        NavigationStack {
+            List {
+                aboutSection
+                referenceRangesSection
+                resetSection
             }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("Your custom boundaries for every lab code will be cleared.")
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") { dismiss() }
+                        .fontWeight(.semibold)
+                }
+            }
+            .confirmationDialog(
+                "Reset all reference ranges to defaults?",
+                isPresented: $showResetAllConfirm,
+                titleVisibility: .visible
+            ) {
+                Button("Reset All", role: .destructive) {
+                    overrides = ReferenceRangeOverrides()
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("Your custom boundaries for every lab code will be cleared.")
+            }
         }
     }
 
@@ -273,5 +282,5 @@ struct LicenseView: View {
 }
 
 #Preview {
-    NavigationStack { SettingsView() }
+    SettingsView()
 }

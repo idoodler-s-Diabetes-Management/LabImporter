@@ -15,6 +15,7 @@ struct DashboardView: View {
 
     @AppStorage("labDisplayPrefs") private var prefs = LabDisplayPreferences()
     @State private var showOrderSheet = false
+    @State private var showSettings = false
     @State private var trendSheet: TrendSheet?
 
     private struct TrendSheet: Identifiable {
@@ -48,7 +49,9 @@ struct DashboardView: View {
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink(destination: SettingsView()) {
+                Button {
+                    showSettings = true
+                } label: {
                     Image(systemName: "gearshape")
                 }
             }
@@ -58,6 +61,9 @@ struct DashboardView: View {
         }
         .sheet(isPresented: $showOrderSheet) {
             LabOrderSheet(prefs: $prefs, allCodes: allCodeNames)
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
         }
         .sheet(item: $trendSheet) { sheet in
             NavigationStack {
