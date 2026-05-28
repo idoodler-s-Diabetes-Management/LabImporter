@@ -4,6 +4,7 @@ import Charts
 struct TrendsView: View {
     let reports: [LabReport]
     var initialCode: String? = nil
+    var onDismiss: (() -> Void)? = nil
 
     @AppStorage("trendsSelectedCode") private var selectedCode: String = ""
     @AppStorage("labDisplayPrefs") private var prefs = LabDisplayPreferences()
@@ -63,6 +64,8 @@ struct TrendsView: View {
         })
     }
 
+    private var isPinned: Bool { prefs.pinnedSet.contains(selectedCode) }
+
     var body: some View {
         VStack(spacing: 0) {
             if availableCodes.isEmpty {
@@ -73,7 +76,19 @@ struct TrendsView: View {
             }
         }
         .navigationTitle("Trends")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if let onDismiss {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Close", action: onDismiss)
+                }
+            }
+            if !selectedCode.isEmpty {
+                ToolbarItem(placement: .topBarTrailing) {
+                    pinButton
+                }
+            }
+        }
         .onAppear {
             let codes = availableCodes.map(\.code)
             if let initial = initialCode, codes.contains(initial) {
@@ -82,6 +97,21 @@ struct TrendsView: View {
                 selectedCode = codes.first ?? ""
             }
         }
+    }
+
+    // MARK: - Toolbar
+
+    private var pinButton: some View {
+        Button {
+            togglePin(selectedCode)
+        } label: {
+            Image(systemName: isPinned ? "pin.fill" : "pin")
+                .font(.system(size: 13, weight: .semibold))
+                .frame(width: 32, height: 32)
+                .glassEffect(in: Circle())
+        }
+        .buttonStyle(.plain)
+        .animation(.spring(duration: 0.2), value: isPinned)
     }
 
     // MARK: - Subviews
@@ -203,9 +233,24 @@ struct TrendsView: View {
         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.primary.opacity(0.1), lineWidth: 0.5))
     }
 
+    // MARK: - Helpers
+
     private func formatValue(_ value: Double) -> String {
         value.truncatingRemainder(dividingBy: 1) == 0
             ? String(format: "%.0f", value)
             : String(format: "%.4g", value)
+    }
+
+    private func togglePin(_ code: String) {
+        var updated = prefs
+        if updated.pinnedCodes.contains(code) {
+            updated.pinnedCodes.removeAll { $0 == code }
+        } else {
+            updated.pinnedCodes.append(code)
+            if !updated.orderedCodes.contains(code) {
+                updated.orderedCodes.append(code)
+            }
+        }
+        prefs = updated
     }
 }
