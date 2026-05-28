@@ -67,7 +67,7 @@ struct ReportDetailView: View {
     private func entryRow(_ entry: LabReport.Entry) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text(entry.name)
+                Text(entry.resolvedName)
                     .font(.body)
                 Text(entry.code)
                     .font(.caption2)

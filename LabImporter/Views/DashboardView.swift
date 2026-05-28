@@ -167,7 +167,7 @@ struct DashboardView: View {
                 let aOrd = orderMap[lhs.entry.code] ?? Int.max
                 let bOrd = orderMap[rhs.entry.code] ?? Int.max
                 if aOrd != bOrd { return aOrd < bOrd }
-                return lhs.entry.name < rhs.entry.name
+                return lhs.entry.resolvedName < rhs.entry.resolvedName
             }
     }
 
@@ -178,7 +178,7 @@ struct DashboardView: View {
         var result: [CodeName] = []
         for report in reports {
             for entry in report.entries where seen.insert(entry.code).inserted {
-                result.append(CodeName(code: entry.code, name: entry.name))
+                result.append(CodeName(code: entry.code, name: entry.resolvedName))
             }
         }
         return result
@@ -375,7 +375,7 @@ private struct MetricCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(alignment: .top, spacing: 4) {
-                Text(metric.entry.name)
+                Text(metric.entry.resolvedName)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(2)

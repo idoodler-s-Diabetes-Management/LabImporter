@@ -225,7 +225,7 @@ struct ReviewView: View {
                 ForEach(unsupportedValues) { value in
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(value.name).font(.body)
+                            Text(value.resolvedName).font(.body)
                             Text(value.code)
                                 .font(.caption2)
                                 .foregroundStyle(.tertiary)

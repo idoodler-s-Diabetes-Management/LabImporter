@@ -30,7 +30,7 @@ struct TrendsView: View {
         var result: [(code: String, name: String)] = []
         for report in reports {
             for entry in report.entries where entry.numericValue != nil && seen.insert(entry.code).inserted {
-                result.append((code: entry.code, name: entry.name))
+                result.append((code: entry.code, name: entry.resolvedName))
             }
         }
         let pinned = prefs.pinnedSet

@@ -24,7 +24,7 @@ struct LabValueRowView: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 4) {
-                    Text(value.name)
+                    Text(value.resolvedName)
                         .font(.body)
 
                     if !hasLoincCode {

@@ -29,6 +29,11 @@ struct LabValue: Identifiable, Equatable, @unchecked Sendable {
         self.isSelected = isSelected
     }
 
+    var resolvedName: String {
+        let mapped = LabMapping.displayName(for: code)
+        return mapped == code ? name : mapped
+    }
+
     static func == (lhs: LabValue, rhs: LabValue) -> Bool {
         lhs.id == rhs.id
             && lhs.isSelected == rhs.isSelected
