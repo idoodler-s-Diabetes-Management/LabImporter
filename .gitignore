@@ -1,3 +1,4 @@
 tools/.loinc_source/
+tools/.env
 LabImporter/Resources/loinc.db-shm
 LabImporter/Resources/loinc.db-wal
