@@ -110,6 +110,7 @@ struct SettingsView: View {
                     .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
                 }
+                .listSectionSpacing(8)
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
