@@ -15,6 +15,7 @@ struct ReviewView: View {
     @State private var cdaShareURL: URL?
     @State private var cdaError: String?
     @State private var showDiscardAlert = false
+    @State private var replacingReport: LabReport?
 
     @State private var showAddValue = false
     @State private var addName = ""
@@ -41,12 +42,14 @@ struct ReviewView: View {
         labValues: [LabValue],
         reportDate: Date = Date(),
         extractedPatientName: String? = nil,
-        extractedAuthorName: String? = nil
+        extractedAuthorName: String? = nil,
+        replacingReport: LabReport? = nil
     ) {
         _labValues = State(initialValue: labValues)
         _reportDate = State(initialValue: reportDate)
         _extractedPatientName = State(initialValue: extractedPatientName)
         _extractedAuthorName = State(initialValue: extractedAuthorName)
+        _replacingReport = State(initialValue: replacingReport)
     }
 
     var body: some View {
@@ -438,6 +441,9 @@ private extension ReviewView {
         )
         do {
             try await HealthKitService.shared.importCDADocument(xml, date: reportDate)
+            if let old = replacingReport {
+                try? await HealthKitService.shared.deleteCDADocument(id: old.id)
+            }
             dismiss()
         } catch {
             cdaError = error.localizedDescription

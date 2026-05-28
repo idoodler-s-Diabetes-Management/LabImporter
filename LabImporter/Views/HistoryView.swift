@@ -3,6 +3,7 @@ import SwiftUI
 struct HistoryView: View {
     @State private var reports: [LabReport] = []
     @State private var loadError: String?
+    @State private var reportToEdit: LabReport?
 
     var body: some View {
         Group {
@@ -27,7 +28,17 @@ struct HistoryView: View {
                 }
             }
         }
-        .task { await loadReports() }
+        .onAppear { Task { await loadReports() } }
+        .sheet(item: $reportToEdit, onDismiss: { Task { await loadReports() } }) { report in
+            NavigationStack {
+                ReviewView(
+                    labValues: report.asLabValues,
+                    reportDate: report.date,
+                    replacingReport: report
+                )
+            }
+            .interactiveDismissDisabled()
+        }
         .alert("Load Error", isPresented: .constant(loadError != nil)) {
             Button("OK") { loadError = nil }
         } message: {
@@ -38,8 +49,14 @@ struct HistoryView: View {
     private var reportList: some View {
         List {
             ForEach(reports) { report in
-                NavigationLink(destination: ReportDetailView(report: report)) {
+                NavigationLink(destination: ReportDetailView(report: report, onDeleted: deleteReport)) {
                     reportRow(report)
+                }
+                .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                    Button { reportToEdit = report } label: {
+                        Label("Edit", systemImage: "pencil")
+                    }
+                    .tint(.blue)
                 }
             }
             .onDelete(perform: deleteReports)
@@ -76,13 +93,16 @@ struct HistoryView: View {
         }
     }
 
+    private func deleteReport(_ id: UUID) {
+        reports.removeAll { $0.id == id }
+        Task { try? await HealthKitService.shared.deleteCDADocument(id: id) }
+    }
+
     private func deleteReports(at offsets: IndexSet) {
-        let toDelete = offsets.map { reports[$0].id }
+        let ids = offsets.map { reports[$0].id }
         reports.remove(atOffsets: offsets)
         Task {
-            for reportId in toDelete {
-                try? await HealthKitService.shared.deleteCDADocument(id: reportId)
-            }
+            for id in ids { try? await HealthKitService.shared.deleteCDADocument(id: id) }
         }
     }
 }

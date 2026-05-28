@@ -2,6 +2,11 @@ import SwiftUI
 
 struct ReportDetailView: View {
     let report: LabReport
+    let onDeleted: (UUID) -> Void
+
+    @Environment(\.dismiss) private var dismiss
+    @State private var showEdit = false
+    @State private var showDeleteAlert = false
 
     var body: some View {
         List {
@@ -25,6 +30,38 @@ struct ReportDetailView: View {
         }
         .navigationTitle(report.date.formatted(date: .abbreviated, time: .omitted))
         .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button { showEdit = true } label: {
+                    Image(systemName: "pencil")
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button { showDeleteAlert = true } label: {
+                    Image(systemName: "trash")
+                }
+                .tint(.red)
+            }
+        }
+        .alert("Delete Report?", isPresented: $showDeleteAlert) {
+            Button("Delete", role: .destructive) {
+                onDeleted(report.id)
+                dismiss()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("This report will be permanently removed from Apple Health.")
+        }
+        .sheet(isPresented: $showEdit, onDismiss: { dismiss() }) {
+            NavigationStack {
+                ReviewView(
+                    labValues: report.asLabValues,
+                    reportDate: report.date,
+                    replacingReport: report
+                )
+            }
+            .interactiveDismissDisabled()
+        }
     }
 
     private func entryRow(_ entry: LabReport.Entry) -> some View {

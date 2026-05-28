@@ -16,3 +16,14 @@ struct LabReport: Codable, Identifiable {
         let unit: String
     }
 }
+
+extension LabReport {
+    var asLabValues: [LabValue] {
+        entries.map {
+            LabValue(code: $0.code, name: $0.name,
+                     displayValue: $0.displayValue,
+                     numericValue: $0.numericValue,
+                     unit: $0.unit)
+        }
+    }
+}
