@@ -159,8 +159,6 @@ struct ReferenceRangeEditorView: View {
 
     var body: some View {
         Form {
-            loincSection
-
             Section {
                 rangeField("Normal Low", text: $normalLowText, defaultValue: defaultRange?.normalLow)
                 rangeField("Normal High", text: $normalHighText, defaultValue: defaultRange?.normalHigh)
@@ -178,6 +176,8 @@ struct ReferenceRangeEditorView: View {
             } footer: {
                 Text("Values between Normal and Borderline are flagged as Borderline. Leave a field empty for no bound.")
             }
+
+            loincSection
 
             if overrides.range(for: code) != nil {
                 Section {
