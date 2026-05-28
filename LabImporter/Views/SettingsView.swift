@@ -90,16 +90,16 @@ struct SettingsView: View {
 
                 Section {
                     VStack(spacing: 16) {
-                        HStack(spacing: 28) {
+                        HStack(spacing: 12) {
                             if let repository = AppInfo.repositoryURL {
-                                roundButton("chevron.left.forwardslash.chevron.right",
-                                            label: "View on GitHub",
-                                            url: repository)
+                                pillButton("View on GitHub",
+                                           systemImage: "chevron.left.forwardslash.chevron.right",
+                                           url: repository)
                             }
                             if let newIssue = AppInfo.newIssueURL {
-                                roundButton("exclamationmark.bubble",
-                                            label: "Report an Issue",
-                                            url: newIssue)
+                                pillButton("Report an Issue",
+                                           systemImage: "exclamationmark.bubble",
+                                           url: newIssue)
                             }
                         }
                         Text("Version \(AppInfo.version) (\(AppInfo.build))")
@@ -126,19 +126,18 @@ struct SettingsView: View {
         }
     }
 
-    /// A circular icon button that opens a web URL in an in-app browser.
-    private func roundButton(_ systemImage: String, label: LocalizedStringKey, url: URL) -> some View {
+    /// A pill-shaped button that opens a web URL in an in-app browser.
+    private func pillButton(_ titleKey: LocalizedStringKey, systemImage: String, url: URL) -> some View {
         Button {
             browserURL = IdentifiedURL(url: url)
         } label: {
-            Image(systemName: systemImage)
-                .font(.title2)
-                .frame(width: 56, height: 56)
+            Label(titleKey, systemImage: systemImage)
+                .font(.subheadline)
         }
         .buttonStyle(.bordered)
-        .buttonBorderShape(.circle)
+        .buttonBorderShape(.capsule)
+        .controlSize(.small)
         .tint(.primary)
-        .accessibilityLabel(label)
     }
 }
 
