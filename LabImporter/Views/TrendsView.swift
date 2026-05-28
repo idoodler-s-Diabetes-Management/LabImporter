@@ -236,14 +236,15 @@ struct TrendsView: View {
                 }
             }
         }
+        .fixedSize()
         .padding(.horizontal, 14)
         .padding(.vertical, 8)
-        .glassEffect(.regular.tint(Color.accentColor.opacity(0.18)).interactive(), in: Capsule())
+        .glassEffect(.regular, in: Capsule())
         .overlay(
             Capsule()
-                .stroke(Color.primary.opacity(0.12), lineWidth: 0.5)
+                .stroke(Color.primary.opacity(0.15), lineWidth: 0.5)
         )
-        .shadow(color: Color.black.opacity(0.18), radius: 8, x: 0, y: 3)
+        .shadow(color: Color.black.opacity(0.2), radius: 8, x: 0, y: 3)
     }
 
     private var selectedPointBubble: some View {
