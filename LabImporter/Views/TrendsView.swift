@@ -3,8 +3,14 @@ import Charts
 
 struct TrendsView: View {
     let reports: [LabReport]
-    var initialCode: String? = nil
-    var onDismiss: (() -> Void)? = nil
+    let initialCode: String?
+    let onDismiss: (() -> Void)?
+
+    init(reports: [LabReport], initialCode: String? = nil, onDismiss: (() -> Void)? = nil) {
+        self.reports = reports
+        self.initialCode = initialCode
+        self.onDismiss = onDismiss
+    }
 
     @AppStorage("trendsSelectedCode") private var selectedCode: String = ""
     @AppStorage("labDisplayPrefs") private var prefs = LabDisplayPreferences()
