@@ -13,6 +13,38 @@ enum AppInfo {
     static var build: String { string("CFBundleVersion") ?? "—" }
     static var branch: String { string("GitBranch") ?? "unknown" }
     static var commit: String { string("GitCommit") ?? "unknown" }
+
+    /// Canonical upstream repository, used as a fallback when no build-time URL is stamped.
+    static let fallbackRepository = "https://github.com/idoodler-s-Diabetes-Management/LabImporter"
+
+    /// Web URL of the repository this build came from. Stamped into `Info.plist`
+    /// at build time (`GitRepositoryURL`) so forks open their own repo, with the
+    /// upstream as a fallback.
+    static var repositoryURL: URL? {
+        webURL(from: string("GitRepositoryURL") ?? fallbackRepository)
+    }
+
+    /// URL that opens the "new issue" composer for `repositoryURL`.
+    static var newIssueURL: URL? {
+        repositoryURL?.appendingPathComponent("issues/new")
+    }
+
+    /// Normalizes a git remote string (`https`, `.git` suffix, or `git@host:owner/repo`
+    /// SSH form) into a browsable `https` web URL.
+    private static func webURL(from remote: String) -> URL? {
+        var value = remote.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !value.isEmpty else { return nil }
+
+        if let range = value.range(of: "git@") {
+            // git@github.com:owner/repo(.git) -> https://github.com/owner/repo
+            let hostAndPath = value[range.upperBound...].replacingOccurrences(of: ":", with: "/")
+            value = "https://" + hostAndPath
+        }
+        if value.hasSuffix(".git") {
+            value = String(value.dropLast(4))
+        }
+        return URL(string: value)
+    }
 }
 
 // MARK: - SettingsView
@@ -30,6 +62,19 @@ struct SettingsView: View {
                         LabSortEditor(prefs: $prefs, allCodes: allCodes)
                     } label: {
                         Label("Sort & Visibility", systemImage: "arrow.up.arrow.down")
+                    }
+                }
+
+                Section("Project") {
+                    if let repository = AppInfo.repositoryURL {
+                        externalLink("View on GitHub",
+                                     systemImage: "chevron.left.forwardslash.chevron.right",
+                                     url: repository)
+                    }
+                    if let newIssue = AppInfo.newIssueURL {
+                        externalLink("Report an Issue",
+                                     systemImage: "exclamationmark.bubble",
+                                     url: newIssue)
                     }
                 }
 
@@ -51,6 +96,19 @@ struct SettingsView: View {
                     Button("Done") { dismiss() }
                         .fontWeight(.semibold)
                 }
+            }
+        }
+    }
+
+    /// A row that opens an external web URL, with a trailing affordance.
+    private func externalLink(_ titleKey: LocalizedStringKey, systemImage: String, url: URL) -> some View {
+        Link(destination: url) {
+            HStack {
+                Label(titleKey, systemImage: systemImage)
+                Spacer()
+                Image(systemName: "arrow.up.right")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
         }
     }
