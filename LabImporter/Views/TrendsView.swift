@@ -228,10 +228,9 @@ struct TrendsView: View {
                 }
             }
         }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 5)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
-        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.primary.opacity(0.1), lineWidth: 0.5))
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .glassEffect(in: RoundedRectangle(cornerRadius: 12))
     }
 
     // MARK: - Helpers
