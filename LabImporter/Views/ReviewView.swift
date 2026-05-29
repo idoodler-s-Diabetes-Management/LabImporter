@@ -36,6 +36,40 @@ struct ReviewView: View {
         labValues.filter { LabMapping.loincCode(for: $0.code) == nil }
     }
 
+    // Values carrying a LOINC mapping — eligible for the categorized list & export.
+    private var supportedCount: Int {
+        labValues.filter { LabMapping.loincCode(for: $0.code) != nil }.count
+    }
+
+    private struct ValueGroup {
+        let category: LabCategory
+        let indices: [Int]
+    }
+
+    // Indices into `labValues` for LOINC-mapped values, grouped by clinical
+    // category in canonical order so the list reads like the saved report.
+    // Indices (not copies) keep each row a live binding for editing.
+    private var valueGroups: [ValueGroup] {
+        let supported = labValues.indices.filter { LabMapping.loincCode(for: labValues[$0].code) != nil }
+        let grouped = Dictionary(grouping: supported) { LabCategory.forCode(labValues[$0].code) }
+        return LabCategory.allCases.compactMap { category in
+            guard let idxs = grouped[category], !idxs.isEmpty else { return nil }
+            return ValueGroup(category: category, indices: idxs)
+        }
+    }
+
+    // Up to three category colors for the soft background wash.
+    private var backgroundColors: [Color] {
+        valueGroups
+            .sorted { $0.indices.count > $1.indices.count }
+            .prefix(3)
+            .map { $0.category.color }
+    }
+
+    private var dominantColor: Color {
+        valueGroups.max(by: { $0.indices.count < $1.indices.count })?.category.color ?? .accentColor
+    }
+
     init(
         labValues: [LabValue],
         reportDate: Date = Date(),
@@ -52,14 +86,17 @@ struct ReviewView: View {
 
     var body: some View {
         List {
+            headerSection
             patientSection
             dateSection
             valuesSection
+            addValueSection
             unsupportedSection
         }
+        .listStyle(.insetGrouped)
         .scrollDismissesKeyboard(.interactively)
         .scrollContentBackground(.hidden)
-        .background(.ultraThinMaterial)
+        .background { CategoryBackground(colors: backgroundColors) }
         .navigationTitle("Lab Report")
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
@@ -100,6 +137,24 @@ struct ReviewView: View {
     }
 
     // MARK: - Sections
+
+    private var categoryCounts: [CategoryCount] {
+        valueGroups.map { CategoryCount(category: $0.category, count: $0.indices.count) }
+    }
+
+    private var headerSection: some View {
+        Section {
+            ReviewHeaderCard(
+                supportedCount: supportedCount,
+                exportableCount: exportableCount,
+                groups: categoryCounts,
+                dominantColor: dominantColor
+            )
+            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+        }
+    }
 
     private var patientSection: some View {
         Section("Patient") {
@@ -164,6 +219,7 @@ struct ReviewView: View {
                 }
             }
         }
+        .listRowBackground(Rectangle().fill(.ultraThinMaterial))
     }
 
     private func suggestionRow(label: LocalizedStringKey, onUse: @escaping () -> Void) -> some View {
@@ -190,65 +246,57 @@ struct ReviewView: View {
                 displayedComponents: .date
             )
         }
+        .listRowBackground(Rectangle().fill(.ultraThinMaterial))
     }
 
+    @ViewBuilder
     private var valuesSection: some View {
-        Section {
-            ForEach(
-                labValues.indices.filter { LabMapping.loincCode(for: labValues[$0].code) != nil },
-                id: \.self
-            ) { idx in
-                LabValueRowView(value: $labValues[idx])
-                    .swipeActions(edge: .trailing) {
-                        Button(role: .destructive) {
-                            labValues.remove(at: idx)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
+        ForEach(valueGroups, id: \.category) { group in
+            Section {
+                ForEach(group.indices, id: \.self) { idx in
+                    LabValueRowView(value: $labValues[idx])
+                        .listRowBackground(Rectangle().fill(.ultraThinMaterial))
+                        .swipeActions(edge: .trailing) {
+                            Button(role: .destructive) {
+                                labValues.remove(at: idx)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
                         }
-                    }
+                }
+            } header: {
+                valuesGroupHeader(group)
             }
+        }
+    }
+
+    /// The first category group carries the "tap to correct" hint above its
+    /// header so the instruction appears once, just before the values begin.
+    @ViewBuilder
+    private func valuesGroupHeader(_ group: ValueGroup) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            if group.category == valueGroups.first?.category {
+                Text("Lab Values — tap values to correct them")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .textCase(nil)
+            }
+            CategorySectionHeader(category: group.category, count: group.indices.count)
+        }
+    }
+
+    private var addValueSection: some View {
+        Section {
             addValueMenu
-        } header: {
-            Text("Lab Values — tap values to correct them")
+                .listRowBackground(Rectangle().fill(.ultraThinMaterial))
         }
     }
 
     @ViewBuilder
     private var unsupportedSection: some View {
         if !unsupportedValues.isEmpty {
-            Section {
-                ForEach(unsupportedValues) { value in
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(value.resolvedName).font(.body)
-                            Text(value.code)
-                                .font(.caption2)
-                                .foregroundStyle(.tertiary)
-                                .textCase(.uppercase)
-                        }
-                        Spacer()
-                        HStack(spacing: 6) {
-                            Text(value.displayValue).font(.body)
-                            if !value.unit.isEmpty {
-                                Text(value.unit)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    }
-                    .padding(.vertical, 2)
-                    .swipeActions(edge: .trailing) {
-                        Button(role: .destructive) {
-                            labValues.removeAll { $0.id == value.id }
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                        }
-                    }
-                }
-            } header: {
-                Text("Not supported for export")
-            } footer: {
-                Text("These values don't have a LOINC code and won't be saved to Apple Health.")
+            UnsupportedValuesSection(values: unsupportedValues) { value in
+                labValues.removeAll { $0.id == value.id }
             }
         }
     }
@@ -428,18 +476,6 @@ private extension ReviewView {
     }
 }
 
-// MARK: - Share sheet wrapper
-
-private struct ShareSheet: UIViewControllerRepresentable {
-    let url: URL
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: [url], applicationActivities: nil)
-    }
-
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-}
-
 // MARK: - Preview
 
 #Preview {
@@ -449,11 +485,9 @@ private struct ShareSheet: UIViewControllerRepresentable {
                 LabValue(code: "BZ", name: "Blood Glucose", displayValue: "95", numericValue: 95, unit: "mg/dl"),
                 LabValue(code: "KREA", name: "Creatinine", displayValue: "0.91", numericValue: 0.91, unit: "mg/dl"),
                 LabValue(code: "HB-A1C", name: "HbA1c (%)", displayValue: "6.5", numericValue: 6.5, unit: "%"),
-                LabValue(code: "DIABOL", name: "Diabetes Screening", displayValue: "-", numericValue: nil, unit: ""),
                 LabValue(code: "CHOL", name: "Total Cholesterol", displayValue: "162", numericValue: 162, unit: "mg/dl"),
             ],
-            extractedPatientName: "Max Mustermann",
-            extractedAuthorName: "Labor München"
+            extractedPatientName: "Max Mustermann"
         )
     }
 }
