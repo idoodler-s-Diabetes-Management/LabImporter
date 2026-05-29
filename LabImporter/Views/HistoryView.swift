@@ -17,7 +17,7 @@ struct HistoryView: View {
                 reportList
             }
         }
-        .navigationTitle("History")
+        .navigationTitle("Reports")
         .navigationBarTitleDisplayMode(.large)
         .background { CategoryBackground(colors: backgroundColors) }
         .onAppear { Task { await loadReports() } }

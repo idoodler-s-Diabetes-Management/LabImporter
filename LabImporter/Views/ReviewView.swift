@@ -82,7 +82,8 @@ struct ReviewView: View {
         reportDate: Date = Date(),
         extractedPatientName: String? = nil,
         extractedAuthorName: String? = nil,
-        replacingReport: LabReport? = nil
+        replacingReport: LabReport? = nil,
+        onSaved: (() -> Void)? = nil
     ) {
         _labValues = State(initialValue: labValues)
         _reportDate = State(initialValue: reportDate)
@@ -91,6 +92,7 @@ struct ReviewView: View {
         _replacingReport = State(initialValue: replacingReport)
         _initialLabValues = State(initialValue: labValues)
         _initialReportDate = State(initialValue: reportDate)
+        self.onSaved = onSaved
     }
 
     var body: some View {
@@ -470,6 +472,7 @@ private extension ReviewView {
             if let old = replacingReport {
                 try? await HealthKitService.shared.deleteCDADocument(id: old.id)
             }
+            onSaved?()
             dismiss()
         } catch {
             cdaError = error.localizedDescription
