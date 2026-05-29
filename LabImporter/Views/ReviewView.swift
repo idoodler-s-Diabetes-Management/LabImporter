@@ -1,4 +1,5 @@
 import SwiftUI
+import VisionKit
 
 struct ReviewView: View {
     @State var labValues: [LabValue]
@@ -18,10 +19,7 @@ struct ReviewView: View {
     @State private var replacingReport: LabReport?
 
     @State private var showAddValue = false
-    @State private var addName = ""
-    @State private var addCode = ""
-    @State private var addDisplayValue = ""
-    @State private var addUnit = ""
+    @State private var importEngine = LabImportEngine()
 
     @FocusState private var anyFieldFocused: Bool
     @Environment(\.dismiss) private var dismiss
@@ -79,7 +77,9 @@ struct ReviewView: View {
         .safeAreaInset(edge: .bottom, spacing: 0) {
             bottomButtons
         }
+        .labImport(engine: importEngine)
         .task { await loadHKCharacteristics() }
+        .onAppear { configureImportEngine() }
         .sheet(isPresented: Binding(
             get: { cdaShareURL != nil },
             set: { if !$0 { cdaShareURL = nil } }
@@ -90,7 +90,7 @@ struct ReviewView: View {
             }
         }
         .sheet(isPresented: $showAddValue) {
-            addValueSheet
+            AddValueSheet { labValues.append($0) }
         }
         .alert("Export Error", isPresented: .constant(cdaError != nil)) {
             Button("OK") { cdaError = nil }
@@ -207,12 +207,7 @@ struct ReviewView: View {
                         }
                     }
             }
-            Button {
-                showAddValue = true
-            } label: {
-                Label("Add Value", systemImage: "plus.circle")
-            }
-            .foregroundStyle(Color.accentColor)
+            addValueMenu
         } header: {
             Text("Lab Values — tap values to correct them")
         }
@@ -264,48 +259,42 @@ struct ReviewView: View {
 
 private extension ReviewView {
 
-    var addValueSheet: some View {
-        NavigationStack {
-            Form {
-                Section {
-                    TextField("Name", text: $addName)
-                        .autocorrectionDisabled()
-                    NavigationLink {
-                        AddCodePickerPage(code: $addCode, name: $addName)
-                    } label: {
-                        HStack {
-                            Text("Lab Test")
-                            Spacer()
-                            Text(addCode.isEmpty ? "Any" : addCode)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
-                Section {
-                    TextField("Value", text: $addDisplayValue)
-                        .keyboardType(.decimalPad)
-                    TextField("Unit (optional)", text: $addUnit)
-                        .autocorrectionDisabled()
-                }
+    /// Lets the user grow the open report with the same "known methods" used to
+    /// create one — scan, file, paste — plus manual entry. Imported values are
+    /// appended to the current set (see `configureImportEngine`).
+    var addValueMenu: some View {
+        Menu {
+            Button {
+                importEngine.scan()
+            } label: {
+                Label("Scan Document", systemImage: "doc.viewfinder")
             }
-            .navigationTitle("Add Value")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button(role: .close) {
-                        showAddValue = false
-                        resetAddForm()
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Add") {
-                        commitAddValue()
-                    }
-                    .fontWeight(.semibold)
-                    .disabled(addName.isEmpty || addDisplayValue.isEmpty)
-                }
+            .disabled(!VNDocumentCameraViewController.isSupported)
+
+            Button {
+                importEngine.pickFile()
+            } label: {
+                Label("Choose File", systemImage: "folder")
             }
+
+            Button {
+                importEngine.paste()
+            } label: {
+                Label("Paste from Clipboard", systemImage: "doc.on.clipboard")
+            }
+            .disabled(!clipboardHasContent)
+
+            Divider()
+
+            Button {
+                showAddValue = true
+            } label: {
+                Label("Enter Manually", systemImage: "square.and.pencil")
+            }
+        } label: {
+            Label("Add Value", systemImage: "plus.circle")
         }
+        .foregroundStyle(Color.accentColor)
     }
 
     var bottomButtons: some View {
@@ -361,6 +350,19 @@ private extension ReviewView {
 
 private extension ReviewView {
 
+    var clipboardHasContent: Bool {
+        let pasteboard = UIPasteboard.general
+        return pasteboard.hasImages || pasteboard.hasStrings
+    }
+
+    /// Appends freshly parsed values to the open report rather than replacing it,
+    /// so scan/file/paste add to what the user is already reviewing or editing.
+    func configureImportEngine() {
+        importEngine.onParsed = { result in
+            labValues.append(contentsOf: result.values)
+        }
+    }
+
     var birthdateBinding: Binding<Date> {
         Binding(
             get: { Date(timeIntervalSinceReferenceDate: birthdateInterval) },
@@ -388,31 +390,6 @@ private extension ReviewView {
         guard let chars = try? await HealthKitService.shared.readPatientCharacteristics() else { return }
         hkBirthdate = chars.dateOfBirth
         hkSex = chars.biologicalSexRaw
-    }
-
-    func resetAddForm() {
-        addName = ""
-        addCode = ""
-        addDisplayValue = ""
-        addUnit = ""
-    }
-
-    func commitAddValue() {
-        let code = addCode.isEmpty
-            ? "MANUAL"
-            : addCode.uppercased().trimmingCharacters(in: .whitespaces)
-        let normalized = addDisplayValue.replacingOccurrences(of: ",", with: ".")
-        let num = Double(normalized)
-        let newValue = LabValue(
-            code: code,
-            name: addName.trimmingCharacters(in: .whitespaces),
-            displayValue: addDisplayValue,
-            numericValue: num,
-            unit: addUnit.trimmingCharacters(in: .whitespaces)
-        )
-        labValues.append(newValue)
-        showAddValue = false
-        resetAddForm()
     }
 
     func shareCDA() {
