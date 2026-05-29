@@ -146,22 +146,35 @@ struct TrendsView: View {
     @ViewBuilder
     private var trendContent: some View {
         if dataPoints.count < 2 {
-            VStack(spacing: 16) {
-                ContentUnavailableView(
-                    "Not Enough Data",
-                    systemImage: "chart.xyaxis.line",
-                    description: Text("Import at least two reports containing this value to see a trend.")
-                )
-                descriptionCard
+            ScrollView {
+                VStack(spacing: 16) {
+                    ContentUnavailableView(
+                        "Not Enough Data",
+                        systemImage: "chart.xyaxis.line",
+                        description: Text("Import at least two reports containing this value to see a trend.")
+                    )
+                    descriptionCard
+                    hideButton
+                }
             }
         } else {
             ScrollView {
                 VStack(spacing: 16) {
                     trendChart
                     descriptionCard
+                    hideButton
                 }
                 .padding()
             }
+        }
+    }
+
+    // Destructive action to remove this value from the dashboard. Hiding is
+    // reversible from Settings → Sort & Visibility, so no confirmation is needed.
+    @ViewBuilder
+    private var hideButton: some View {
+        if !selectedCode.isEmpty {
+            HideFromDashboardButton(prefs: $prefs, code: selectedCode) { onDismiss?() }
         }
     }
 
@@ -318,6 +331,41 @@ struct TrendsView: View {
         }
         prefs = updated
         impactFeedback.impactOccurred()
+    }
+}
+
+// MARK: - HideFromDashboardButton
+
+/// Destructive button shown at the bottom of the value detail sheet. Adds the
+/// value to the hidden set (and unpins it), then dismisses back to the
+/// dashboard. Reversible from Settings → Sort & Visibility.
+private struct HideFromDashboardButton: View {
+    @Binding var prefs: LabDisplayPreferences
+    let code: String
+    let onHidden: () -> Void
+
+    private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+
+    var body: some View {
+        Button(role: .destructive, action: hide) {
+            Label("Hide from Dashboard", systemImage: "eye.slash")
+                .font(.body.weight(.medium))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 4)
+        }
+        .buttonStyle(.bordered)
+        .tint(.red)
+        .padding(.horizontal)
+        .padding(.top, 4)
+    }
+
+    private func hide() {
+        var updated = prefs
+        if !updated.hiddenCodes.contains(code) { updated.hiddenCodes.append(code) }
+        updated.pinnedCodes.removeAll { $0 == code }
+        prefs = updated
+        impactFeedback.impactOccurred()
+        onHidden()
     }
 }
 
