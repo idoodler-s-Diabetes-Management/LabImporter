@@ -275,7 +275,7 @@ private struct MetricCard: View {
             }
         }
         .padding(14)
-        .frame(maxWidth: .infinity, minHeight: 158, alignment: .topLeading)
+        .frame(maxWidth: .infinity, minHeight: 120, alignment: .topLeading)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
         .overlay(
             RoundedRectangle(cornerRadius: 20)
