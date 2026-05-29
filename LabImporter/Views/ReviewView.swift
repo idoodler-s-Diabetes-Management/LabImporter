@@ -23,8 +23,11 @@ struct ReviewView: View {
     @State private var didSeedMetadata = false
 
     // Snapshot the sheet opened with, so we only warn about discarding real edits.
-    private let initialLabValues: [LabValue]
-    private let initialReportDate: Date
+    // @State (not let) so it's captured once and preserved across re-inits, staying
+    // paired with `labValues` — otherwise a parent re-render re-derives it (with
+    // fresh `asLabValues` UUIDs) and every row looks changed.
+    @State private var initialLabValues: [LabValue]
+    @State private var initialReportDate: Date
 
     @FocusState private var anyFieldFocused: Bool
     @Environment(\.dismiss) private var dismiss
@@ -86,8 +89,8 @@ struct ReviewView: View {
         _extractedPatientName = State(initialValue: extractedPatientName)
         _extractedAuthorName = State(initialValue: extractedAuthorName)
         _replacingReport = State(initialValue: replacingReport)
-        initialLabValues = labValues
-        initialReportDate = reportDate
+        _initialLabValues = State(initialValue: labValues)
+        _initialReportDate = State(initialValue: reportDate)
     }
 
     var body: some View {
