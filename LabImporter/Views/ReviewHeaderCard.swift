@@ -12,6 +12,46 @@ struct CDAShareSheet: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 
+/// The pinned bottom action bar on the review screen: a prominent "save to
+/// Health" button and a secondary "share CDA" button, fading into the content
+/// above. Dimmed and non-interactive until at least one value is exportable.
+struct ReviewActionBar: View {
+    let isEnabled: Bool
+    let onSave: () -> Void
+    let onShare: () -> Void
+
+    var body: some View {
+        VStack(spacing: 10) {
+            Button("Save to Health Records", action: onSave)
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+                .frame(maxWidth: .infinity)
+
+            Button("Share CDA File", action: onShare)
+                .buttonStyle(.bordered)
+                .controlSize(.large)
+                .frame(maxWidth: .infinity)
+        }
+        .opacity(isEnabled ? 1 : 0.4)
+        .allowsHitTesting(isEnabled)
+        .padding(.horizontal)
+        .padding(.bottom)
+        .padding(.top, 16)
+        .background {
+            Rectangle()
+                .fill(.regularMaterial)
+                .mask {
+                    LinearGradient(
+                        colors: [.clear, .black],
+                        startPoint: .top,
+                        endPoint: UnitPoint(x: 0.5, y: 0.3)
+                    )
+                }
+                .ignoresSafeArea(edges: .bottom)
+        }
+    }
+}
+
 /// A "we detected X — use it?" row offering to fill a field with a value found
 /// in the report or in Apple Health.
 struct SuggestionRow: View {

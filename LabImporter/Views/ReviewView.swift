@@ -20,6 +20,7 @@ struct ReviewView: View {
 
     @State private var showAddValue = false
     @State private var importEngine = LabImportEngine()
+    @State private var didSeedMetadata = false
 
     // Snapshot the sheet opened with, so we only warn about discarding real edits.
     private let initialLabValues: [LabValue]
@@ -124,7 +125,10 @@ struct ReviewView: View {
         }
         .labImport(engine: importEngine)
         .task { await loadHKCharacteristics() }
-        .onAppear { configureImportEngine() }
+        .onAppear {
+            configureImportEngine()
+            seedMetadataFromReport()
+        }
         .sheet(isPresented: Binding(
             get: { cdaShareURL != nil },
             set: { if !$0 { cdaShareURL = nil } }
@@ -344,36 +348,11 @@ private extension ReviewView {
     }
 
     var bottomButtons: some View {
-        VStack(spacing: 10) {
-            Button("Save to Health Records") {
-                Task { await performCDAImport() }
-            }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-            .frame(maxWidth: .infinity)
-
-            Button("Share CDA File") { shareCDA() }
-                .buttonStyle(.bordered)
-                .controlSize(.large)
-                .frame(maxWidth: .infinity)
-        }
-        .opacity(exportableCount == 0 ? 0.4 : 1)
-        .allowsHitTesting(exportableCount > 0)
-        .padding(.horizontal)
-        .padding(.bottom)
-        .padding(.top, 16)
-        .background {
-            Rectangle()
-                .fill(.regularMaterial)
-                .mask {
-                    LinearGradient(
-                        colors: [.clear, .black],
-                        startPoint: .top,
-                        endPoint: UnitPoint(x: 0.5, y: 0.3)
-                    )
-                }
-                .ignoresSafeArea(edges: .bottom)
-        }
+        ReviewActionBar(
+            isEnabled: exportableCount > 0,
+            onSave: { Task { await performCDAImport() } },
+            onShare: { shareCDA() }
+        )
     }
 
     var keyboardDoneButton: some ToolbarContent {
@@ -407,7 +386,7 @@ private extension ReviewView {
     var hasEdits: Bool {
         guard reportDate == initialReportDate,
               labValues.count == initialLabValues.count else { return true }
-        return zip(labValues, initialLabValues).contains { !$0.matchesContent(of: $1) }
+        return zip(labValues, initialLabValues).contains { !$0.matchesSavedData(of: $1) }
     }
 
     /// Appends freshly parsed values to the open report rather than replacing it,
@@ -416,6 +395,18 @@ private extension ReviewView {
         importEngine.onParsed = { result in
             labValues.append(contentsOf: result.values)
         }
+    }
+
+    /// When editing a saved report, populate the patient/author fields from that
+    /// report (they otherwise default to the global `@AppStorage` values, which
+    /// would both hide the report's author and silently overwrite it on save).
+    /// Runs once; new reports keep the stored defaults.
+    func seedMetadataFromReport() {
+        guard !didSeedMetadata else { return }
+        didSeedMetadata = true
+        guard let report = replacingReport else { return }
+        if !report.patientName.isEmpty { patientName = report.patientName }
+        if !report.authorName.isEmpty { authorName = report.authorName }
     }
 
     var birthdateBinding: Binding<Date> {
