@@ -22,12 +22,14 @@ struct ReviewView: View {
     @State private var importEngine = LabImportEngine()
     @State private var didSeedMetadata = false
 
-    // Snapshot the sheet opened with, so we only warn about discarding real edits.
-    // @State (not let) so it's captured once and preserved across re-inits, staying
-    // paired with `labValues` — otherwise a parent re-render re-derives it (with
-    // fresh `asLabValues` UUIDs) and every row looks changed.
+    // Snapshot the sheet opened with, to warn only about discarding real edits.
+    // @State (not let) so it's captured once and preserved across re-inits, paired
+    // with `labValues` — else a re-render re-derives it (fresh `asLabValues` UUIDs).
     @State private var initialLabValues: [LabValue]
     @State private var initialReportDate: Date
+
+    /// Called after a successful save (before dismiss) so a presenter can react.
+    private let onSaved: (() -> Void)?
 
     @FocusState private var anyFieldFocused: Bool
     @Environment(\.dismiss) private var dismiss
