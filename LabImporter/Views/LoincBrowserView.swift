@@ -118,7 +118,7 @@ struct LoincTermDetailView: View {
                 }
             }
             if let detail {
-                Section(Text("Details")) {
+                Section("Details") {
                     attribute("LOINC Code", detail.code)
                     attribute("Component", detail.component)
                     attribute("Property", detail.property)

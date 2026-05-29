@@ -322,7 +322,7 @@ enum CDAMigrator {
 
     /// Ordered version-step migrations. Empty today (the current schema is the
     /// baseline); register `SomeMigration.self` here when conventions change.
-    private static let migrations: [any CDAMigration.Type] = []
+    nonisolated(unsafe) private static let migrations: [any CDAMigration.Type] = []
 
     /// Returns `report` upgraded to the current schema, or `nil` when the source
     /// document is unversioned, older than `minimumSupportedVersion`, or no
