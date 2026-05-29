@@ -31,6 +31,7 @@ final class LoincDirectory: @unchecked Sendable {
 
     let version: String
     let count: Int
+    let license: String
 
     private let database: OpaquePointer?
     private let language: String
@@ -43,11 +44,11 @@ final class LoincDirectory: @unchecked Sendable {
         language = Bundle.main.preferredLocalizations.first ?? "en"
 
         guard let url = Bundle.main.url(forResource: "loinc", withExtension: "db") else {
-            database = nil; version = ""; count = 0; return
+            database = nil; version = ""; count = 0; license = ""; return
         }
         var handle: OpaquePointer?
         guard sqlite3_open_v2(url.path, &handle, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
-            sqlite3_close(handle); database = nil; version = ""; count = 0; return
+            sqlite3_close(handle); database = nil; version = ""; count = 0; license = ""; return
         }
         database = handle
 
@@ -86,6 +87,7 @@ final class LoincDirectory: @unchecked Sendable {
 
         version = LoincDirectory.scalar(handle, "SELECT value FROM meta WHERE key = 'version'") ?? ""
         count = Int(LoincDirectory.scalar(handle, "SELECT count(*) FROM term") ?? "0") ?? 0
+        license = LoincDirectory.scalar(handle, "SELECT value FROM meta WHERE key = 'license'") ?? ""
     }
 
     // MARK: - Lookups

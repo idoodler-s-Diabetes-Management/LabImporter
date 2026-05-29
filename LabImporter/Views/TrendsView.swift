@@ -15,6 +15,7 @@ struct TrendsView: View {
     @AppStorage("trendsSelectedCode") private var selectedCode: String = ""
     @AppStorage("labDisplayPrefs") private var prefs = LabDisplayPreferences()
     @State private var selectedDate: Date?
+    @State private var selectedTerm: LoincTerm?
     private let selectionFeedback = UISelectionFeedbackGenerator()
     private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
 
@@ -106,6 +107,10 @@ struct TrendsView: View {
             } else if selectedCode.isEmpty || !codes.contains(selectedCode) {
                 selectedCode = codes.first ?? ""
             }
+            selectedTerm = LoincDirectory.shared.term(for: selectedCode)
+        }
+        .onChange(of: selectedCode) { _, code in
+            selectedTerm = LoincDirectory.shared.term(for: code)
         }
     }
 
@@ -138,15 +143,56 @@ struct TrendsView: View {
     @ViewBuilder
     private var trendContent: some View {
         if dataPoints.count < 2 {
-            ContentUnavailableView(
-                "Not Enough Data",
-                systemImage: "chart.xyaxis.line",
-                description: Text("Import at least two reports containing this value to see a trend.")
-            )
+            VStack(spacing: 16) {
+                ContentUnavailableView(
+                    "Not Enough Data",
+                    systemImage: "chart.xyaxis.line",
+                    description: Text("Import at least two reports containing this value to see a trend.")
+                )
+                descriptionCard
+            }
         } else {
-            trendChart
+            ScrollView {
+                VStack(spacing: 16) {
+                    trendChart
+                    descriptionCard
+                }
                 .padding()
+            }
         }
+    }
+
+    // Description of the selected LOINC value, shown below the graph. Tapping a
+    // metric on the dashboard opens this sheet; drag it up to read the full text.
+    @ViewBuilder
+    private var descriptionCard: some View {
+        if let term = selectedTerm, let description = descriptionText(for: term) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("About this value")
+                    .font(.subheadline.weight(.semibold))
+                Text(description)
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text(verbatim: "LOINC \(term.code)")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
+            )
+            .padding(.horizontal)
+        }
+    }
+
+    private func descriptionText(for term: LoincTerm) -> String? {
+        if let description = term.description, !description.isEmpty { return description }
+        // Fall back to the English name when it adds detail beyond the title.
+        return term.englishName == term.name ? nil : term.englishName
     }
 
     private var trendChart: some View {

@@ -175,6 +175,17 @@ CREATE VIRTUAL TABLE label_fts USING fts5(
 """
 
 
+def load_license(zf: zipfile.ZipFile) -> str:
+    """The Regenstrief LOINC license text (must travel with the data)."""
+    for name in zf.namelist():
+        base = name.rsplit("/", 1)[-1].lower()
+        if "license" in base and base.endswith(".txt"):
+            with zf.open(name) as fh:
+                return io.TextIOWrapper(fh, encoding="utf-8", errors="replace").read().strip()
+    sys.stderr.write("warning: no LOINC license file found in archive\n")
+    return ""
+
+
 def build(zip_path: str, out_path: str) -> None:
     with zipfile.ZipFile(zip_path) as zf:
         entries = read_base(zf)
@@ -183,12 +194,13 @@ def build(zip_path: str, out_path: str) -> None:
                 continue
             hits = merge_variant(zf, lang, fname, entries)
             print(f"LOINC: {lang} matched {hits} terms")
+        license_text = load_license(zf)
 
     ordered = sorted(entries.values(), key=lambda e: e["r"])
-    write_db(ordered, _release_version(zip_path), out_path)
+    write_db(ordered, _release_version(zip_path), license_text, out_path)
 
 
-def write_db(ordered: list[dict], version: str, out_path: str) -> None:
+def write_db(ordered: list[dict], version: str, license_text: str, out_path: str) -> None:
     os.makedirs(os.path.dirname(out_path) or ".", exist_ok=True)
     if os.path.exists(out_path):
         os.remove(out_path)
@@ -200,6 +212,7 @@ def write_db(ordered: list[dict], version: str, out_path: str) -> None:
         con.executescript(SCHEMA)
         con.execute("INSERT INTO meta VALUES('version', ?)", (version,))
         con.execute("INSERT INTO meta VALUES('languages', ?)", (",".join(LANGS.keys()),))
+        con.execute("INSERT INTO meta VALUES('license', ?)", (license_text,))
 
         rowid = 0
         labels = 0

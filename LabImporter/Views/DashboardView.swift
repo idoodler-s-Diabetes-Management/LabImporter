@@ -58,7 +58,7 @@ struct DashboardView: View {
             NavigationStack {
                 TrendsView(reports: reports, initialCode: sheet.code, onDismiss: { trendSheet = nil })
             }
-            .presentationDetents([.medium])
+            .presentationDetents([.medium, .large])
             .presentationDragIndicator(.visible)
         }
     }
