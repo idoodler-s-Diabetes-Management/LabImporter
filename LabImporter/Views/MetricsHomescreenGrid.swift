@@ -58,9 +58,14 @@ struct MetricsHomescreenGrid: View {
 
     /// A short long-press "grabs" the card (so it doesn't fight the scroll view
     /// or a quick tap), then the drag moves it with live reflow.
+    ///
+    /// The drag uses `minimumDistance: 0` so it begins the instant the long
+    /// press completes — otherwise releasing without moving cancels the
+    /// sequence instead of ending it, and `onEnded`/`drop()` never runs, leaving
+    /// the card stuck lifted and enlarged.
     private func reorderGesture(for code: String) -> some Gesture {
         LongPressGesture(minimumDuration: 0.22)
-            .sequenced(before: DragGesture(coordinateSpace: .named(gridSpace)))
+            .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .named(gridSpace)))
             .onChanged { value in
                 switch value {
                 case .first(true):
