@@ -64,13 +64,15 @@ struct MetricsHomescreenGrid: View {
 
     // MARK: - Sticky drag gesture
 
-    /// A short long-press "grabs" the card (so it doesn't fight the scroll view
-    /// or a quick tap), then the drag moves it with live reflow. The visible
-    /// lift is bound to `@GestureState` (`updating`), which auto-resets on
-    /// release; `onChanged`/`onEnded` only handle the reorder bookkeeping.
+    /// A long-press "grabs" the card, then the drag moves it with live reflow.
+    /// The 0.5s duration (and the drag's default 10pt threshold) keep taps and
+    /// scroll swipes from triggering it — a quick tap opens the trend, and a
+    /// swipe fails the long press so the ScrollView scrolls normally. The
+    /// visible lift is bound to `@GestureState` (`updating`), which auto-resets
+    /// on release; `onChanged`/`onEnded` only handle the reorder bookkeeping.
     private func reorderGesture(for code: String) -> some Gesture {
-        LongPressGesture(minimumDuration: 0.22)
-            .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .named(gridSpace)))
+        LongPressGesture(minimumDuration: 0.5)
+            .sequenced(before: DragGesture(coordinateSpace: .named(gridSpace)))
             .updating($activeDrag) { value, state, _ in
                 switch value {
                 case .first(true):
