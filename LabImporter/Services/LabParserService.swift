@@ -57,9 +57,14 @@ actor LabParserService {
 
             let numericValue: Double? = entry.rawValue == "-" ? nil : Double(normalizedValue)
 
+            // Resolve the printed code to LOINC, the app's canonical identity.
+            // Unresolved codes keep the printed text so the user can map them in
+            // the review sheet before saving.
+            let code = LabMapping.loinc(forPrinted: entry.code) ?? entry.code
+
             return LabValue(
-                code: entry.code,
-                name: LabMapping.displayName(for: entry.code),
+                code: code,
+                name: LabMapping.displayName(for: code),
                 displayValue: entry.rawValue,
                 numericValue: numericValue,
                 unit: entry.unit

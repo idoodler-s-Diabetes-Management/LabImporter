@@ -1,138 +1,122 @@
 import Foundation
 
-// Maps German lab report codes to human-readable names, LOINC codes, and reference ranges.
+// LOINC is the canonical identity for every lab value in the app: the parser
+// resolves printed report codes to LOINC, and storage, reference ranges and
+// display names all key off the LOINC code. The German abbreviations that lab
+// reports actually print (KREA, HB-A1C, …) only appear here as *import-time*
+// resolver inputs — see `loinc(forPrinted:)`.
 //
-// The curated tables below cover the common German abbreviations that the AI
-// parser emits (KREA, HB-A1C, …) and carry the hand-tuned reference ranges and
-// localized display names. For any code that is already a LOINC number — e.g.
-// one chosen from the catalog in CodePickerSheet — the lookups fall back to
-// LoincDirectory (the full ~18k common-lab LOINC catalog bundled at build time).
+// For the handful of curated "favorite" metrics we keep hand-tuned localized
+// names and clinical reference ranges; everything else is resolved against the
+// full bundled catalog via `LoincDirectory`.
 enum LabMapping {
 
+    // MARK: - Curated common metrics (LOINC-keyed)
+
+    struct Metric {
+        let loinc: String
+        let name: String
+        let range: ReferenceRange?
+    }
+
+    // Single source of truth for the app's favorite metrics.
+    static let commonMetrics: [Metric] = [
+        Metric(loinc: "2345-7", name: String(localized: "Blood Glucose"),
+               range: ReferenceRange(normalLow: 70, normalHigh: 100, borderlineLow: nil, borderlineHigh: 125)),
+        Metric(loinc: "2160-0", name: String(localized: "Creatinine"),
+               range: ReferenceRange(normalLow: 0.5, normalHigh: 1.2, borderlineLow: nil, borderlineHigh: nil)),
+        Metric(loinc: "33914-3", name: String(localized: "eGFR (MDRD)"),
+               range: ReferenceRange(normalLow: 90, normalHigh: nil, borderlineLow: 60, borderlineHigh: nil)),
+        Metric(loinc: "62238-1", name: String(localized: "eGFR (CKD-EPI)"),
+               range: ReferenceRange(normalLow: 90, normalHigh: nil, borderlineLow: 60, borderlineHigh: nil)),
+        Metric(loinc: "2093-3", name: String(localized: "Total Cholesterol"),
+               range: ReferenceRange(normalLow: nil, normalHigh: 200, borderlineLow: nil, borderlineHigh: 239)),
+        Metric(loinc: "2085-9", name: String(localized: "HDL Cholesterol"),
+               range: ReferenceRange(normalLow: 40, normalHigh: nil, borderlineLow: nil, borderlineHigh: nil)),
+        Metric(loinc: "43396-1", name: String(localized: "Non-HDL Cholesterol"), range: nil),
+        Metric(loinc: "2089-1", name: String(localized: "LDL Cholesterol"),
+               range: ReferenceRange(normalLow: nil, normalHigh: 100, borderlineLow: nil, borderlineHigh: 159)),
+        Metric(loinc: "2571-8", name: String(localized: "Triglycerides"),
+               range: ReferenceRange(normalLow: nil, normalHigh: 150, borderlineLow: nil, borderlineHigh: 199)),
+        Metric(loinc: "1742-6", name: String(localized: "GPT (ALT)"),
+               range: ReferenceRange(normalLow: nil, normalHigh: 40, borderlineLow: nil, borderlineHigh: nil)),
+        Metric(loinc: "2324-2", name: String(localized: "Gamma-GT (GGT)"),
+               range: ReferenceRange(normalLow: nil, normalHigh: 55, borderlineLow: nil, borderlineHigh: nil)),
+        Metric(loinc: "4548-4", name: String(localized: "HbA1c (%)"),
+               range: ReferenceRange(normalLow: nil, normalHigh: 5.7, borderlineLow: nil, borderlineHigh: 6.4)),
+        Metric(loinc: "59261-8", name: String(localized: "HbA1 (mmol/mol)"), range: nil),
+        Metric(loinc: "3016-3", name: String(localized: "TSH (Thyroid)"),
+               range: ReferenceRange(normalLow: 0.4, normalHigh: 4.0, borderlineLow: nil, borderlineHigh: nil)),
+        Metric(loinc: "14647-2", name: String(localized: "Diabetes Screening"), range: nil),
+    ]
+
+    private static let metricsByLoinc: [String: Metric] =
+        Dictionary(commonMetrics.map { ($0.loinc, $0) }, uniquingKeysWith: { first, _ in first })
+
+    // Quick-pick "favorites" list shown in the picker and Settings.
     static var allKnownCodes: [(code: String, name: String)] {
-        [
-            ("BZ",       String(localized: "Blood Glucose")),
-            ("KREA",     String(localized: "Creatinine")),
-            ("MDRD",     String(localized: "eGFR (MDRD)")),
-            ("CKD-EPI",  String(localized: "eGFR (CKD-EPI)")),
-            ("CHOL",     String(localized: "Total Cholesterol")),
-            ("HDL",      String(localized: "HDL Cholesterol")),
-            ("NONHDL",   String(localized: "Non-HDL Cholesterol")),
-            ("LDL",      String(localized: "LDL Cholesterol")),
-            ("TRIG",     String(localized: "Triglycerides")),
-            ("GPT",      String(localized: "GPT (ALT)")),
-            ("G-GT",     String(localized: "Gamma-GT (GGT)")),
-            ("HB-A1C",   String(localized: "HbA1c (%)")),
-            ("HB-A1",    String(localized: "HbA1 (mmol/mol)")),
-            ("TSH",      String(localized: "TSH (Thyroid)")),
-            ("DIABOL",   String(localized: "Diabetes Screening")),
-        ]
+        commonMetrics.map { (code: $0.loinc, name: $0.name) }
     }
 
-    // swiftlint:disable:next cyclomatic_complexity
+    // MARK: - LOINC lookups
+
+    // Localized display name for a LOINC code: curated favorite name first, then
+    // the bundled catalog, finally the raw code (e.g. an as-yet-unmapped value).
     static func displayName(for code: String) -> String {
-        switch code.uppercased() {
-        case "DIABOL", "DIAB0L":        return String(localized: "Diabetes Screening")
-        case "KREA", "CREATININE":      return String(localized: "Creatinine")
-        case "MDRD", "EGFR":            return String(localized: "eGFR (MDRD)")
-        case "CHOL", "TC":              return String(localized: "Total Cholesterol")
-        case "HDL":                     return String(localized: "HDL Cholesterol")
-        case "NONHDL", "NON-HDL":       return String(localized: "Non-HDL Cholesterol")
-        case "LDL":                     return String(localized: "LDL Cholesterol")
-        case "TRIG", "TG":              return String(localized: "Triglycerides")
-        case "GPT", "ALT":              return String(localized: "GPT (ALT)")
-        case "G-GT", "GGT", "GGTP":    return String(localized: "Gamma-GT (GGT)")
-        case "HB-A1C", "HBAIC", "HBA1C", "HBA1C%": return String(localized: "HbA1c (%)")
-        case "HB-A1", "HBA1":          return String(localized: "HbA1 (mmol/mol)")
-        case "TSH-0", "TSH":           return String(localized: "TSH (Thyroid)")
-        case "BZ", "GLUCOSE", "GLU":   return String(localized: "Blood Glucose")
-        case "KREA-GFR", "CKD-EPI":    return String(localized: "eGFR (CKD-EPI)")
-        default:
-            // Fall back to the full LOINC catalog for raw LOINC codes (e.g. "2160-0").
-            if let term = LoincDirectory.shared.term(for: code) { return term.name }
-            return code
-        }
+        let trimmed = code.trimmingCharacters(in: .whitespaces)
+        if let metric = metricsByLoinc[trimmed] { return metric.name }
+        if let term = LoincDirectory.shared.term(for: trimmed) { return term.name }
+        return code
     }
 
-    // LOINC codes for CDA export — covers all recognised lab codes.
-    // swiftlint:disable:next cyclomatic_complexity
-    static func loincCode(for code: String) -> (loinc: String, display: String)? {
-        switch code.uppercased() {
-        case "BZ", "GLUCOSE", "GLU", "BLOOD-GLUCOSE":
-            return ("2345-7", "Glucose [Mass/volume] in Serum or Plasma")
-        case "KREA", "CREATININE":
-            return ("2160-0", "Creatinine [Mass/volume] in Serum or Plasma")
-        case "MDRD", "EGFR", "KREA-GFR":
-            return ("33914-3", "GFR/BSA pred MDRD")
-        case "CKD-EPI":
-            return ("62238-1", "GFR/BSA pred CKD-EPI")
-        case "CHOL", "TC":
-            return ("2093-3", "Cholesterol [Mass/volume] in Serum or Plasma")
-        case "HDL":
-            return ("2085-9", "Cholesterol in HDL [Mass/volume] in Serum or Plasma")
-        case "NONHDL", "NON-HDL":
-            return ("43396-1", "Cholesterol non HDL [Mass/volume] in Serum or Plasma")
-        case "LDL":
-            return ("2089-1", "Cholesterol in LDL [Mass/volume] in Serum or Plasma")
-        case "TRIG", "TG":
-            return ("2571-8", "Triglyceride [Mass/volume] in Serum or Plasma")
-        case "GPT", "ALT":
-            return ("1742-6", "Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma")
-        case "G-GT", "GGT", "GGTP":
-            return ("2324-2", "Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma")
-        case "HB-A1C", "HBAIC", "HBA1C", "HBA1C%":
-            return ("4548-4", "Hemoglobin A1c/Hemoglobin.total in Blood")
-        case "HB-A1", "HBA1":
-            return ("59261-8", "Hemoglobin A1c/Hemoglobin.total in Blood by IFCC protocol")
-        case "TSH-0", "TSH":
-            return ("3016-3", "Thyrotropin [Units/volume] in Serum or Plasma")
-        case "DIABOL", "DIAB0L":
-            return ("14647-2", "Glucose [Mass/volume] in Serum or Plasma --fasting")
-        default:
-            // Codes picked straight from the LOINC catalog are already LOINC numbers.
-            if let term = LoincDirectory.shared.term(for: code) {
-                return (term.code, term.englishName)
-            }
-            return nil
-        }
-    }
-
-    // Maps a LOINC code back to an internal lab code for reference-range lookups.
-    static func internalCode(forLoinc loinc: String) -> String? {
-        let candidates = ["BZ", "KREA", "MDRD", "CKD-EPI", "CHOL", "HDL", "NONHDL", "LDL",
-                          "TRIG", "GPT", "G-GT", "HB-A1C", "HB-A1", "TSH", "DIABOL", "EGFR"]
-        return candidates.first { loincCode(for: $0)?.loinc == loinc }
-    }
-
-    // Standard clinical reference ranges.
-    // Borderline values fall between normal and clearly abnormal.
-    // swiftlint:disable:next cyclomatic_complexity
+    // Clinical reference range, only defined for the curated favorites.
     static func referenceRange(for code: String) -> ReferenceRange? {
-        switch code.uppercased() {
-        case "BZ", "GLUCOSE", "GLU", "BLOOD-GLUCOSE":
-            return ReferenceRange(normalLow: 70, normalHigh: 100, borderlineLow: nil, borderlineHigh: 125)
-        case "HB-A1C", "HBAIC", "HBA1C", "HBA1C%":
-            return ReferenceRange(normalLow: nil, normalHigh: 5.7, borderlineLow: nil, borderlineHigh: 6.4)
-        case "CHOL", "TC":
-            return ReferenceRange(normalLow: nil, normalHigh: 200, borderlineLow: nil, borderlineHigh: 239)
-        case "LDL":
-            return ReferenceRange(normalLow: nil, normalHigh: 100, borderlineLow: nil, borderlineHigh: 159)
-        case "HDL":
-            return ReferenceRange(normalLow: 40, normalHigh: nil, borderlineLow: nil, borderlineHigh: nil)
-        case "TRIG", "TG":
-            return ReferenceRange(normalLow: nil, normalHigh: 150, borderlineLow: nil, borderlineHigh: 199)
-        case "KREA", "CREATININE":
-            return ReferenceRange(normalLow: 0.5, normalHigh: 1.2, borderlineLow: nil, borderlineHigh: nil)
-        case "GPT", "ALT":
-            return ReferenceRange(normalLow: nil, normalHigh: 40, borderlineLow: nil, borderlineHigh: nil)
-        case "G-GT", "GGT", "GGTP":
-            return ReferenceRange(normalLow: nil, normalHigh: 55, borderlineLow: nil, borderlineHigh: nil)
-        case "TSH-0", "TSH":
-            return ReferenceRange(normalLow: 0.4, normalHigh: 4.0, borderlineLow: nil, borderlineHigh: nil)
-        case "MDRD", "EGFR", "KREA-GFR", "CKD-EPI":
-            return ReferenceRange(normalLow: 90, normalHigh: nil, borderlineLow: 60, borderlineHigh: nil)
+        metricsByLoinc[code.trimmingCharacters(in: .whitespaces)]?.range
+    }
+
+    // Validates that `code` is a real LOINC code and returns it with an English
+    // display name for CDA export. Returns nil for unmapped/unknown codes, which
+    // is how the UI decides a value cannot yet be saved to Health.
+    static func loincCode(for code: String) -> (loinc: String, display: String)? {
+        let trimmed = code.trimmingCharacters(in: .whitespaces)
+        if let term = LoincDirectory.shared.term(for: trimmed) {
+            return (term.code, term.englishName)
+        }
+        if let metric = metricsByLoinc[trimmed] {
+            // Curated favorite that falls outside the common-lab catalog (e.g. eGFR MDRD).
+            return (metric.loinc, metric.name)
+        }
+        return nil
+    }
+
+    // MARK: - Import resolution (printed report code -> LOINC)
+
+    // Maps the codes/abbreviations a lab report actually prints to LOINC, so the
+    // rest of the app only ever deals in LOINC. Returns nil when the printed code
+    // is neither a known abbreviation nor an existing LOINC code, in which case
+    // the user maps it manually in the review sheet.
+    // swiftlint:disable:next cyclomatic_complexity
+    static func loinc(forPrinted printed: String) -> String? {
+        switch printed.uppercased().trimmingCharacters(in: .whitespaces) {
+        case "DIABOL", "DIAB0L":            return "14647-2"
+        case "KREA", "CREATININE":          return "2160-0"
+        case "MDRD", "EGFR":                return "33914-3"
+        case "KREA-GFR", "CKD-EPI":         return "62238-1"
+        case "CHOL", "TC":                  return "2093-3"
+        case "HDL":                          return "2085-9"
+        case "NONHDL", "NON-HDL":           return "43396-1"
+        case "LDL":                          return "2089-1"
+        case "TRIG", "TG":                  return "2571-8"
+        case "GPT", "ALT":                  return "1742-6"
+        case "G-GT", "GGT", "GGTP":         return "2324-2"
+        case "HB-A1C", "HBAIC", "HBA1C", "HBA1C%": return "4548-4"
+        case "HB-A1", "HBA1":               return "59261-8"
+        case "TSH-0", "TSH":                return "3016-3"
+        case "BZ", "GLUCOSE", "GLU":        return "2345-7"
         default:
-            return nil
+            // Already a LOINC code (e.g. pasted in, or chosen from the catalog)?
+            let trimmed = printed.trimmingCharacters(in: .whitespaces)
+            return LoincDirectory.shared.isKnownLoinc(trimmed) ? trimmed : nil
         }
     }
 }

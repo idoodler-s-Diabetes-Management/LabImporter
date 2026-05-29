@@ -179,15 +179,16 @@ private final class CDADocumentParser: NSObject, XMLParserDelegate {
         guard let date = delegate.reportDate else { return nil }
 
         let entries = delegate.observations.map { obs -> LabReport.Entry in
-            let internalCode = LabMapping.internalCode(forLoinc: obs.loinc) ?? obs.loinc
-            let mappedName = LabMapping.displayName(for: internalCode)
-            let name = mappedName == internalCode ? obs.display : mappedName
+            // The stored code is the LOINC code itself; prefer our localized name,
+            // falling back to the display name carried in the CDA document.
+            let mappedName = LabMapping.displayName(for: obs.loinc)
+            let name = mappedName == obs.loinc ? obs.display : mappedName
             let display = obs.value.truncatingRemainder(dividingBy: 1) == 0
                 ? String(format: "%.0f", obs.value)
                 : String(format: "%.4g", obs.value)
             return LabReport.Entry(
                 id: UUID(),
-                code: internalCode,
+                code: obs.loinc,
                 name: name,
                 displayValue: display,
                 numericValue: obs.value,
