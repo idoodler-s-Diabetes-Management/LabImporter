@@ -162,37 +162,13 @@ struct TrendsView: View {
         }
     }
 
-    // Description of the selected LOINC value, shown below the graph. Tapping a
-    // metric on the dashboard opens this sheet; drag it up to read the full text.
+    // Description of the selected LOINC value, shown below the graph, linking to
+    // the full LOINC details. Tapping a metric on the dashboard opens this sheet.
     @ViewBuilder
     private var descriptionCard: some View {
-        if let term = selectedTerm, let description = descriptionText(for: term) {
-            VStack(alignment: .leading, spacing: 6) {
-                Text("About this value")
-                    .font(.subheadline.weight(.semibold))
-                Text(description)
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                Text(verbatim: "LOINC \(term.code)")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
-            )
-            .padding(.horizontal)
+        if let term = selectedTerm {
+            ValueDescriptionCard(term: term)
         }
-    }
-
-    private func descriptionText(for term: LoincTerm) -> String? {
-        if let description = term.description, !description.isEmpty { return description }
-        // Fall back to the English name when it adds detail beyond the title.
-        return term.englishName == term.name ? nil : term.englishName
     }
 
     private var trendChart: some View {
@@ -335,5 +311,54 @@ struct TrendsView: View {
         }
         prefs = updated
         impactFeedback.impactOccurred()
+    }
+}
+
+// MARK: - ValueDescriptionCard
+
+/// Tappable summary of the selected value's LOINC term shown beneath the trend
+/// chart; navigates to the full structured details (and the loinc.org link).
+private struct ValueDescriptionCard: View {
+    let term: LoincTerm
+
+    var body: some View {
+        NavigationLink {
+            LoincTermDetailView(term: term)
+        } label: {
+            VStack(alignment: .leading, spacing: 6) {
+                HStack {
+                    Text("About this value")
+                        .font(.subheadline.weight(.semibold))
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
+                if let description {
+                    Text(description)
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                Text(verbatim: "LOINC \(term.code)")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
+            )
+            .padding(.horizontal)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var description: String? {
+        if let description = term.description, !description.isEmpty { return description }
+        // Fall back to the English name when it adds detail beyond the title.
+        return term.englishName == term.name ? nil : term.englishName
     }
 }
