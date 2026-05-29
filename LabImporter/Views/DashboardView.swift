@@ -32,6 +32,7 @@ struct DashboardView: View {
             .padding(.top, 8)
             .padding(.bottom, 24)
         }
+        .background { CategoryBackground(colors: backgroundColors) }
         .navigationTitle("Lab Results")
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
@@ -168,6 +169,21 @@ struct DashboardView: View {
             }
     }
 
+    // Up to three distinct category colors from the visible metrics, used for
+    // the subtle background wash.
+    private var backgroundColors: [Color] {
+        var seen = Set<LabCategory>()
+        var result: [Color] = []
+        for metric in sortedMetrics {
+            let category = LabCategory.forCode(metric.entry.code)
+            if seen.insert(category).inserted {
+                result.append(category.color)
+            }
+            if result.count == 3 { break }
+        }
+        return result
+    }
+
     // MARK: - Code names for order sheet
 
     private var allCodeNames: [CodeName] {
@@ -297,5 +313,35 @@ private struct MetricCard: View {
         .chartXAxis(.hidden)
         .chartYAxis(.hidden)
         .frame(height: 40)
+    }
+}
+
+// MARK: - CategoryBackground
+
+/// A soft, low-opacity wash of the dashboard's metric category colors — a subtle
+/// tint behind the content in the spirit of the Health app. Falls back to a
+/// gentle accent tint when there are no metrics yet.
+private struct CategoryBackground: View {
+    let colors: [Color]
+
+    private let anchors: [UnitPoint] = [.topLeading, .topTrailing, .bottomLeading]
+
+    var body: some View {
+        ZStack {
+            ForEach(Array(palette.enumerated()), id: \.offset) { index, color in
+                RadialGradient(
+                    colors: [color.opacity(0.16), .clear],
+                    center: anchors[index % anchors.count],
+                    startRadius: 0,
+                    endRadius: 480
+                )
+            }
+        }
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
+    }
+
+    private var palette: [Color] {
+        colors.isEmpty ? [Color.accentColor.opacity(0.6)] : colors
     }
 }
