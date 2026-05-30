@@ -290,8 +290,9 @@ private struct MetricCard: View {
 
     /// The colored category "dock" at the card's top-left. When a trend is
     /// available it doubles as the trend indicator and hosts a directional
-    /// arrow; otherwise it is a simple category-color dot. Both variants reserve
-    /// the same footprint so the title alignment stays put.
+    /// arrow; otherwise it is a simple category-color dot filling the same
+    /// circle. Both variants share an 18×18 footprint so the title alignment —
+    /// and the dot/arrow size — stays consistent across cards.
     @ViewBuilder
     private var dock: some View {
         if let trend {
@@ -303,8 +304,7 @@ private struct MetricCard: View {
                 .accessibilityLabel(trend.accessibilityLabel)
         } else {
             Circle()
-                .fill(categoryColor)
-                .frame(width: 9, height: 9)
+                .fill(categoryColor.gradient)
                 .frame(width: 18, height: 18)
                 .accessibilityHidden(true)
         }
