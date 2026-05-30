@@ -1,6 +1,5 @@
 import SwiftUI
 import Charts
-import UniformTypeIdentifiers
 
 // MARK: - MetricsHomescreenGrid
 
@@ -9,19 +8,37 @@ import UniformTypeIdentifiers
 /// There is no separate "edit"/jiggle mode: a swipe scrolls, a tap opens the
 /// card's trend, and a long-press lifts a card so it follows the finger. While a
 /// card is dragged the grid **reflows live** — the other cards animate aside to
-/// open the gap where the card will land. Built on `.onDrag` + a `DropDelegate`
-/// (UIKit drag-and-drop) so it coexists with the surrounding `ScrollView`.
+/// open the gap where the card will land, and on release the card settles into
+/// its slot.
+///
+/// Reordering is driven by an in-app long-press + drag gesture (not the system
+/// `.onDrag`/`.onDrop` data-transfer machinery), so there is no cross-app drag
+/// session: backgrounding the app or releasing anywhere cleanly ends the drag,
+/// and the drop animates into place instead of dissolving.
 struct MetricsHomescreenGrid: View {
     let metrics: [MetricData]
     @Binding var prefs: LabDisplayPreferences
     let onOpenTrend: (String) -> Void
 
     /// The code currently lifted, or `nil` when no drag is in progress. The
-    /// lifted card is hidden in place so its slot reads as the open gap.
+    /// lifted card is hidden in place (its slot reads as the open gap) while a
+    /// floating copy follows the finger.
     @State private var draggingCode: String?
     /// The working order during an active drag. `nil` when idle, in which case
     /// the displayed order comes from `dashboardSortedMetrics`.
     @State private var liveOrder: [String]?
+    /// Live frames of every card, in the grid's coordinate space — used to find
+    /// the slot under the finger and to settle the floating card on drop.
+    @State private var cardFrames: [String: CGRect] = [:]
+    /// Top-leading position of the floating card, in the grid's coordinate space.
+    @State private var floatingOrigin: CGPoint = .zero
+    /// Scale of the floating card (lifts to >1 while dragging, settles to 1).
+    @State private var floatingScale: CGFloat = 1
+    /// Offset from the lifted card's top-leading to the finger at grab time, kept
+    /// constant so the float tracks the finger regardless of how the grid reflows.
+    @State private var grabOffset: CGSize?
+
+    private static let gridSpace = "LabGrid"
 
     var body: some View {
         LazyVGrid(
@@ -32,14 +49,9 @@ struct MetricsHomescreenGrid: View {
                 metricCard(for: metric)
             }
         }
+        .coordinateSpace(.named(Self.gridSpace))
         .animation(.snappy, value: displayedCodes)
-        // Catches drops that land in the grid's gutters (not on a card) so the
-        // drag still finalizes and resets.
-        .onDrop(of: [.text], delegate: GridResetDropDelegate(
-            draggingCode: $draggingCode,
-            liveOrder: $liveOrder,
-            onCommit: commitOrder
-        ))
+        .overlay(alignment: .topLeading) { floatingCard }
     }
 
     // MARK: - Card
@@ -48,26 +60,87 @@ struct MetricsHomescreenGrid: View {
     private func metricCard(for metric: MetricData) -> some View {
         let code = metric.entry.code
         let pinned = prefs.pinnedSet.contains(code)
-        Button { onOpenTrend(code) } label: {
-            MetricCard(metric: metric, isPinned: pinned)
+        MetricCard(metric: metric, isPinned: pinned)
+            .contentShape(RoundedRectangle(cornerRadius: 20))
+            // The lifted card is hidden in place so its slot reads as the gap.
+            .opacity(draggingCode == code ? 0 : 1)
+            .onGeometryChange(for: CGRect.self) { proxy in
+                proxy.frame(in: .named(Self.gridSpace))
+            } action: { cardFrames[code] = $0 }
+            .onTapGesture { onOpenTrend(code) }
+            .gesture(reorderGesture(for: code))
+    }
+
+    /// The floating copy of the lifted card that tracks the finger.
+    @ViewBuilder
+    private var floatingCard: some View {
+        if let code = draggingCode, let metric = metric(for: code) {
+            MetricCard(metric: metric, isPinned: prefs.pinnedSet.contains(code))
+                .frame(width: liftedSize.width, height: liftedSize.height)
+                .scaleEffect(floatingScale)
+                .shadow(color: .black.opacity(0.18), radius: 10, y: 6)
+                .offset(x: floatingOrigin.x, y: floatingOrigin.y)
+                .allowsHitTesting(false)
         }
-        .buttonStyle(.plain)
-        .opacity(draggingCode == code ? 0 : 1)
-        .onDrag {
-            beginDrag(code)
-            return NSItemProvider(object: code as NSString)
-        } preview: {
-            MetricCard(metric: metric, isPinned: pinned)
-                .frame(width: 180)
-                // Match the card's corners so the lift platter isn't a square.
-                .contentShape(.dragPreview, RoundedRectangle(cornerRadius: 20))
+    }
+
+    // MARK: - Gesture
+
+    private func reorderGesture(for code: String) -> some Gesture {
+        LongPressGesture(minimumDuration: 0.3)
+            .sequenced(before: DragGesture(coordinateSpace: .named(Self.gridSpace)))
+            .onChanged { value in
+                guard case .second(true, let drag) = value else { return }
+                if draggingCode != code { beginDrag(code) }
+                if let drag { updateDrag(drag) }
+            }
+            .onEnded { _ in endDrag() }
+    }
+
+    private func beginDrag(_ code: String) {
+        draggingCode = code
+        liveOrder = displayedCodes
+        let frame = cardFrames[code] ?? .zero
+        floatingOrigin = CGPoint(x: frame.minX, y: frame.minY)
+        withAnimation(.snappy) { floatingScale = 1.05 }
+    }
+
+    private func updateDrag(_ drag: DragGesture.Value) {
+        guard let dragging = draggingCode else { return }
+        let base = cardFrames[dragging] ?? .zero
+        floatingOrigin = CGPoint(
+            x: base.minX + drag.translation.width,
+            y: base.minY + drag.translation.height
+        )
+        relocate(to: drag.location)
+    }
+
+    /// Moves the dragged code to sit at whatever slot the finger is over, driving
+    /// the live reflow. The grid's `.animation(value: displayedCodes)` animates
+    /// the other cards parting.
+    private func relocate(to point: CGPoint) {
+        guard let dragging = draggingCode, var order = liveOrder else { return }
+        guard let target = cardFrames.first(where: { $0.key != dragging && $0.value.contains(point) })?.key,
+              let from = order.firstIndex(of: dragging),
+              let dest = order.firstIndex(of: target), from != dest
+        else { return }
+        order.move(fromOffsets: IndexSet(integer: from), toOffset: dest > from ? dest + 1 : dest)
+        liveOrder = order
+    }
+
+    private func endDrag() {
+        guard let dragging = draggingCode else { return }
+        if let liveOrder { persistOrder(liveOrder) }
+        // Settle the floating card into its final slot, then drop the overlay so
+        // the in-grid card reappears exactly where the float landed.
+        let landing = cardFrames[dragging].map { CGPoint(x: $0.minX, y: $0.minY) } ?? floatingOrigin
+        withAnimation(.snappy) {
+            floatingOrigin = landing
+            floatingScale = 1
+        } completion: {
+            draggingCode = nil
+            liveOrder = nil
         }
-        .onDrop(of: [.text], delegate: ReorderDropDelegate(
-            targetCode: code,
-            draggingCode: $draggingCode,
-            liveOrder: $liveOrder,
-            onCommit: commitOrder
-        ))
     }
 
     // MARK: - Ordering
@@ -80,22 +153,15 @@ struct MetricsHomescreenGrid: View {
 
     /// `displayedCodes` resolved back to their `MetricData`.
     private var displayMetrics: [MetricData] {
-        let lookup = Dictionary(metrics.map { ($0.entry.code, $0) }) { first, _ in first }
-        return displayedCodes.compactMap { lookup[$0] }
+        displayedCodes.compactMap { metric(for: $0) }
     }
 
-    /// Starts a drag, first clearing any state left behind by a previous drag
-    /// that ended without a drop (e.g. released over the navigation bar), so a
-    /// stale hidden card can never persist into the next gesture.
-    private func beginDrag(_ code: String) {
-        draggingCode = code
-        liveOrder = displayedCodes
+    private func metric(for code: String) -> MetricData? {
+        metrics.first { $0.entry.code == code }
     }
 
-    /// Persists the final drag order. The drop delegates clear the transient drag
-    /// state via their bindings; this only writes the result through `prefs`.
-    private func commitOrder(_ order: [String]) {
-        persistOrder(order)
+    private var liftedSize: CGSize {
+        (draggingCode.flatMap { cardFrames[$0] } ?? .zero).size
     }
 
     /// Persists `codes` as the leading entries of `orderedCodes`, preserving any
@@ -109,60 +175,6 @@ struct MetricsHomescreenGrid: View {
         var updated = prefs
         updated.orderedCodes = result
         prefs = updated
-    }
-}
-
-// MARK: - Drop delegates
-
-/// Per-card delegate that performs the live reflow: as the dragged card hovers a
-/// new target, it moves within `liveOrder` (animated), so neighbouring cards part
-/// to open the landing gap.
-private struct ReorderDropDelegate: DropDelegate {
-    let targetCode: String
-    @Binding var draggingCode: String?
-    @Binding var liveOrder: [String]?
-    let onCommit: ([String]) -> Void
-
-    func dropEntered(info: DropInfo) {
-        guard let dragging = draggingCode, dragging != targetCode,
-              var order = liveOrder,
-              let from = order.firstIndex(of: dragging),
-              let dest = order.firstIndex(of: targetCode)
-        else { return }
-        withAnimation(.snappy) {
-            order.move(fromOffsets: IndexSet(integer: from), toOffset: dest > from ? dest + 1 : dest)
-            liveOrder = order
-        }
-    }
-
-    func dropUpdated(info: DropInfo) -> DropProposal? {
-        DropProposal(operation: .move)
-    }
-
-    func performDrop(info: DropInfo) -> Bool {
-        if let order = liveOrder { onCommit(order) }
-        draggingCode = nil
-        liveOrder = nil
-        return true
-    }
-}
-
-/// Grid-level fallback delegate: finalizes a drop that lands between cards, and
-/// resets the drag state so a lifted card never stays hidden.
-private struct GridResetDropDelegate: DropDelegate {
-    @Binding var draggingCode: String?
-    @Binding var liveOrder: [String]?
-    let onCommit: ([String]) -> Void
-
-    func dropUpdated(info: DropInfo) -> DropProposal? {
-        DropProposal(operation: .move)
-    }
-
-    func performDrop(info: DropInfo) -> Bool {
-        if let order = liveOrder { onCommit(order) }
-        draggingCode = nil
-        liveOrder = nil
-        return true
     }
 }
 
