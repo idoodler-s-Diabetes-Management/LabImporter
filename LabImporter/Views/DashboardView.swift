@@ -320,27 +320,38 @@ private struct MetricCard: View {
         return .steady
     }
 
-    private func trendBadge(_ trend: Trend) -> some View {
-        Image(systemName: trend.symbol)
-            .font(.caption2.weight(.bold))
-            .foregroundStyle(categoryColor)
-            .padding(4)
-            .background(categoryColor.opacity(0.15), in: Circle())
-            .accessibilityLabel(trend.accessibilityLabel)
+    /// The colored category "dock" at the card's top-left. When a trend is
+    /// available it doubles as the trend indicator and hosts a directional
+    /// arrow; otherwise it is a simple category-color dot. Both variants reserve
+    /// the same footprint so the title alignment stays put.
+    @ViewBuilder
+    private var dock: some View {
+        if let trend {
+            Image(systemName: trend.symbol)
+                .font(.system(size: 9, weight: .heavy))
+                .foregroundStyle(.white)
+                .frame(width: 18, height: 18)
+                .background(categoryColor.gradient, in: Circle())
+                .accessibilityLabel(trend.accessibilityLabel)
+        } else {
+            Circle()
+                .fill(categoryColor)
+                .frame(width: 9, height: 9)
+                .frame(width: 18, height: 18)
+                .accessibilityHidden(true)
+        }
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack(alignment: .top, spacing: 5) {
-                Circle()
-                    .fill(categoryColor)
-                    .frame(width: 8, height: 8)
-                    .padding(.top, 3)
+            HStack(alignment: .top, spacing: 7) {
+                dock
                 Text(metric.entry.resolvedName)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
+                    .padding(.top, 1)
                 Spacer(minLength: 0)
                 if isPinned {
                     Image(systemName: "pin.fill")
@@ -362,9 +373,6 @@ private struct MetricCard: View {
                         .lineLimit(1)
                 }
                 Spacer(minLength: 0)
-                if let trend {
-                    trendBadge(trend)
-                }
             }
 
             if metric.history.count > 1 {
