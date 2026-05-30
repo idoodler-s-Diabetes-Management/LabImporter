@@ -64,6 +64,10 @@ enum AppInfo {
 struct SettingsView: View {
     @Binding var prefs: LabDisplayPreferences
     let allCodes: [CodeName]
+    /// `true` when presented as a sheet (iPhone) — shows a Close button. `false`
+    /// when hosted as the detail pane of the iPad sidebar, where the split view
+    /// owns dismissal and a Close button would be out of place.
+    var isModal = true
     @Environment(\.dismiss) private var dismiss
     @State private var browserURL: IdentifiedURL?
 
@@ -139,8 +143,10 @@ struct SettingsView: View {
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button(role: .close) { dismiss() }
+                if isModal {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button(role: .close) { dismiss() }
+                    }
                 }
             }
             .sheet(item: $browserURL) { item in

@@ -12,8 +12,14 @@ struct DashboardView: View {
     let scannerAvailable: Bool
     let clipboardAvailable: Bool
     let isProcessing: Bool
+    /// When the dashboard is the detail pane of an iPad sidebar, the sidebar
+    /// already hosts the Reports/Settings/Import entry points, so the dashboard
+    /// hides its own toolbar chrome to avoid duplicating them. Defaults to `true`
+    /// so the standalone (iPhone) presentation is unchanged.
+    var showsLibraryToolbarItems = true
 
     @AppStorage("labDisplayPrefs") private var prefs = LabDisplayPreferences()
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var showSettings = false
     @State private var trendSheet: TrendSheet?
     @State private var dropTargetCode: String?
@@ -37,21 +43,23 @@ struct DashboardView: View {
         .navigationTitle("Lab Results")
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                NavigationLink(destination: HistoryView()) {
-                    Image(systemName: "doc.text")
+            if showsLibraryToolbarItems {
+                ToolbarItem(placement: .topBarLeading) {
+                    NavigationLink(destination: HistoryView()) {
+                        Image(systemName: "doc.text")
+                    }
+                    .accessibilityLabel("Reports")
                 }
-                .accessibilityLabel("Reports")
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    showSettings = true
-                } label: {
-                    Image(systemName: "gearshape")
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showSettings = true
+                    } label: {
+                        Image(systemName: "gearshape")
+                    }
                 }
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                importMenu
+                ToolbarItem(placement: .topBarTrailing) {
+                    importMenu
+                }
             }
         }
         .sheet(isPresented: $showSettings) {
@@ -94,14 +102,21 @@ struct DashboardView: View {
     // MARK: - Metrics grid
 
     private var metricsGrid: some View {
-        LazyVGrid(
-            columns: [GridItem(.flexible()), GridItem(.flexible())],
-            spacing: 14
-        ) {
+        LazyVGrid(columns: gridColumns, spacing: 14) {
             ForEach(sortedMetrics) { metric in
                 metricCard(for: metric)
             }
         }
+    }
+
+    /// Two fixed columns on compact widths (iPhone); on regular widths (iPad) the
+    /// cards flow to fill the wider canvas with a sensible minimum so they don't
+    /// stretch into a sparse two-up grid.
+    private var gridColumns: [GridItem] {
+        if horizontalSizeClass == .regular {
+            return [GridItem(.adaptive(minimum: 200, maximum: 280), spacing: 14)]
+        }
+        return [GridItem(.flexible()), GridItem(.flexible())]
     }
 
     @ViewBuilder
