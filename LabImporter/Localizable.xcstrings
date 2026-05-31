@@ -1,6 +1,237 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "The on-device AI couldn't recognize the language of this report. This can happen with very short reports, or ones made up mostly of codes and numbers. Try importing or scanning the full report so there's more text to read, then try again." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die geräteinterne KI konnte die Sprache dieses Befunds nicht erkennen. Das kann bei sehr kurzen Befunden vorkommen oder bei solchen, die überwiegend aus Codes und Zahlen bestehen. Importiere oder scanne den vollständigen Befund, damit mehr Text vorhanden ist, und versuche es dann erneut."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La IA en el dispositivo no pudo reconocer el idioma de este informe. Esto puede ocurrir con informes muy cortos o compuestos principalmente por códigos y números. Importa o escanea el informe completo para que haya más texto y vuelve a intentarlo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’IA sur l’appareil n’a pas pu reconnaître la langue de ce compte rendu. Cela peut arriver avec des comptes rendus très courts ou composés principalement de codes et de chiffres. Importez ou numérisez le compte rendu complet afin d’avoir plus de texte, puis réessayez."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’IA sul dispositivo non è riuscita a riconoscere la lingua di questo referto. Può accadere con referti molto brevi o composti principalmente da codici e numeri. Importa o scansiona il referto completo in modo da avere più testo, quindi riprova."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デバイス上のAIはこのレポートの言語を認識できませんでした。これは、非常に短いレポートや、ほとんどがコードと数字で構成されているレポートで起こることがあります。テキストが増えるようレポート全体を読み込むかスキャンしてから、もう一度お試しください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De AI op het apparaat kon de taal van dit rapport niet herkennen. Dit kan gebeuren bij zeer korte rapporten of rapporten die vooral uit codes en cijfers bestaan. Importeer of scan het volledige rapport zodat er meer tekst is en probeer het opnieuw."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sztuczna inteligencja na urządzeniu nie rozpoznała języka tego raportu. Może się to zdarzyć w przypadku bardzo krótkich raportów lub takich, które składają się głównie z kodów i liczb. Zaimportuj lub zeskanuj cały raport, aby było więcej tekstu, a następnie spróbuj ponownie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A IA no dispositivo não conseguiu reconhecer o idioma deste relatório. Isso pode acontecer com relatórios muito curtos ou compostos principalmente por códigos e números. Importe ou digitalize o relatório completo para que haja mais texto e tente novamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ИИ на устройстве не смог распознать язык этого отчета. Это может произойти с очень короткими отчетами или с теми, что состоят в основном из кодов и цифр. Импортируйте или отсканируйте отчет целиком, чтобы было больше текста, и повторите попытку."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cihaz üzerindeki yapay zeka bu raporun dilini tanıyamadı. Bu durum çok kısa raporlarda veya çoğunlukla kod ve sayılardan oluşan raporlarda görülebilir. Daha fazla metin olması için raporun tamamını içe aktarın veya tarayın, ardından tekrar deneyin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Штучний інтелект на пристрої не зміг розпізнати мову цього звіту. Це може статися з дуже короткими звітами або тими, що складаються переважно з кодів і цифр. Імпортуйте або відскануйте повний звіт, щоб було більше тексту, а потім повторіть спробу."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备端 AI 无法识别此报告的语言。这可能发生在非常简短的报告，或主要由代码和数字组成的报告中。请导入或扫描完整的报告以提供更多文本，然后重试。"
+          }
+        }
+      }
+    },
+    "The on-device AI couldn't process this document. Make sure it's a lab report and try again." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die geräteinterne KI konnte dieses Dokument nicht verarbeiten. Stelle sicher, dass es sich um einen Laborbefund handelt, und versuche es erneut."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La IA en el dispositivo no pudo procesar este documento. Asegúrate de que sea un informe de laboratorio e inténtalo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’IA sur l’appareil n’a pas pu traiter ce document. Assurez-vous qu’il s’agit d’un compte rendu de laboratoire, puis réessayez."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’IA sul dispositivo non è riuscita a elaborare questo documento. Assicurati che sia un referto di laboratorio e riprova."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デバイス上のAIはこの書類を処理できませんでした。検査報告書であることを確認して、もう一度お試しください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De AI op het apparaat kon dit document niet verwerken. Controleer of het een laboratoriumrapport is en probeer het opnieuw."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sztuczna inteligencja na urządzeniu nie mogła przetworzyć tego dokumentu. Upewnij się, że to wynik badań laboratoryjnych, i spróbuj ponownie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A IA no dispositivo não conseguiu processar este documento. Verifique se é um laudo laboratorial e tente novamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ИИ на устройстве не смог обработать этот документ. Убедитесь, что это лабораторный отчет, и повторите попытку."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cihaz üzerindeki yapay zeka bu belgeyi işleyemedi. Bunun bir laboratuvar raporu olduğundan emin olun ve tekrar deneyin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Штучний інтелект на пристрої не зміг обробити цей документ. Переконайтеся, що це лабораторний звіт, і повторіть спробу."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备端 AI 无法处理此文档。请确认这是一份化验报告，然后重试。"
+          }
+        }
+      }
+    },
+    "This report is too long for the on-device AI to read at once. Try importing fewer pages, or one report at a time." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieser Befund ist zu lang, als dass ihn die geräteinterne KI auf einmal lesen könnte. Versuche, weniger Seiten oder jeweils einen Befund zu importieren."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este informe es demasiado largo para que la IA en el dispositivo lo lea de una vez. Intenta importar menos páginas o un informe a la vez."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce rapport est trop long pour que l’IA sur l’appareil puisse le lire en une seule fois. Essayez d’importer moins de pages, ou un rapport à la fois."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questo referto è troppo lungo perché l’IA sul dispositivo possa leggerlo in una volta sola. Prova a importare meno pagine o un referto alla volta."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このレポートは長すぎるため、デバイス上のAIで一度に読み取ることができません。ページ数を減らすか、レポートを1件ずつ読み込んでみてください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit rapport is te lang om in één keer door de AI op het apparaat te laten lezen. Probeer minder pagina’s of één rapport tegelijk te importeren."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ten raport jest zbyt długi, aby sztuczna inteligencja na urządzeniu mogła go odczytać za jednym razem. Spróbuj zaimportować mniej stron lub po jednym raporcie naraz."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este relatório é longo demais para a IA no dispositivo ler de uma vez. Tente importar menos páginas ou um relatório por vez."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Этот отчет слишком длинный, чтобы ИИ на устройстве мог прочитать его за один раз. Попробуйте импортировать меньше страниц или по одному отчету за раз."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu rapor, cihaz üzerindeki yapay zekanın bir kerede okuyamayacağı kadar uzun. Daha az sayfa veya her seferinde bir rapor içe aktarmayı deneyin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цей звіт надто довгий, щоб штучний інтелект на пристрої міг прочитати його за один раз. Спробуйте імпортувати менше сторінок або по одному звіту за раз."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此报告太长，设备端 AI 无法一次性读取。请尝试导入较少的页面，或一次导入一份报告。"
+          }
+        }
+      }
+    },
     "" : {
 
     },
