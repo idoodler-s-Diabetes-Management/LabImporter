@@ -8,6 +8,9 @@ struct HistoryView: View {
     // Reports the user swiped to delete, awaiting confirmation. Deletion from
     // Apple Health is irreversible, so we verify intent before removing them.
     @State private var pendingDeleteIDs: [UUID] = []
+    // Multi-select state: drives the list's checkmarks while editing.
+    @State private var editMode: EditMode = .inactive
+    @State private var selection: Set<UUID> = []
 
     var body: some View {
         Group {
@@ -21,9 +24,12 @@ struct HistoryView: View {
                 reportList
             }
         }
-        .navigationTitle("Reports")
+        .navigationTitle(navigationTitle)
         .navigationBarTitleDisplayMode(.large)
         .background { CategoryBackground(colors: backgroundColors) }
+        .environment(\.editMode, $editMode)
+        .navigationBarBackButtonHidden(editMode.isEditing)
+        .toolbar { toolbarContent }
         .onAppear { Task { await loadReports() } }
         .sheet(item: $reportToEdit, onDismiss: { Task { await loadReports() } }, content: { report in
             NavigationStack {
@@ -49,6 +55,7 @@ struct HistoryView: View {
             Button("Delete", role: .destructive) {
                 deleteReports(ids: pendingDeleteIDs)
                 pendingDeleteIDs = []
+                exitEditing()
             }
             Button("Cancel", role: .cancel) { pendingDeleteIDs = [] }
         } message: {
@@ -60,22 +67,100 @@ struct HistoryView: View {
         }
     }
 
+    // MARK: - Toolbar
+
+    private var navigationTitle: String {
+        if editMode.isEditing && !selection.isEmpty {
+            return String(localized: "\(selection.count) Selected")
+        }
+        return String(localized: "Reports")
+    }
+
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            if !reports.isEmpty {
+                Button {
+                    withAnimation { toggleEditing() }
+                } label: {
+                    if editMode.isEditing {
+                        Image(systemName: "checkmark")
+                    } else {
+                        Text("Edit")
+                    }
+                }
+                .accessibilityLabel(editMode.isEditing ? Text("Done") : Text("Edit"))
+            }
+        }
+
+        if editMode.isEditing {
+            // Replaces the back button while selecting: a one-tap path to clear
+            // every report (still gated behind the confirmation alert).
+            ToolbarItem(placement: .topBarLeading) {
+                Button("Delete All", role: .destructive) {
+                    pendingDeleteIDs = reports.map(\.id)
+                }
+                .tint(.red)
+            }
+
+            ToolbarItem(placement: .bottomBar) {
+                HStack {
+                    Button(allSelected ? "Deselect All" : "Select All") {
+                        selection = allSelected ? [] : Set(reports.map(\.id))
+                    }
+                    Spacer()
+                    Button("Delete", role: .destructive) {
+                        pendingDeleteIDs = Array(selection)
+                    }
+                    .tint(.red)
+                    .disabled(selection.isEmpty)
+                }
+            }
+        }
+    }
+
+    private var allSelected: Bool {
+        !reports.isEmpty && selection.count == reports.count
+    }
+
+    private func toggleEditing() {
+        if editMode.isEditing {
+            exitEditing()
+        } else {
+            editMode = .active
+        }
+    }
+
+    private func exitEditing() {
+        editMode = .inactive
+        selection = []
+    }
+
     // MARK: - List
 
     private var reportList: some View {
-        List {
+        List(selection: $selection) {
             Section {
                 summaryCard
                     .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                     .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
+                    .selectionDisabled()
             }
 
             ForEach(groupedByYear, id: \.year) { group in
                 Section(String(group.year)) {
                     ForEach(group.reports) { report in
-                        NavigationLink(destination: ReportDetailView(report: report, onDeleted: deleteReport)) {
-                            ReportRow(report: report)
+                        // Drop the NavigationLink (and its disclosure chevron) while
+                        // selecting — tapping a row toggles its checkmark, not navigation.
+                        Group {
+                            if editMode.isEditing {
+                                ReportRow(report: report)
+                            } else {
+                                NavigationLink(destination: ReportDetailView(report: report, onDeleted: deleteReport)) {
+                                    ReportRow(report: report)
+                                }
+                            }
                         }
                         .listRowBackground(Rectangle().fill(.ultraThinMaterial))
                         .swipeActions(edge: .leading, allowsFullSwipe: false) {
@@ -84,6 +169,10 @@ struct HistoryView: View {
                             }
                             .tint(.blue)
                         }
+                        // While selecting, show the multi-select circles instead of
+                        // the per-row red delete control (swipe-to-delete still works
+                        // outside edit mode).
+                        .deleteDisabled(editMode.isEditing)
                     }
                     .onDelete { offsets in pendingDeleteIDs = offsets.map { group.reports[$0].id } }
                 }
@@ -175,8 +264,12 @@ struct HistoryView: View {
                 counts[LabCategory.forCode(entry.code), default: 0] += 1
             }
         }
+        // Tiebreak by the category's raw value so equal counts always sort the
+        // same way. Swift's sort isn't stable, and this property recomputes on
+        // every re-render (e.g. each selection toggle) — without a deterministic
+        // order the wash colors would swap corners on unrelated state changes.
         return counts
-            .sorted { $0.value > $1.value }
+            .sorted { $0.value != $1.value ? $0.value > $1.value : $0.key.rawValue < $1.key.rawValue }
             .prefix(3)
             .map { $0.key.color }
     }
@@ -186,6 +279,9 @@ struct HistoryView: View {
     private func loadReports() async {
         do {
             reports = try await HealthKitService.shared.loadCDADocuments()
+            // Drop selections (and leave edit mode) once nothing is left to act on.
+            selection.formIntersection(Set(reports.map(\.id)))
+            if reports.isEmpty { exitEditing() }
         } catch {
             loadError = error.localizedDescription
         }
