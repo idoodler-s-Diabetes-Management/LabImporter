@@ -213,7 +213,8 @@ struct HomeView: View {
                 onManual: createManually,
                 scannerAvailable: VNDocumentCameraViewController.isSupported,
                 clipboardAvailable: clipboardHasContent,
-                isProcessing: importEngine.isProcessing
+                isProcessing: importEngine.isProcessing,
+                showsLibraryToolbarItems: showsLibraryToolbarItems
             )
         } else {
             DashboardView(

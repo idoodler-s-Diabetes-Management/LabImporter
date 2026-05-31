@@ -93,7 +93,12 @@ final class CloudSyncService {
             forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
             object: store, queue: .main
         ) { [weak self] note in
-            MainActor.assumeIsolated { self?.remoteStoreChanged(note) }
+            let info = note.userInfo
+            let reason = info?[NSUbiquitousKeyValueStoreChangeReasonKey] as? Int
+            let changedKeys = info?[NSUbiquitousKeyValueStoreChangedKeysKey] as? [String]
+            MainActor.assumeIsolated {
+                self?.remoteStoreChanged(reason: reason, changedKeys: changedKeys)
+            }
         }
 
         // Pull what iCloud already has, then push anything that only exists
@@ -114,14 +119,9 @@ final class CloudSyncService {
 
     // MARK: iCloud → local
 
-    private func remoteStoreChanged(_ note: Notification) {
-        let info = note.userInfo
-        if let reason = info?[NSUbiquitousKeyValueStoreChangeReasonKey] as? Int,
-           reason == NSUbiquitousKeyValueStoreQuotaViolationChange {
-            return
-        }
-        let changed = (info?[NSUbiquitousKeyValueStoreChangedKeysKey] as? [String])
-            .map(Set.init) ?? Self.syncedKeys
+    private func remoteStoreChanged(reason: Int?, changedKeys: [String]?) {
+        if reason == NSUbiquitousKeyValueStoreQuotaViolationChange { return }
+        let changed = changedKeys.map(Set.init) ?? Self.syncedKeys
         applyRemoteValues(for: changed.intersection(Self.syncedKeys))
     }
 
