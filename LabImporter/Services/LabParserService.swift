@@ -46,6 +46,63 @@ struct ParseResult {
     let authorName: String?
 }
 
+// MARK: - Errors
+
+/// Errors surfaced to the user when the on-device model can't parse a report.
+///
+/// Foundation Models throws `LanguageModelSession.GenerationError`, whose
+/// `localizedDescription` is a terse, English-only system string (e.g. "An
+/// unsupported language or locale was used"). Leaking that verbatim into the
+/// UI is confusing — especially in a non-English app — so we translate the
+/// cases we care about into clear, localized, actionable messages.
+enum LabParserError: LocalizedError {
+    /// Apple Intelligence won't run for the device's current language/region.
+    case unsupportedLanguageOrLocale
+    /// The document was too large for the model's context window.
+    case documentTooLong
+    /// The model's safety guardrails blocked the request.
+    case contentBlocked
+    /// Any other generation failure — carries the system description as-is.
+    case generationFailed(String)
+
+    var errorDescription: String? {
+        switch self {
+        case .unsupportedLanguageOrLocale:
+            return String(localized: """
+            On-device AI isn't available for your device's current language or region. \
+            Open Settings → Apple Intelligence & Siri and set your iPhone language to one \
+            Apple Intelligence supports (for example English or German), then try again.
+            """)
+        case .documentTooLong:
+            return String(localized: """
+            This report is too long for the on-device AI to read at once. \
+            Try importing fewer pages, or one report at a time.
+            """)
+        case .contentBlocked:
+            return String(localized: """
+            The on-device AI couldn't process this document. \
+            Make sure it's a lab report and try again.
+            """)
+        case .generationFailed(let detail):
+            return detail
+        }
+    }
+
+    /// Maps a Foundation Models generation error to a user-facing `LabParserError`.
+    init(_ generationError: LanguageModelSession.GenerationError) {
+        switch generationError {
+        case .unsupportedLanguageOrLocale:
+            self = .unsupportedLanguageOrLocale
+        case .exceededContextWindowSize:
+            self = .documentTooLong
+        case .guardrailViolation:
+            self = .contentBlocked
+        default:
+            self = .generationFailed(generationError.localizedDescription)
+        }
+    }
+}
+
 // MARK: - Parser
 
 actor LabParserService {
@@ -125,12 +182,17 @@ actor LabParserService {
             """
         )
 
-        let response = try await session.respond(
-            to: "Extract all lab values from this text:\n\n\(text)",
-            generating: AILabReport.self
-        )
-
-        return response.content
+        do {
+            let response = try await session.respond(
+                to: "Extract all lab values from this text:\n\n\(text)",
+                generating: AILabReport.self
+            )
+            return response.content
+        } catch let error as LanguageModelSession.GenerationError {
+            // Translate the model's terse, English-only system error into a
+            // clear, localized message before it reaches the UI alert.
+            throw LabParserError(error)
+        }
     }
 
     // MARK: - Date helpers

@@ -1,6 +1,237 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "On-device AI isn't available for your device's current language or region. Open Settings → Apple Intelligence & Siri and set your iPhone language to one Apple Intelligence supports (for example English or German), then try again." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die geräteinterne KI ist für die aktuelle Sprache oder Region deines Geräts nicht verfügbar. Öffne „Einstellungen“ → „Apple Intelligence & Siri“ und stelle die Sprache deines iPhones auf eine von Apple Intelligence unterstützte Sprache ein (zum Beispiel Englisch oder Deutsch), und versuche es dann erneut."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La IA en el dispositivo no está disponible para el idioma o la región actuales de tu dispositivo. Abre Ajustes → Apple Intelligence y Siri y configura el idioma de tu iPhone en uno compatible con Apple Intelligence (por ejemplo, inglés o alemán); luego, inténtalo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’IA sur l’appareil n’est pas disponible pour la langue ou la région actuelles de votre appareil. Ouvrez Réglages → Apple Intelligence et Siri, puis réglez la langue de votre iPhone sur une langue prise en charge par Apple Intelligence (par exemple l’anglais ou l’allemand) avant de réessayer."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’IA sul dispositivo non è disponibile per la lingua o la regione attuali del dispositivo. Apri Impostazioni → Apple Intelligence e Siri e imposta la lingua dell’iPhone su una supportata da Apple Intelligence (ad esempio inglese o tedesco), quindi riprova."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デバイス上のAIは、お使いのデバイスの現在の言語または地域では利用できません。「設定」→「Apple Intelligenceとシリ」を開き、iPhoneの言語をApple Intelligenceが対応している言語（例：英語またはドイツ語）に設定してから、もう一度お試しください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De AI op het apparaat is niet beschikbaar voor de huidige taal of regio van je apparaat. Open Instellingen → Apple Intelligence en Siri en stel de taal van je iPhone in op een taal die door Apple Intelligence wordt ondersteund (bijvoorbeeld Engels of Duits) en probeer het opnieuw."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sztuczna inteligencja na urządzeniu nie jest dostępna dla bieżącego języka lub regionu Twojego urządzenia. Otwórz Ustawienia → Apple Intelligence i Siri i ustaw język iPhone’a na obsługiwany przez Apple Intelligence (na przykład angielski lub niemiecki), a następnie spróbuj ponownie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A IA no dispositivo não está disponível para o idioma ou a região atuais do seu dispositivo. Abra Ajustes → Apple Intelligence e Siri e defina o idioma do seu iPhone como um compatível com a Apple Intelligence (por exemplo, inglês ou alemão); em seguida, tente novamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ИИ на устройстве недоступен для текущего языка или региона вашего устройства. Откройте «Настройки» → «Apple Intelligence и Siri» и установите для iPhone язык, поддерживаемый Apple Intelligence (например, английский или немецкий), затем повторите попытку."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cihaz üzerindeki yapay zeka, cihazınızın geçerli dili veya bölgesi için kullanılamıyor. Ayarlar → Apple Intelligence ve Siri’yi açın ve iPhone’unuzun dilini Apple Intelligence’ın desteklediği bir dile (örneğin İngilizce veya Almanca) ayarlayın, ardından tekrar deneyin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Штучний інтелект на пристрої недоступний для поточної мови або регіону вашого пристрою. Відкрийте «Параметри» → «Apple Intelligence та Siri» і встановіть для iPhone мову, яку підтримує Apple Intelligence (наприклад, англійську або німецьку), а потім повторіть спробу."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备端 AI 不支持您设备当前的语言或地区。请打开“设置”→“Apple Intelligence 与 Siri”，将 iPhone 的语言设置为 Apple Intelligence 支持的语言（例如英语或德语），然后重试。"
+          }
+        }
+      }
+    },
+    "The on-device AI couldn't process this document. Make sure it's a lab report and try again." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die geräteinterne KI konnte dieses Dokument nicht verarbeiten. Stelle sicher, dass es sich um einen Laborbefund handelt, und versuche es erneut."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La IA en el dispositivo no pudo procesar este documento. Asegúrate de que sea un informe de laboratorio e inténtalo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’IA sur l’appareil n’a pas pu traiter ce document. Assurez-vous qu’il s’agit d’un compte rendu de laboratoire, puis réessayez."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’IA sul dispositivo non è riuscita a elaborare questo documento. Assicurati che sia un referto di laboratorio e riprova."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デバイス上のAIはこの書類を処理できませんでした。検査報告書であることを確認して、もう一度お試しください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De AI op het apparaat kon dit document niet verwerken. Controleer of het een laboratoriumrapport is en probeer het opnieuw."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sztuczna inteligencja na urządzeniu nie mogła przetworzyć tego dokumentu. Upewnij się, że to wynik badań laboratoryjnych, i spróbuj ponownie."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A IA no dispositivo não conseguiu processar este documento. Verifique se é um laudo laboratorial e tente novamente."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ИИ на устройстве не смог обработать этот документ. Убедитесь, что это лабораторный отчет, и повторите попытку."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cihaz üzerindeki yapay zeka bu belgeyi işleyemedi. Bunun bir laboratuvar raporu olduğundan emin olun ve tekrar deneyin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Штучний інтелект на пристрої не зміг обробити цей документ. Переконайтеся, що це лабораторний звіт, і повторіть спробу."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设备端 AI 无法处理此文档。请确认这是一份化验报告，然后重试。"
+          }
+        }
+      }
+    },
+    "This report is too long for the on-device AI to read at once. Try importing fewer pages, or one report at a time." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieser Befund ist zu lang, als dass ihn die geräteinterne KI auf einmal lesen könnte. Versuche, weniger Seiten oder jeweils einen Befund zu importieren."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este informe es demasiado largo para que la IA en el dispositivo lo lea de una vez. Intenta importar menos páginas o un informe a la vez."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce rapport est trop long pour que l’IA sur l’appareil puisse le lire en une seule fois. Essayez d’importer moins de pages, ou un rapport à la fois."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questo referto è troppo lungo perché l’IA sul dispositivo possa leggerlo in una volta sola. Prova a importare meno pagine o un referto alla volta."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このレポートは長すぎるため、デバイス上のAIで一度に読み取ることができません。ページ数を減らすか、レポートを1件ずつ読み込んでみてください。"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit rapport is te lang om in één keer door de AI op het apparaat te laten lezen. Probeer minder pagina’s of één rapport tegelijk te importeren."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ten raport jest zbyt długi, aby sztuczna inteligencja na urządzeniu mogła go odczytać za jednym razem. Spróbuj zaimportować mniej stron lub po jednym raporcie naraz."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este relatório é longo demais para a IA no dispositivo ler de uma vez. Tente importar menos páginas ou um relatório por vez."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Этот отчет слишком длинный, чтобы ИИ на устройстве мог прочитать его за один раз. Попробуйте импортировать меньше страниц или по одному отчету за раз."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu rapor, cihaz üzerindeki yapay zekanın bir kerede okuyamayacağı kadar uzun. Daha az sayfa veya her seferinde bir rapor içe aktarmayı deneyin."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цей звіт надто довгий, щоб штучний інтелект на пристрої міг прочитати його за один раз. Спробуйте імпортувати менше сторінок або по одному звіту за раз."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此报告太长，设备端 AI 无法一次性读取。请尝试导入较少的页面，或一次导入一份报告。"
+          }
+        }
+      }
+    },
     "" : {
 
     },
