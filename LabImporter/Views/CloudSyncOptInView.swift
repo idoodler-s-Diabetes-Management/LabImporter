@@ -36,19 +36,12 @@ struct CloudSyncOptInView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            Spacer()
+        OnboardingScaffold {
             hero
-            Spacer()
+        } card: {
             benefitCard
-                .frame(maxWidth: 480)
-                .padding(.horizontal, 24)
-            Spacer()
-            privacyNote
-                .frame(maxWidth: 480)
-                .padding(.horizontal, 32)
-                .padding(.bottom, 16)
-            buttons
+        } footer: {
+            footer
         }
         .background { MorphingCategoryBackground() }
         .onAppear {
@@ -135,7 +128,14 @@ struct CloudSyncOptInView: View {
         .opacity(appeared ? 1 : 0)
     }
 
-    // MARK: - Buttons
+    // MARK: - Footer
+
+    private var footer: some View {
+        VStack(spacing: 16) {
+            privacyNote
+            buttons
+        }
+    }
 
     private var buttons: some View {
         VStack(spacing: 12) {
@@ -157,8 +157,6 @@ struct CloudSyncOptInView: View {
             .buttonStyle(.bordered)
             .controlSize(.large)
         }
-        .padding(.horizontal, 24)
-        .padding(.bottom, 48)
         .opacity(appeared ? 1 : 0)
     }
 }

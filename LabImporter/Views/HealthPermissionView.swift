@@ -34,19 +34,12 @@ struct HealthPermissionView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            Spacer()
+        OnboardingScaffold {
             hero
-            Spacer()
+        } card: {
             benefitCard
-                .frame(maxWidth: 480)
-                .padding(.horizontal, 24)
-            Spacer()
-            privacyNote
-                .frame(maxWidth: 480)
-                .padding(.horizontal, 32)
-                .padding(.bottom, 16)
-            continueButton
+        } footer: {
+            footer
         }
         .background { MorphingCategoryBackground() }
         .onAppear {
@@ -139,7 +132,14 @@ struct HealthPermissionView: View {
         .opacity(appeared ? 1 : 0)
     }
 
-    // MARK: - Button
+    // MARK: - Footer
+
+    private var footer: some View {
+        VStack(spacing: 16) {
+            privacyNote
+            continueButton
+        }
+    }
 
     private var continueButton: some View {
         Button {
@@ -158,8 +158,6 @@ struct HealthPermissionView: View {
         .buttonStyle(.borderedProminent)
         .controlSize(.large)
         .disabled(isRequesting)
-        .padding(.horizontal, 24)
-        .padding(.bottom, 48)
         .opacity(appeared ? 1 : 0)
     }
 

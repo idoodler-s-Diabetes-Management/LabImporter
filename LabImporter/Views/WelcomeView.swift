@@ -36,15 +36,12 @@ struct WelcomeView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            Spacer()
+        OnboardingScaffold {
             hero
-            Spacer()
+        } card: {
             featureCard
-                .frame(maxWidth: 480)
-                .padding(.horizontal, 24)
-            Spacer()
-            getStartedButton
+        } footer: {
+            footer
         }
         .background { MorphingCategoryBackground() }
         .onAppear {
@@ -88,7 +85,7 @@ struct WelcomeView: View {
     // MARK: - Feature card
 
     private var featureCard: some View {
-        VStack(alignment: .leading, spacing: 26) {
+        VStack(alignment: .leading, spacing: 22) {
             ForEach(Array(features.enumerated()), id: \.offset) { index, feature in
                 FeatureRow(feature: feature)
                     .opacity(appeared ? 1 : 0)
@@ -107,15 +104,13 @@ struct WelcomeView: View {
         )
     }
 
-    // MARK: - Button
+    // MARK: - Footer
 
-    private var getStartedButton: some View {
+    private var footer: some View {
         Button("Get Started", action: onDismiss)
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
             .frame(maxWidth: .infinity)
-            .padding(.horizontal, 24)
-            .padding(.bottom, 48)
             .opacity(appeared ? 1 : 0)
     }
 }
