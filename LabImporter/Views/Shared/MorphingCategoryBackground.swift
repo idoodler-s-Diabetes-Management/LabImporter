@@ -44,37 +44,33 @@ struct MorphingCategoryBackground: View {
         .init(0, 1), .init(0.5, 1), .init(1, 1)
     ]
 
-    /// Radius of the softening blur. The mesh is drawn larger than the canvas by
-    /// a comfortable multiple of this so the blur's faded edges fall outside the
-    /// visible area (see `body`).
+    /// Radius of the softening blur. The mesh is over-drawn past the canvas by a
+    /// comfortable multiple of this (via negative padding) so the blur's faded
+    /// edges fall outside the visible area (see `mesh(at:)`).
     private let blurRadius: CGFloat = 60
 
     var body: some View {
-        GeometryReader { proxy in
-            let size = proxy.size
-            ZStack {
-                Color(.systemBackground)
-                if reduceMotion {
-                    mesh(at: 0)
-                } else {
-                    TimelineView(.animation) { context in
-                        mesh(at: context.date.timeIntervalSinceReferenceDate)
+        // Fill exactly like `CategoryBackground`: a flexible view that bleeds
+        // into the safe area. Deliberately *no* `GeometryReader`/fixed frame —
+        // when used as a `.background`, the proxy reports the safe-area-inset
+        // size, and pinning the mesh to it (then `.ignoresSafeArea()`) can't
+        // bleed an already-fixed frame, which left a margin around the wash.
+        // Instead the mesh is over-drawn and clipped back to the bounds.
+        Color(.systemBackground)
+            .overlay {
+                Group {
+                    if reduceMotion {
+                        mesh(at: 0)
+                    } else {
+                        TimelineView(.animation) { context in
+                            mesh(at: context.date.timeIntervalSinceReferenceDate)
+                        }
                     }
                 }
+                .clipped()
             }
-            // Draw the gradient larger than the canvas on every side, then clip
-            // back to it. Blurring a gradient fades its edges toward transparent;
-            // pushing those edges well beyond the visible bounds means only the
-            // fully-saturated interior shows, so the wash reaches every edge.
-            .frame(
-                width: size.width + blurRadius * 4,
-                height: size.height + blurRadius * 4
-            )
-            .frame(width: size.width, height: size.height)
-            .clipped()
-        }
-        .ignoresSafeArea()
-        .allowsHitTesting(false)
+            .ignoresSafeArea()
+            .allowsHitTesting(false)
     }
 
     private func mesh(at time: TimeInterval) -> some View {
@@ -84,6 +80,11 @@ struct MorphingCategoryBackground: View {
             points: Self.points,
             colors: (0..<9).map { color(forVertex: $0, time: time) }
         )
+        // Over-draw the mesh beyond the visible bounds (negative padding) so
+        // that, once blurred, its edges fade toward transparent *outside* the
+        // clip — only the fully-saturated interior shows and the wash reaches
+        // every edge.
+        .padding(-blurRadius * 2)
         // A wide blur melts the nine color zones into one another so the result
         // reads as an organic wash rather than a visible grid.
         .blur(radius: blurRadius)
