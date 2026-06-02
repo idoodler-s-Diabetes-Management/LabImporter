@@ -1,3 +1,4 @@
+import StoreKit
 import SwiftUI
 import UIKit
 
@@ -6,7 +7,7 @@ import UIKit
 extension AppInfo {
     /// How this build reached the device. Drives the build-info card's badge and
     /// whether an expiry date can be shown. Everything here is derived on device —
-    /// no network — in keeping with the app's no-server design.
+    /// no network of our own — in keeping with the app's no-server design.
     enum InstallKind {
         case appStore
         case testFlight
@@ -14,6 +15,12 @@ extension AppInfo {
         /// provisioning profile and therefore a hard expiry.
         case development
         case simulator
+    }
+
+    /// A build's provenance plus, when knowable on device, when it stops working.
+    struct Installation: Sendable {
+        let kind: InstallKind
+        let expirationDate: Date?
     }
 
     /// The app's primary icon, loaded from the asset catalog at runtime so the
@@ -31,38 +38,51 @@ extension AppInfo {
         return UIImage(named: "AppIcon")
     }
 
+    /// Resolves where this build came from and, when it's knowable on device, when
+    /// it stops working:
+    /// - development / ad-hoc builds expire with their embedded provisioning
+    ///   profile (`ExpirationDate`);
+    /// - TestFlight builds expire 90 days after they were built;
+    /// - App Store builds don't expire.
+    static func installation() async -> Installation {
+        let kind = await installKind()
+        let expiration: Date?
+        switch kind {
+        case .development:
+            expiration = provisioningProfileExpiration()
+        case .testFlight:
+            expiration = buildDate.flatMap { Calendar.current.date(byAdding: .day, value: 90, to: $0) }
+        case .appStore, .simulator:
+            expiration = nil
+        }
+        return Installation(kind: kind, expirationDate: expiration)
+    }
+
     /// Where this build came from. Order matters: a build carrying an embedded
     /// provisioning profile (development / ad-hoc) is reported as `.development`
-    /// even though it may also have a sandbox receipt.
-    static var installKind: InstallKind {
+    /// even though it may also report a sandbox StoreKit environment.
+    ///
+    /// The App Store vs TestFlight distinction comes from StoreKit's
+    /// `AppTransaction` environment — the modern replacement for the deprecated
+    /// `Bundle.main.appStoreReceiptURL` sandbox-receipt check. We only read the
+    /// environment, so the unverified payload is enough.
+    private static func installKind() async -> InstallKind {
         #if targetEnvironment(simulator)
         return .simulator
         #else
         if provisioningProfileExpiration() != nil {
             return .development
         }
-        if Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" {
+        guard let result = try? await AppTransaction.shared else {
+            return .appStore
+        }
+        switch result.unsafePayloadValue.environment {
+        case .sandbox:
             return .testFlight
+        default:
+            return .appStore
         }
-        return .appStore
         #endif
-    }
-
-    /// The date this build stops working, when that is knowable on device:
-    /// - development / ad-hoc builds expire with their embedded provisioning
-    ///   profile (`ExpirationDate`);
-    /// - TestFlight builds expire 90 days after they were built.
-    /// App Store builds don't expire, so this is `nil` for them.
-    static var expirationDate: Date? {
-        switch installKind {
-        case .development:
-            return provisioningProfileExpiration()
-        case .testFlight:
-            guard let built = buildDate else { return nil }
-            return Calendar.current.date(byAdding: .day, value: 90, to: built)
-        case .appStore, .simulator:
-            return nil
-        }
     }
 
     /// Best-effort build timestamp: the modification date of the main executable,
@@ -103,6 +123,10 @@ extension AppInfo {
 /// of the review and history headers, and computes everything on device (no
 /// network), matching the app's no-server design.
 struct BuildInfoCard: View {
+    /// Resolved asynchronously (the App Store / TestFlight split needs StoreKit's
+    /// `AppTransaction`); the badge and expiry appear once it's known.
+    @State private var installation: AppInfo.Installation?
+
     private var displayName: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
             ?? Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String
@@ -126,7 +150,7 @@ struct BuildInfoCard: View {
                     Text("Version \(AppInfo.version) (\(AppInfo.build))")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
-                    if let expiry = AppInfo.expirationDate {
+                    if let expiry = installation?.expirationDate {
                         Label {
                             Text("Expires \(expiry.formatted(date: .abbreviated, time: .omitted))")
                         } icon: {
@@ -139,7 +163,9 @@ struct BuildInfoCard: View {
 
                 Spacer(minLength: 8)
 
-                buildTypeBadge
+                if let kind = installation?.kind {
+                    buildTypeBadge(kind)
+                }
             }
 
             if hasGitInfo {
@@ -158,6 +184,11 @@ struct BuildInfoCard: View {
             RoundedRectangle(cornerRadius: 20)
                 .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
         )
+        .task {
+            if installation == nil {
+                installation = await AppInfo.installation()
+            }
+        }
     }
 
     /// A compact key/value line for the source strip — a glyph + label on the
@@ -206,8 +237,8 @@ struct BuildInfoCard: View {
         }
     }
 
-    @ViewBuilder private var buildTypeBadge: some View {
-        switch AppInfo.installKind {
+    @ViewBuilder private func buildTypeBadge(_ kind: AppInfo.InstallKind) -> some View {
+        switch kind {
         case .appStore: badge("App Store", color: .blue)
         case .testFlight: badge("TestFlight", color: .indigo)
         case .development: badge("Development", color: .orange)
