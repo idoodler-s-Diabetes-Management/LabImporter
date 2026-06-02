@@ -87,6 +87,12 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             List {
+                Section {
+                    BuildInfoCard()
+                        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                        .listRowBackground(Color.clear)
+                }
+
                 Section("Dashboard") {
                     NavigationLink {
                         LabSortEditor(prefs: $prefs, allCodes: allCodes)
@@ -130,21 +136,20 @@ struct SettingsView: View {
                 }
 
                 Section("About") {
-                    LabeledContent {
-                        Text(AppInfo.branch)
-                    } label: {
-                        SettingsRowLabel("Branch",
-                                         systemImage: "arrow.triangle.branch", color: .orange)
-                    }
-                    LabeledContent {
-                        Text(AppInfo.commit)
-                    } label: {
-                        SettingsRowLabel("Commit", systemImage: "number", color: .purple)
-                    }
                     NavigationLink {
                         LicenseView()
                     } label: {
                         SettingsRowLabel("License", systemImage: "doc.text", color: .pink)
+                    }
+                    if let repository = AppInfo.repositoryURL {
+                        linkRow("View on GitHub",
+                                systemImage: "chevron.left.forwardslash.chevron.right",
+                                color: .gray, url: repository)
+                    }
+                    if let newIssue = AppInfo.newIssueURL {
+                        linkRow("Report an Issue",
+                                systemImage: "exclamationmark.bubble",
+                                color: .red, url: newIssue)
                     }
                 }
 
@@ -158,23 +163,6 @@ struct SettingsView: View {
                     always verify them against your original report. Never make medical decisions \
                     based on this app; consult a qualified healthcare professional about your results.
                     """)
-                }
-
-                Section {
-                    if let repository = AppInfo.repositoryURL {
-                        linkRow("View on GitHub",
-                                systemImage: "chevron.left.forwardslash.chevron.right",
-                                color: .gray, url: repository)
-                    }
-                    if let newIssue = AppInfo.newIssueURL {
-                        linkRow("Report an Issue",
-                                systemImage: "exclamationmark.bubble",
-                                color: .red, url: newIssue)
-                    }
-                } footer: {
-                    Text("Version \(AppInfo.version) (\(AppInfo.build))")
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.top, 8)
                 }
             }
             .navigationTitle("Settings")

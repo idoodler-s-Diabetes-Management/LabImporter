@@ -4,91 +4,6 @@
     "" : {
 
     },
-    "1Y" : {
-      "comment" : "Segmented control: trend chart time window of one year",
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "1 J" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "1 A" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "1 A" } },
-        "it" : { "stringUnit" : { "state" : "translated", "value" : "1 A" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "1年" } },
-        "nl" : { "stringUnit" : { "state" : "translated", "value" : "1 jr" } },
-        "pl" : { "stringUnit" : { "state" : "translated", "value" : "1 rok" } },
-        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "1 A" } },
-        "ru" : { "stringUnit" : { "state" : "translated", "value" : "1 год" } },
-        "tr" : { "stringUnit" : { "state" : "translated", "value" : "1 Yıl" } },
-        "uk" : { "stringUnit" : { "state" : "translated", "value" : "1 рік" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "1年" } }
-      }
-    },
-    "3M" : {
-      "comment" : "Segmented control: trend chart time window of three months",
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "3 M" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "3 M" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "3 M" } },
-        "it" : { "stringUnit" : { "state" : "translated", "value" : "3 M" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "3か月" } },
-        "nl" : { "stringUnit" : { "state" : "translated", "value" : "3 mnd" } },
-        "pl" : { "stringUnit" : { "state" : "translated", "value" : "3 mies." } },
-        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "3 M" } },
-        "ru" : { "stringUnit" : { "state" : "translated", "value" : "3 мес" } },
-        "tr" : { "stringUnit" : { "state" : "translated", "value" : "3 Ay" } },
-        "uk" : { "stringUnit" : { "state" : "translated", "value" : "3 міс" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "3个月" } }
-      }
-    },
-    "6M" : {
-      "comment" : "Segmented control: trend chart time window of six months",
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "6 M" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "6 M" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "6 M" } },
-        "it" : { "stringUnit" : { "state" : "translated", "value" : "6 M" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "6か月" } },
-        "nl" : { "stringUnit" : { "state" : "translated", "value" : "6 mnd" } },
-        "pl" : { "stringUnit" : { "state" : "translated", "value" : "6 mies." } },
-        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "6 M" } },
-        "ru" : { "stringUnit" : { "state" : "translated", "value" : "6 мес" } },
-        "tr" : { "stringUnit" : { "state" : "translated", "value" : "6 Ay" } },
-        "uk" : { "stringUnit" : { "state" : "translated", "value" : "6 міс" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "6个月" } }
-      }
-    },
-    "All" : {
-      "comment" : "Segmented control: trend chart shows the full history",
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Alle" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Todo" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tout" } },
-        "it" : { "stringUnit" : { "state" : "translated", "value" : "Tutto" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "すべて" } },
-        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Alles" } },
-        "pl" : { "stringUnit" : { "state" : "translated", "value" : "Wszystko" } },
-        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Tudo" } },
-        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Все" } },
-        "tr" : { "stringUnit" : { "state" : "translated", "value" : "Tümü" } },
-        "uk" : { "stringUnit" : { "state" : "translated", "value" : "Усе" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "全部" } }
-      }
-    },
-    "Time Range" : {
-      "comment" : "Accessibility label for the trend chart time-window picker",
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Zeitraum" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Intervalo de tiempo" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Période" } },
-        "it" : { "stringUnit" : { "state" : "translated", "value" : "Intervallo di tempo" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "期間" } },
-        "nl" : { "stringUnit" : { "state" : "translated", "value" : "Periode" } },
-        "pl" : { "stringUnit" : { "state" : "translated", "value" : "Zakres czasu" } },
-        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Intervalo de tempo" } },
-        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Период" } },
-        "tr" : { "stringUnit" : { "state" : "translated", "value" : "Zaman aralığı" } },
-        "uk" : { "stringUnit" : { "state" : "translated", "value" : "Період" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "时间范围" } }
-      }
-    },
     "–" : {
       "localizations" : {
         "de" : {
@@ -577,6 +492,237 @@
         }
       }
     },
+    "1Y" : {
+      "comment" : "Segmented control: trend chart time window of one year",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 J"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 A"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 A"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 A"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1年"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 jr"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 rok"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 A"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 год"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 Yıl"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 рік"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1年"
+          }
+        }
+      }
+    },
+    "3M" : {
+      "comment" : "Segmented control: trend chart time window of three months",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 M"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 M"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 M"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 M"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3か月"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 mnd"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 mies."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 M"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 мес"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 Ay"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 міс"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3个月"
+          }
+        }
+      }
+    },
+    "6M" : {
+      "comment" : "Segmented control: trend chart time window of six months",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 M"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 M"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 M"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 M"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6か月"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 mnd"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 mies."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 M"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 мес"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 Ay"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 міс"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6个月"
+          }
+        }
+      }
+    },
     "A quick note on how to use LabImporter safely." : {
       "localizations" : {
         "de" : {
@@ -953,6 +1099,83 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "添加数值"
+          }
+        }
+      }
+    },
+    "All" : {
+      "comment" : "Segmented control: trend chart shows the full history",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutto"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべて"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alles"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wszystko"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tudo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Все"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tümü"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Усе"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全部"
           }
         }
       }
@@ -1563,6 +1786,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已输入的数值将不会保存。"
+          }
+        }
+      }
+    },
+    "App Store" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Store"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Store"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Store"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Store"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Store"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Store"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Store"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Store"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Store"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Store"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Store"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Store"
           }
         }
       }
@@ -3546,82 +3845,6 @@
         }
       }
     },
-    "Custom name" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eigener Name"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nombre personalizado"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nom personnalisé"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nome personalizzato"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "カスタム名"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aangepaste naam"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nazwa niestandardowa"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nome personalizado"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Своё название"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Özel ad"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Власна назва"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "自定义名称"
-          }
-        }
-      }
-    },
     "Component" : {
       "localizations" : {
         "de" : {
@@ -4152,6 +4375,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "手动创建报告"
+          }
+        }
+      }
+    },
+    "Custom name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eigener Name"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nombre personalizado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom personnalisé"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nome personalizzato"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カスタム名"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aangepaste naam"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nazwa niestandardowa"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nome personalizado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Своё название"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Özel ad"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Власна назва"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定义名称"
           }
         }
       }
@@ -5065,6 +5364,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在报告中检测到：\"%@\""
+          }
+        }
+      }
+    },
+    "Development" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwicklung"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desarrollo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Développement"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sviluppo"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開発"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontwikkeling"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wersja deweloperska"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desenvolvimento"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разработка"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geliştirme"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Розробка"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开发"
           }
         }
       }
@@ -6054,6 +6429,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "一切在设备上完成。LabImporter 绝不会传输你的化验数据。"
+          }
+        }
+      }
+    },
+    "Expires %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Läuft ab %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caduca %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expire le %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scade %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有効期限 %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verloopt %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wygasa %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expira em %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Истекает %@"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geçerlilik: %@"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Діє до %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "到期 %@"
           }
         }
       }
@@ -10548,6 +10999,7 @@
       }
     },
     "Name" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -13517,7 +13969,6 @@
       }
     },
     "Required" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -14964,6 +15415,82 @@
         }
       }
     },
+    "Simulator" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simulator"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simulador"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simulateur"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simulatore"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "シミュレータ"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simulator"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Symulator"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simulador"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Симулятор"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simülatör"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Симулятор"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "模拟器"
+          }
+        }
+      }
+    },
     "Some reports couldn't be removed from Apple Health." : {
       "localizations" : {
         "de" : {
@@ -15721,6 +16248,82 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "拍照"
+          }
+        }
+      }
+    },
+    "TestFlight" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TestFlight"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TestFlight"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TestFlight"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TestFlight"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TestFlight"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TestFlight"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TestFlight"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TestFlight"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TestFlight"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TestFlight"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TestFlight"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TestFlight"
           }
         }
       }
@@ -16561,6 +17164,83 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "此报告将从 Apple 健康中永久删除。"
+          }
+        }
+      }
+    },
+    "Time Range" : {
+      "comment" : "Accessibility label for the trend chart time-window picker",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeitraum"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intervalo de tiempo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Période"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intervallo di tempo"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "期間"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Periode"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zakres czasu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intervalo de tempo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Период"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zaman aralığı"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Період"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "时间范围"
           }
         }
       }
