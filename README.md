@@ -11,27 +11,38 @@ Scan, import, or paste your lab report — the app uses Vision OCR and the on-de
 
 ## Screenshots
 
-> All screenshots are from the iOS 26 Simulator on iPhone 17 Pro. Left: Light mode · Right: Dark mode.
-
-**Dashboard** — metric cards with current value, sparkline trend, and category colour coding
-
-![Dashboard](screenshots/01-dashboard.png)
-
-**Trends** — interactive per-metric chart; scrub to inspect individual data points
-
-![Trends](screenshots/02-trends.png)
-
-**Review** — AI-extracted lab values grouped by clinical category, ready to correct before saving
-
-![Review](screenshots/03-review.png)
-
-**Reports** — full history of imported reports grouped by year, with report stats
-
-![Reports](screenshots/04-history.png)
-
-**Settings** — sort and visibility controls, iCloud sync toggle, and LOINC catalog browser
-
-![Settings](screenshots/05-settings.png)
+<table>
+  <tr>
+    <th align="left">Screen</th>
+    <th>Light</th>
+    <th>Dark</th>
+  </tr>
+  <tr>
+    <td><b>Dashboard</b><br><sup>Metric cards with sparklines</sup></td>
+    <td><img src="screenshots/01-dashboard-light.png" width="220"/></td>
+    <td><img src="screenshots/01-dashboard-dark.png" width="220"/></td>
+  </tr>
+  <tr>
+    <td><b>Trends</b><br><sup>Interactive per-metric chart</sup></td>
+    <td><img src="screenshots/02-trends-light.png" width="220"/></td>
+    <td><img src="screenshots/02-trends-dark.png" width="220"/></td>
+  </tr>
+  <tr>
+    <td><b>Review</b><br><sup>AI-extracted values before saving</sup></td>
+    <td><img src="screenshots/03-review-light.png" width="220"/></td>
+    <td><img src="screenshots/03-review-dark.png" width="220"/></td>
+  </tr>
+  <tr>
+    <td><b>Reports</b><br><sup>Full import history grouped by year</sup></td>
+    <td><img src="screenshots/04-history-light.png" width="220"/></td>
+    <td><img src="screenshots/04-history-dark.png" width="220"/></td>
+  </tr>
+  <tr>
+    <td><b>Settings</b><br><sup>Sort, sync, and LOINC catalog</sup></td>
+    <td><img src="screenshots/05-settings-light.png" width="220"/></td>
+    <td><img src="screenshots/05-settings-dark.png" width="220"/></td>
+  </tr>
+</table>
 
 ---
 
