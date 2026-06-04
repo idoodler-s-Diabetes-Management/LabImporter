@@ -25,6 +25,23 @@ struct MetricCard: View {
         LabCategory.forCode(metric.entry.code).color
     }
 
+    /// The user's reference range for this metric's code, if set.
+    private var referenceRange: ReferenceRange? {
+        LabMapping.referenceRange(for: metric.entry.code)
+    }
+
+    /// Out-of-range status of the latest reading against the user's reference
+    /// range for this code, or `nil` when there's no value or no range.
+    private var rangeStatus: RangeStatus? {
+        LabMapping.rangeStatus(for: metric.entry.numericValue, code: metric.entry.code)
+    }
+
+    /// The value's colour: tinted by its out-of-range status, else primary.
+    private var valueForeground: Color {
+        if let rangeStatus, rangeStatus.isOutOfRange { return rangeStatus.color }
+        return .primary
+    }
+
     /// Direction of the latest reading relative to the previous one, used to show
     /// a small trend arrow in the overview. `nil` when there is no prior value to
     /// compare against.
@@ -100,7 +117,7 @@ struct MetricCard: View {
             HStack(alignment: .firstTextBaseline, spacing: 3) {
                 Text(metric.entry.displayValue)
                     .font(.title2.bold())
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(valueForeground)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                 if !metric.entry.unit.isEmpty {
@@ -110,6 +127,11 @@ struct MetricCard: View {
                         .lineLimit(1)
                 }
                 Spacer(minLength: 0)
+                if let rangeStatus {
+                    RangeStatusBadge(status: rangeStatus,
+                                     range: referenceRange,
+                                     unit: metric.entry.unit)
+                }
             }
 
             if metric.history.count > 1 {
@@ -128,31 +150,48 @@ struct MetricCard: View {
     }
 
     private var sparkline: some View {
-        Chart(metric.history) { point in
-            LineMark(
-                x: .value("Date", point.date),
-                y: .value("Value", point.value)
-            )
-            .foregroundStyle(categoryColor.opacity(0.85))
-
-            AreaMark(
-                x: .value("Date", point.date),
-                y: .value("Value", point.value)
-            )
-            .foregroundStyle(
-                LinearGradient(
-                    colors: [categoryColor.opacity(0.3), categoryColor.opacity(0.05)],
-                    startPoint: .top,
-                    endPoint: .bottom
+        Chart {
+            ForEach(metric.history) { point in
+                LineMark(
+                    x: .value("Date", point.date),
+                    y: .value("Value", point.value)
                 )
-            )
+                .foregroundStyle(categoryColor.opacity(0.85))
 
-            PointMark(
-                x: .value("Date", point.date),
-                y: .value("Value", point.value)
-            )
-            .foregroundStyle(categoryColor)
-            .symbolSize(20)
+                AreaMark(
+                    x: .value("Date", point.date),
+                    y: .value("Value", point.value)
+                )
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [categoryColor.opacity(0.3), categoryColor.opacity(0.05)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+
+                PointMark(
+                    x: .value("Date", point.date),
+                    y: .value("Value", point.value)
+                )
+                .foregroundStyle(categoryColor)
+                .symbolSize(20)
+            }
+
+            // Faint dashed guides at the reference bounds. No explicit Y scale is
+            // set, so Charts auto-includes these in the domain — the marks stay
+            // inside the plot (never spilling past the card) and the data simply
+            // shares the height with them.
+            if let low = referenceRange?.low {
+                RuleMark(y: .value("Low", low))
+                    .foregroundStyle(RangeStatus.low.color.opacity(0.4))
+                    .lineStyle(StrokeStyle(lineWidth: 0.75, dash: [3, 2]))
+            }
+            if let high = referenceRange?.high {
+                RuleMark(y: .value("High", high))
+                    .foregroundStyle(RangeStatus.high.color.opacity(0.4))
+                    .lineStyle(StrokeStyle(lineWidth: 0.75, dash: [3, 2]))
+            }
         }
         .chartXAxis(.hidden)
         .chartYAxis(.hidden)

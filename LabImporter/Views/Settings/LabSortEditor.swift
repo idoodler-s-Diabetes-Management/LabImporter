@@ -13,9 +13,10 @@ struct LabSortEditor: View {
     @State private var visibleOrdered: [CodeName]
     @State private var hiddenSet: Set<String>
     @State private var pinnedSet: Set<String>
-    /// The code currently being renamed (drives the rename alert), plus its draft.
-    @State private var renamingCode: String?
-    @State private var renameDraft = ""
+    /// The LOINC code pushed onto the detail screen, where the user renames the
+    /// metric and sets its reference range. `nil` until they tap a row's info
+    /// button.
+    @State private var detailCode: String?
 
     init(prefs: Binding<LabDisplayPreferences>, allCodes: [CodeName]) {
         _prefs = prefs
@@ -52,12 +53,18 @@ struct LabSortEditor: View {
         .onChange(of: visibleOrdered.map(\.code)) { save() }
         .onChange(of: hiddenSet) { save() }
         .onChange(of: pinnedSet) { save() }
-        .renameLabAlert(code: $renamingCode, draft: $renameDraft, prefs: $prefs)
+        .navigationDestination(item: $detailCode) { code in
+            if let term = LoincDirectory.shared.term(for: code) {
+                LoincTermDetailView(term: term)
+            }
+        }
     }
 
-    private func startRename(_ code: String) {
-        renameDraft = prefs.nickname(for: code) ?? ""
-        renamingCode = code
+    /// Opens the LOINC detail screen for `code`, where renaming and reference
+    /// range editing live. Codes the catalog doesn't know have no detail screen,
+    /// so the info button is hidden for them (see `row(for:)`).
+    private func showDetail(_ code: String) {
+        detailCode = code
     }
 
     /// Visible codes split by pin state. Both partitions preserve their relative
@@ -112,13 +119,23 @@ struct LabSortEditor: View {
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
+                if let range = prefs.referenceRange(for: item.code) {
+                    Label(range.formatted(), systemImage: "ruler")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
             }
             Spacer()
-            Button { startRename(item.code) } label: {
-                Image(systemName: "pencil")
-                    .foregroundStyle(Color.secondary)
+            // The catalog detail screen hosts renaming and reference-range
+            // editing; only LOINC codes the catalog knows have one.
+            if LoincDirectory.shared.term(for: item.code) != nil {
+                Button { showDetail(item.code) } label: {
+                    Image(systemName: "info.circle")
+                        .foregroundStyle(Color.secondary)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Details")
             }
-            .buttonStyle(.plain)
             Button { hideCode(item.code) } label: {
                 Image(systemName: "eye.slash")
                     .foregroundStyle(Color.secondary)
