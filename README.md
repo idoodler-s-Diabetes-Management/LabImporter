@@ -11,6 +11,8 @@
 
 Scan, import, or paste your lab report — the app uses Vision OCR and the on-device Foundation Models framework to extract values, lets you review and correct them, then saves them directly into Apple Health as a CDA clinical document.
 
+Because the parsing runs on Apple Intelligence, LabImporter needs a compatible device: an **iPhone 15 Pro, iPhone 16, or newer**, or an **iPad with Apple silicon (M1 or later)**, running **iOS or iPadOS 26.0 or later**.
+
 > [!IMPORTANT]
 > **Not medical advice.** LabImporter is not a medical device and does not provide medical advice, diagnosis, or treatment. Extracted values may be inaccurate or incomplete — always verify them against your original report and never make medical decisions based on this app. See the [Medical disclaimer](#medical-disclaimer) below.
 
@@ -47,7 +49,7 @@ Scan, import, or paste your lab report — the app uses Vision OCR and the on-de
 
 - iOS or iPadOS 26.0 or later
 - An Apple Intelligence–capable device:
-  - **iPhone** with an A17 Pro chip or later, or
+  - **iPhone 15 Pro, iPhone 16, or newer**, or
   - **iPad** with Apple silicon (M1 or later)
 - An Apple Developer account (free tier is sufficient for personal use via Xcode)
 - For GitHub Actions builds: an Apple Developer Program membership (paid, required for TestFlight)
@@ -172,7 +174,7 @@ All processing happens entirely on-device. No lab data is sent to any server. Th
 
 ### On-device AI inside the app
 
-Lab value extraction is powered by Apple's on-device Foundation Models framework (`LanguageModelSession` / `@Generable`). The language model runs entirely on the device — no lab data is transmitted to any external server or API. An Apple Intelligence-capable device (A17 Pro / M1 chip or later, iOS 26+) is required for parsing; on unsupported hardware the app shows a "Device Not Supported" screen.
+Lab value extraction is powered by Apple's on-device Foundation Models framework (`LanguageModelSession` / `@Generable`). The language model runs entirely on the device — no lab data is transmitted to any external server or API. An Apple Intelligence-capable device (iPhone 15 Pro, iPhone 16, or newer, or an iPad with Apple silicon, on iOS / iPadOS 26+) is required for parsing; on unsupported hardware the app shows a "Device Not Supported" screen.
 
 ### Built with AI assistance
 
