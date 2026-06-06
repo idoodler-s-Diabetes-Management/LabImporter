@@ -41,6 +41,7 @@ Because the parsing runs on Apple Intelligence, LabImporter needs a compatible d
 - **Customise** — pin metrics to the top, reorder, or hide them from the dashboard
 - **iCloud sync (opt-in)** — optionally roam your dashboard layout (card order, pins, hidden metrics, custom names, and reference ranges) across your devices; your lab values always stay in Apple Health and never sync
 - **Share** — export any report as a CDA file to send to a doctor or another app
+- **13 languages** — fully localized in English, German, Spanish, French, Italian, Japanese, Dutch, Polish, Portuguese (Brazil), Russian, Turkish, Ukrainian, and Simplified Chinese
 - **Privacy-first** — all data lives in Apple Health on your device; no account or server required
 
 ---
