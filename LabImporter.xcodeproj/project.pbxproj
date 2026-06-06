@@ -23,6 +23,12 @@
 		AABB000000000000000055AA /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABB000000000000000037AA /* FoundationModels.framework */; };
 		AABB000000000000000056AA /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABB000000000000000038AA /* PhotosUI.framework */; };
 		AABB000000000000000057AA /* CDAExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000058AA /* CDAExportService.swift */; };
+		AAED000000000000000010AA /* PDFExportOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED000000000000000011AA /* PDFExportOptions.swift */; };
+		AAED000000000000000012AA /* PDFExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED000000000000000013AA /* PDFExportService.swift */; };
+		AAED000000000000000014AA /* PDFReportPageViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED000000000000000015AA /* PDFReportPageViews.swift */; };
+		AAED000000000000000016AA /* PDFExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED000000000000000017AA /* PDFExportView.swift */; };
+		AAED000000000000000018AA /* PDFReportComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED000000000000000019AA /* PDFReportComposer.swift */; };
+		AAED00000000000000001AAA /* PDFTrendPageViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED00000000000000001BAA /* PDFTrendPageViews.swift */; };
 		AABB000000000000000060AA /* LabReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000061AA /* LabReport.swift */; };
 		AABB000000000000000064AA /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000065AA /* HistoryView.swift */; };
 		AABB000000000000000066AA /* ReportDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000067AA /* ReportDetailView.swift */; };
@@ -86,6 +92,12 @@
 		AABB000000000000000038AA /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		AABB000000000000000039AA /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = SOURCE_ROOT; };
 		AABB000000000000000058AA /* CDAExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDAExportService.swift; sourceTree = "<group>"; };
+		AAED000000000000000011AA /* PDFExportOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExportOptions.swift; sourceTree = "<group>"; };
+		AAED000000000000000013AA /* PDFExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExportService.swift; sourceTree = "<group>"; };
+		AAED000000000000000015AA /* PDFReportPageViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFReportPageViews.swift; sourceTree = "<group>"; };
+		AAED000000000000000017AA /* PDFExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExportView.swift; sourceTree = "<group>"; };
+		AAED000000000000000019AA /* PDFReportComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFReportComposer.swift; sourceTree = "<group>"; };
+		AAED00000000000000001BAA /* PDFTrendPageViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFTrendPageViews.swift; sourceTree = "<group>"; };
 		AABB000000000000000061AA /* LabReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabReport.swift; sourceTree = "<group>"; };
 		AABB000000000000000065AA /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		AABB000000000000000067AA /* ReportDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDetailView.swift; sourceTree = "<group>"; };
@@ -206,6 +218,7 @@
 				AABB000000000000000096AA /* LabCategory.swift */,
 				AABB000000000000000061AA /* LabReport.swift */,
 				AABB000000000000000075AA /* LabDisplayPreferences.swift */,
+				AAED000000000000000011AA /* PDFExportOptions.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -217,6 +230,7 @@
 				AABB000000000000000024AA /* LabParserService.swift */,
 				AABB000000000000000025AA /* HealthKitService.swift */,
 				AABB000000000000000058AA /* CDAExportService.swift */,
+				AAED000000000000000013AA /* PDFExportService.swift */,
 				AABB000000000000000090AA /* LoincDirectory.swift */,
 				AABB0000000000000000D0AA /* CloudSyncService.swift */,
 			);
@@ -234,6 +248,7 @@
 				AABB0000000000000000A5AA /* History */,
 				AABB0000000000000000A6AA /* Settings */,
 				AABB0000000000000000A7AA /* Shared */,
+				AAED0000000000000000E0AA /* Export */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -339,6 +354,17 @@
 				AAFF0000000000000000F201 /* RangeStatusBadge.swift */,
 			);
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		AAED0000000000000000E0AA /* Export */ = {
+			isa = PBXGroup;
+			children = (
+				AAED000000000000000017AA /* PDFExportView.swift */,
+				AAED000000000000000015AA /* PDFReportPageViews.swift */,
+				AAED000000000000000019AA /* PDFReportComposer.swift */,
+				AAED00000000000000001BAA /* PDFTrendPageViews.swift */,
+			);
+			path = Export;
 			sourceTree = "<group>";
 		};
 		AABB0000000000000000A8AA /* Project Files */ = {
@@ -550,6 +576,12 @@
 				AABB000000000000000091AA /* LoincDirectory.swift in Sources */,
 				AABB0000000000000000D1AA /* CloudSyncService.swift in Sources */,
 				AABB000000000000000057AA /* CDAExportService.swift in Sources */,
+				AAED000000000000000010AA /* PDFExportOptions.swift in Sources */,
+				AAED000000000000000012AA /* PDFExportService.swift in Sources */,
+				AAED000000000000000014AA /* PDFReportPageViews.swift in Sources */,
+				AAED000000000000000016AA /* PDFExportView.swift in Sources */,
+				AAED000000000000000018AA /* PDFReportComposer.swift in Sources */,
+				AAED00000000000000001AAA /* PDFTrendPageViews.swift in Sources */,
 				AABB000000000000000046AA /* HomeView.swift in Sources */,
 				AABB000000000000000047AA /* ReviewView.swift in Sources */,
 				AACC000000000000000001AA /* ReviewView+Preview.swift in Sources */,

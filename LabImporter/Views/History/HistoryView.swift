@@ -11,6 +11,7 @@ struct HistoryView: View {
     // Multi-select state: drives the list's checkmarks while editing.
     @State private var editMode: EditMode = .inactive
     @State private var selection: Set<UUID> = []
+    @State private var showExport = false
 
     var body: some View {
         Group {
@@ -31,6 +32,9 @@ struct HistoryView: View {
         .navigationBarBackButtonHidden(editMode.isEditing)
         .toolbar { toolbarContent }
         .onAppear { Task { await loadReports() } }
+        .sheet(isPresented: $showExport) {
+            PDFExportView(reports: reports)
+        }
         .sheet(item: $reportToEdit, onDismiss: { Task { await loadReports() } }, content: { report in
             NavigationStack {
                 ReviewView(
@@ -79,15 +83,22 @@ struct HistoryView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
+            if !reports.isEmpty && !editMode.isEditing {
+                Button {
+                    showExport = true
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                }
+                .accessibilityLabel(Text("Export PDF"))
+            }
+        }
+
+        ToolbarItem(placement: .topBarTrailing) {
             if !reports.isEmpty {
                 Button {
                     withAnimation { toggleEditing() }
                 } label: {
-                    if editMode.isEditing {
-                        Image(systemName: "checkmark")
-                    } else {
-                        Text("Edit")
-                    }
+                    Image(systemName: editMode.isEditing ? "checkmark" : "checklist")
                 }
                 .accessibilityLabel(editMode.isEditing ? Text("Done") : Text("Edit"))
             }
