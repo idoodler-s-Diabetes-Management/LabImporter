@@ -233,6 +233,45 @@ struct TrendsView: View {
 
 extension TrendsView {
     private var trendChart: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            chartHeader
+            chartBody
+        }
+        .padding()
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
+        )
+    }
+
+    /// Fixed readout above the plot, Apple-Health style: while scrubbing it
+    /// shows the value under the finger, otherwise the latest reading. Living
+    /// outside the scrollable plot, it needs no scroll-offset math and no
+    /// edge clamping, and never covers the data under the finger.
+    @ViewBuilder
+    private var chartHeader: some View {
+        if let point = selectedDataPoint ?? dataPoints.last {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(point.date.formatted(date: .abbreviated, time: .omitted))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    Text(formatValue(point.value))
+                        .font(.title2.weight(.semibold))
+                        .contentTransition(.numericText())
+                    if !point.unit.isEmpty {
+                        Text(point.unit)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .animation(.snappy(duration: 0.2), value: point.date)
+        }
+    }
+
+    private var chartBody: some View {
         Chart {
             if let range = referenceRange {
                 if let low = range.low {
@@ -290,20 +329,6 @@ extension TrendsView {
         .chartXVisibleDomain(length: visibleDomainSeconds)
         .chartScrollPosition(x: $scrollPositionX)
         .chartXSelection(value: $selectedDate)
-        .chartOverlay { proxy in
-            GeometryReader { geo in
-                if let selected = selectedDataPoint,
-                   let plotFrame = proxy.plotFrame.map({ geo[$0] }),
-                   let xPos = proxy.position(forX: selected.date) {
-                    scrubCallout(selected)
-                        .position(
-                            x: clampedX(xPos, in: plotFrame),
-                            y: plotFrame.minY + 22
-                        )
-                        .allowsHitTesting(false)
-                }
-            }
-        }
         .onChange(of: selectedDataPoint?.date) { _, newDate in
             if newDate != nil { selectionFeedback.selectionChanged() }
         }
@@ -321,40 +346,6 @@ extension TrendsView {
             }
         }
         .frame(minHeight: 260)
-        .padding()
-        .overlay(alignment: .topLeading) { unitBadge }
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
-        .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
-        )
-    }
-
-    private func scrubCallout(_ point: DataPoint) -> some View {
-        VStack(alignment: .center, spacing: 1) {
-            Text(point.date.formatted(date: .abbreviated, time: .omitted))
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-            HStack(alignment: .firstTextBaseline, spacing: 3) {
-                Text(formatValue(point.value))
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.primary)
-                if !point.unit.isEmpty {
-                    Text(point.unit)
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                }
-            }
-        }
-        .fixedSize()
-        .padding(.horizontal, 14)
-        .padding(.vertical, 8)
-        .glassEffect(.regular, in: Capsule())
-        .overlay(
-            Capsule()
-                .stroke(Color.primary.opacity(0.15), lineWidth: 0.5)
-        )
-        .shadow(color: Color.black.opacity(0.2), radius: 8, x: 0, y: 3)
     }
 
     private var selectedPointBubble: some View {
@@ -375,18 +366,6 @@ extension TrendsView {
 // MARK: - Helpers
 
 extension TrendsView {
-    /// Static unit caption pinned to the card (`chartYAxisLabel` rides the scrollable plot).
-    @ViewBuilder
-    var unitBadge: some View {
-        if !currentUnit.isEmpty {
-            Text(currentUnit)
-                .font(.caption.weight(.medium))
-                .foregroundStyle(valueColor.opacity(0.8))
-                .padding(EdgeInsets(top: 8, leading: 12, bottom: 0, trailing: 0))
-                .allowsHitTesting(false)
-        }
-    }
-
     var windowPicker: some View {
         Picker("Time Range", selection: $window) {
             ForEach(TrendWindow.allCases) { option in
@@ -413,11 +392,6 @@ extension TrendsView {
         } else {
             scrollPositionX = last.addingTimeInterval(-visibleDomainSeconds * 0.95)
         }
-    }
-
-    private func clampedX(_ xPos: CGFloat, in frame: CGRect) -> CGFloat {
-        let halfBubble: CGFloat = 60
-        return min(max(xPos, frame.minX + halfBubble), frame.maxX - halfBubble)
     }
 
     private func formatValue(_ value: Double) -> String {
