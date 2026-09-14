@@ -10,7 +10,7 @@ import Foundation
 struct AskLabValueIntent: AppIntent {
     static let title: LocalizedStringResource = "Ask About a Lab Value"
     static let description = IntentDescription(
-        "Reads back your most recent reading for a value you've allowed Siri to access."
+        "Reads back your most recent reading for a value you've allowed to be accessed this way."
     )
 
     @Parameter(title: "Lab Value")
