@@ -17,7 +17,7 @@ struct LabMetricEntity: AppEntity, IndexedEntity {
         TypeDisplayRepresentation(name: "Lab Value")
     }
 
-    static var defaultQuery = LabMetricEntityQuery()
+    static let defaultQuery = LabMetricEntityQuery()
 
     /// The LOINC code — stable across renames and re-imports.
     let id: String

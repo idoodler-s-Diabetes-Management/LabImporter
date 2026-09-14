@@ -8,8 +8,8 @@ import Foundation
 /// re-checks the same preference before touching Health, so a value can never
 /// be spoken just because it was once allowed and later revoked.
 struct AskLabValueIntent: AppIntent {
-    static var title: LocalizedStringResource = "Ask About a Lab Value"
-    static var description = IntentDescription(
+    static let title: LocalizedStringResource = "Ask About a Lab Value"
+    static let description = IntentDescription(
         "Reads back your most recent reading for a value you've allowed Siri to access."
     )
 
