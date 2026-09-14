@@ -37,50 +37,35 @@ struct HomeView: View {
     /// up-front decision about surfacing latest readings in search. Gates entry
     /// like the iCloud step; defaults `false` so existing installs see it once.
     @AppStorage("hasChosenSpotlightSearch") private var hasChosenSpotlightSearch = false
+    /// Whether the user has made the up-front Siri & Shortcuts decision. Gates
+    /// entry like the other onboarding steps; per-value access stays a
+    /// separate, later opt-in in Settings.
+    @AppStorage("hasChosenSiriIntelligence") private var hasChosenSiriIntelligence = false
     @AppStorage(CloudSyncService.enabledKey) private var iCloudSyncEnabled = false
     /// Mirrors the Settings opt-in for surfacing the latest reading in Spotlight,
     /// observed here so flipping it re-publishes the index right away.
     @AppStorage(SpotlightSearch.showLatestValueKey) private var showLatestValueInSearch = false
+    @AppStorage(SiriExposurePreferences.storageKey) private var siriPrefs = SiriExposurePreferences()
 
     // iPad sidebar state
     @AppStorage("labDisplayPrefs") private var prefs = LabDisplayPreferences()
     @State private var sidebarSelection: SidebarSection? = .dashboard
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
 
-    /// Whether to present the iPad sidebar split view. Keyed off the device
-    /// idiom rather than `horizontalSizeClass` on purpose: a large iPhone flips
-    /// between compact (portrait) and regular (landscape) on every rotation, and
-    /// driving the root layout off that swaps the whole navigation container —
-    /// tearing down any pushed screen and dumping the user back on the
-    /// dashboard. The idiom is stable across rotation, so the iPhone keeps its
-    /// `NavigationStack` (and its navigation state) and only the iPad gets the
-    /// sidebar. `NavigationSplitView` still collapses itself when an iPad is
-    /// horizontally compact (Slide Over), so no behavior is lost there.
+    /// Whether to present the iPad-style sidebar split view. Idiom alone used
+    /// to be the whole check — a regular iPhone flips `horizontalSizeClass`
+    /// between compact (portrait) and regular (landscape) on every rotation,
+    /// and driving the root layout off that tears down navigation state on
+    /// every turn. Requiring *both* size classes regular keeps that property
+    /// (no iPhone is ever regular×regular) while also picking up unfolded
+    /// foldables: an iPhone Duo's inner display reports `.phone` idiom but is
+    /// regular×regular like an iPad, while its folded/cover screen behaves
+    /// like a normal compact iPhone. `NavigationSplitView` still collapses
+    /// itself when horizontally compact (Slide Over, or the Duo folded).
     private var usesSidebarLayout: Bool {
         UIDevice.current.userInterfaceIdiom == .pad
-    }
-
-    /// Sections shown in the iPad sidebar. On compact widths (iPhone) these are
-    /// reached through the dashboard's own toolbar instead, so the sidebar is
-    /// only built when the layout is regular-width.
-    private enum SidebarSection: String, CaseIterable, Identifiable {
-        case dashboard, reports, settings
-        var id: String { rawValue }
-
-        var title: LocalizedStringKey {
-            switch self {
-            case .dashboard: return "Lab Results"
-            case .reports: return "Reports"
-            case .settings: return "Settings"
-            }
-        }
-
-        var icon: String {
-            switch self {
-            case .dashboard: return "square.grid.2x2"
-            case .reports: return "doc.text"
-            case .settings: return "gearshape"
-            }
-        }
+            || (horizontalSizeClass == .regular && verticalSizeClass == .regular)
     }
 
     var body: some View {
@@ -179,6 +164,8 @@ struct HomeView: View {
         .onAppear {
             refreshClipboardState()
             configureImportEngine()
+            // Lets `StartLabScanIntent` (Siri) drive the same scan flow as "Scan Document".
+            SiriActionBridge.shared.setScanHandler { importEngine.scan() }
         }
         .onOpenURL { url in
             // A `labimporter://metric/<code>` deep link opens that metric's trend;
@@ -200,7 +187,7 @@ struct HomeView: View {
         .fullScreenCover(isPresented: Binding(
             get: {
                 !hasSeenWelcome || !hasAcknowledgedDisclaimer || !hasGrantedHealthAccess
-                    || !hasChosenICloudSync || !hasChosenSpotlightSearch
+                    || !hasChosenICloudSync || !hasChosenSpotlightSearch || !hasChosenSiriIntelligence
             },
             set: { _ in }
         )) {
@@ -338,7 +325,7 @@ struct HomeView: View {
     /// review sheet would present beneath the welcome cover and stay hidden.
     private func handleIncomingFile(_ url: URL) {
         guard hasSeenWelcome, hasAcknowledgedDisclaimer, hasGrantedHealthAccess,
-              hasChosenICloudSync, hasChosenSpotlightSearch else {
+              hasChosenICloudSync, hasChosenSpotlightSearch, hasChosenSiriIntelligence else {
             pendingImportURL = url
             return
         }
@@ -384,9 +371,10 @@ struct HomeView: View {
 // MARK: - Report loading & Spotlight deep links
 
 private extension HomeView {
-    /// Five-step onboarding: welcome → Apple Health → iCloud sync → Spotlight
-    /// search → disclaimer. Each gate is mandatory, so the same fullScreenCover
-    /// stays up (swapping its inner view) until the user clears them all.
+    /// Six-step onboarding: welcome → Apple Health → iCloud sync → Spotlight
+    /// search → Siri & Shortcuts → disclaimer. Each gate is mandatory, so the
+    /// same fullScreenCover stays up (swapping its inner view) until the user
+    /// clears them all.
     @ViewBuilder
     var onboardingFlow: some View {
         if !hasSeenWelcome {
@@ -411,6 +399,14 @@ private extension HomeView {
                 withAnimation(.smooth(duration: 0.35)) { hasChosenSpotlightSearch = true }
             }
             .transition(.opacity)
+        } else if !hasChosenSiriIntelligence {
+            SiriIntelligenceOptInView { enabled in
+                var prefs = siriPrefs
+                prefs.isEnabled = enabled
+                siriPrefs = prefs
+                withAnimation(.smooth(duration: 0.35)) { hasChosenSiriIntelligence = true }
+            }
+            .transition(.opacity)
         } else {
             DisclaimerView {
                 withAnimation(.smooth(duration: 0.35)) { hasAcknowledgedDisclaimer = true }
@@ -421,7 +417,8 @@ private extension HomeView {
 
     /// True once every onboarding gate is cleared, whichever step was last.
     var onboardingComplete: Bool {
-        hasSeenWelcome && hasAcknowledgedDisclaimer && hasGrantedHealthAccess && hasChosenICloudSync && hasChosenSpotlightSearch
+        hasSeenWelcome && hasAcknowledgedDisclaimer && hasGrantedHealthAccess && hasChosenICloudSync
+            && hasChosenSpotlightSearch && hasChosenSiriIntelligence
     }
 
     /// Wraps `loadReports` so it does nothing until the user has cleared the
@@ -454,7 +451,7 @@ private extension HomeView {
     /// confirmation) and presents the detail.
     func presentTrend(for code: String) {
         guard hasSeenWelcome, hasAcknowledgedDisclaimer, hasGrantedHealthAccess, hasChosenICloudSync,
-              hasChosenSpotlightSearch, isLoaded, !reports.isEmpty else {
+              hasChosenSpotlightSearch, hasChosenSiriIntelligence, isLoaded, !reports.isEmpty else {
             pendingDeepLinkCode = code
             return
         }
@@ -478,6 +475,7 @@ private extension HomeView {
         hasGrantedHealthAccess = true
         hasChosenICloudSync = true
         hasChosenSpotlightSearch = true
+        hasChosenSiriIntelligence = true
         reports = LabReport.sampleHistory
         isLoaded = true
         if ScreenshotMode.initialScreen == "review" {

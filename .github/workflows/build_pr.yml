@@ -1,0 +1,43 @@
+name: Build (PR verification)
+run-name: Build LabImporter (${{ github.ref_name }})
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Compile check — Simulator SDK, unsigned, no secrets, no artifacts
+    runs-on: macos-26
+    permissions:
+      contents: read
+    steps:
+      - name: Select Xcode version
+        run: sudo xcode-select --switch /Applications/Xcode_26.2.app/Contents/Developer
+
+      - name: Checkout Repo
+        uses: actions/checkout@v5
+
+      - name: SwiftLint
+        run: |
+          if ! command -v swiftlint &>/dev/null; then
+            brew install swiftlint
+          fi
+          swiftlint lint --strict --reporter github-actions-logging
+
+      # Simulator SDK + code signing disabled: confirms the branch compiles
+      # without touching App Store Connect, Match, or any repo secret. No IPA
+      # is produced (a signed archive needs real signing credentials, which
+      # this repo doesn't have configured) — this only proves the Swift code
+      # itself builds clean with Xcode 26.
+      - name: Build (Simulator SDK, unsigned)
+        run: |
+          xcodebuild build \
+            -project LabImporter.xcodeproj \
+            -scheme LabImporter \
+            -destination "generic/platform=iOS Simulator" \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO
