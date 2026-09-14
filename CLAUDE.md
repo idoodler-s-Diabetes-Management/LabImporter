@@ -263,8 +263,17 @@ and run in order on first setup:
    TestFlight. Manual + scheduled (first Sunday monthly).
 5. **`lint.yml`** — SwiftLint on every PR to `main` (and manual dispatch).
 
-Fastlane lanes (`fastlane/Fastfile`): `build_labimporter`, `release`,
-`identifiers`, `certs`, `validate_secrets`, `nuke_certs`,
+Not part of that numbered setup sequence, but also on every PR to `main` (and
+manual dispatch): **`build_pr.yml`** — the same `macos-26` / Xcode 26.2 compile
++ archive as `build_labimporter.yml`, but via the `verify_build` lane: it
+fetches the existing Distribution cert **read-only** (`match(readonly: true)`
+— never creates/renews one), never touches the TestFlight build number, and
+**never uploads anywhere**. The resulting `LabImporter.ipa` (+ dSYM) is
+attached to the workflow run as a downloadable artifact — use this to confirm
+a branch actually builds before merging, without shipping a TestFlight build.
+
+Fastlane lanes (`fastlane/Fastfile`): `build_labimporter`, `verify_build`,
+`release`, `identifiers`, `certs`, `validate_secrets`, `nuke_certs`,
 `check_and_renew_certificates`. Match uses git storage
 (`fastlane/Matchfile` → `Match-Secrets` repo). Ruby deps pinned in `Gemfile`
 (`fastlane 2.231.0`).

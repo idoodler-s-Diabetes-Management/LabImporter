@@ -189,6 +189,7 @@
 		AASI000000000000000018AA /* SiriAccessEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriAccessEditor.swift; sourceTree = "<group>"; };
 		AASI000000000000000021AA /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		AASI000000000000000023AA /* SidebarSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarSection.swift; sourceTree = "<group>"; };
+		AASI000000000000000024AA /* build_pr.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = build_pr.yml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -469,6 +470,7 @@
 				AABB0000000000000000AB24 /* create_certs.yml */,
 				AABB0000000000000000AB25 /* build_labimporter.yml */,
 				AABB0000000000000000AB26 /* lint.yml */,
+				AASI000000000000000024AA /* build_pr.yml */,
 			);
 			path = workflows;
 			sourceTree = "<group>";

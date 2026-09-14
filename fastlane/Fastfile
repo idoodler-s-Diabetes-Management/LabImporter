@@ -92,6 +92,57 @@ platform :ios do
     )
   end
 
+  # ── Verify Build (PR check) ──────────────────────────────────────────────────
+
+  desc "Build & archive LabImporter for PR verification — never uploads to TestFlight"
+  lane :verify_build do
+    setup_ci if ENV['CI']
+
+    update_project_team(
+      path: "#{GITHUB_WORKSPACE}/LabImporter.xcodeproj",
+      teamid: "#{TEAMID}"
+    )
+
+    app_store_connect_api_key(
+      key_id:    "#{FASTLANE_KEY_ID}",
+      issuer_id: "#{FASTLANE_ISSUER_ID}",
+      key_content: "#{FASTLANE_KEY}"
+    )
+
+    # Read-only: fetches the existing Distribution cert/profile (created by the
+    # `certs` lane) but never creates or renews one, and — unlike
+    # `build_labimporter` — never touches the TestFlight build number.
+    match(
+      type: "appstore",
+      readonly: true,
+      git_basic_authorization: Base64.strict_encode64("#{GITHUB_REPOSITORY_OWNER}:#{GH_PAT}"),
+      app_identifier: ["#{BUNDLE_ID}"]
+    )
+
+    mapping = Actions.lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]
+
+    update_code_signing_settings(
+      path: "#{GITHUB_WORKSPACE}/LabImporter.xcodeproj",
+      profile_name: mapping["#{BUNDLE_ID}"],
+      code_sign_identity: "iPhone Distribution",
+      targets: ["LabImporter"]
+    )
+
+    gym(
+      export_method:  "app-store",
+      scheme:         "LabImporter",
+      output_name:    "LabImporter.ipa",
+      configuration:  "Release",
+      destination:    "generic/platform=iOS",
+      buildlog_path:  "buildlog"
+    )
+
+    copy_artifacts(
+      target_path: "artifacts",
+      artifacts: ["*.ipa", "*.dSYM.zip"]
+    )
+  end
+
   # ── Release ────────────────────────────────────────────────────────────────
 
   desc "Upload IPA to TestFlight"
