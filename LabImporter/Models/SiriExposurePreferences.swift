@@ -14,8 +14,21 @@ struct SiriExposurePreferences: RawRepresentable, Equatable {
     var isEnabled = false
     /// LOINC codes the user has explicitly allowed Siri to read and speak a
     /// reading for. Empty by default — turning on `isEnabled` alone exposes no
-    /// value; the user opts in per metric.
+    /// value; the user opts in per metric. Ignored while `allowAllValues` is on.
     var allowedCodes: [String] = []
+    /// When `true`, every tracked value — including ones imported later — may
+    /// be read back by Siri, bypassing `allowedCodes` entirely. Chosen once
+    /// up front during onboarding (`SiriIntelligenceOptInView`) as an
+    /// alternative to the per-metric allow-list, and changeable later in
+    /// Settings. `false` by default: never default a health app to its most
+    /// permissive setting, even when the master switch is already on.
+    var allowAllValues = false
+    /// Codes the user has already been asked about while in Selected-Values
+    /// mode — whichever way they answered (`NewValuesSiriPromptView`,
+    /// `SiriAccessEditor`). Lets a newly imported value be offered exactly
+    /// once instead of nagging on every future save; a code the user declined
+    /// stays here without ever joining `allowedCodes`.
+    var decidedCodes: [String] = []
     /// Lets Siri open the scanner ("Scan a lab report in LabImporter"). Never
     /// touches a health value, so it's the one thing on by default once the
     /// master switch is on.
@@ -30,6 +43,12 @@ struct SiriExposurePreferences: RawRepresentable, Equatable {
     /// see `SpotlightSearch` for the dedicated Spotlight feature. Off by
     /// default.
     var allowKnowledgeIndexing = false
+    /// Lets Siri/Spotlight's "Search in LabImporter" system search
+    /// (`SearchLabValuesIntent`) open the app straight to a matching tracked
+    /// value's trend. Never speaks or returns a reading — it only navigates,
+    /// the same as tapping the app icon and searching by hand — so like
+    /// `allowScanShortcut` it's on by default once the master switch is on.
+    var allowInAppSearch = true
 
     init() {}
 
@@ -39,40 +58,102 @@ struct SiriExposurePreferences: RawRepresentable, Equatable {
         else { self = SiriExposurePreferences(); return }
         isEnabled = decoded.isEnabled
         allowedCodes = decoded.allowedCodes
+        allowAllValues = decoded.allowAllValues
+        decidedCodes = decoded.decidedCodes
         allowScanShortcut = decoded.allowScanShortcut
         allowOnScreenAwareness = decoded.allowOnScreenAwareness
         allowKnowledgeIndexing = decoded.allowKnowledgeIndexing
+        allowInAppSearch = decoded.allowInAppSearch
     }
 
     var rawValue: String {
-        let payload = Payload(isEnabled: isEnabled, allowedCodes: allowedCodes,
-                               allowScanShortcut: allowScanShortcut,
+        let payload = Payload(isEnabled: isEnabled, allowedCodes: allowedCodes, allowAllValues: allowAllValues,
+                               decidedCodes: decidedCodes, allowScanShortcut: allowScanShortcut,
                                allowOnScreenAwareness: allowOnScreenAwareness,
-                               allowKnowledgeIndexing: allowKnowledgeIndexing)
+                               allowKnowledgeIndexing: allowKnowledgeIndexing,
+                               allowInAppSearch: allowInAppSearch)
         return (try? JSONEncoder().encode(payload)).flatMap { String(data: $0, encoding: .utf8) } ?? ""
     }
 
     var allowedSet: Set<String> { Set(allowedCodes) }
 
+    /// Whether `code` is covered by either access mode: every value while
+    /// `allowAllValues` is on, else only an explicitly allowed one.
+    func isCodeAllowed(_ code: String) -> Bool {
+        allowAllValues || allowedSet.contains(code)
+    }
+
+    /// Turns Siri access for `code` on or off, keeping `allowedCodes` a set.
+    mutating func setAllowed(_ allowed: Bool, for code: String) {
+        var codes = allowedSet
+        if allowed { codes.insert(code) } else { codes.remove(code) }
+        allowedCodes = Array(codes)
+    }
+
+    /// Marks `codes` as decided so `NewValuesSiriPromptView` never asks about
+    /// them again, regardless of which way each was answered.
+    mutating func markDecided<S: Sequence>(_ codes: S) where S.Element == String {
+        var decided = Set(decidedCodes)
+        decided.formUnion(codes)
+        decidedCodes = Array(decided)
+    }
+
     /// Whether Siri may read and speak `code`'s latest value out loud.
     func isValueExposed(_ code: String) -> Bool {
-        isEnabled && allowedSet.contains(code)
+        isEnabled && isCodeAllowed(code)
     }
 
     /// Whether the scan shortcut is available to Siri.
     var canStartScan: Bool { isEnabled && allowScanShortcut }
 
+    /// Whether Siri/Spotlight's in-app search may open the app.
+    var canSearch: Bool { isEnabled && allowInAppSearch }
+
     /// Whether `code` may be proactively suggested to / indexed by Siri.
     func isKnowledgeIndexed(_ code: String) -> Bool {
-        isEnabled && allowKnowledgeIndexing && allowedSet.contains(code)
+        isEnabled && allowKnowledgeIndexing && isCodeAllowed(code)
     }
 
     private struct Payload: Codable {
         var isEnabled: Bool
         var allowedCodes: [String]
+        var allowAllValues: Bool
+        var decidedCodes: [String]
         var allowScanShortcut: Bool
         var allowOnScreenAwareness: Bool
         var allowKnowledgeIndexing: Bool
+        var allowInAppSearch: Bool
+
+        init(isEnabled: Bool, allowedCodes: [String], allowAllValues: Bool, decidedCodes: [String],
+             allowScanShortcut: Bool, allowOnScreenAwareness: Bool, allowKnowledgeIndexing: Bool, allowInAppSearch: Bool) {
+            self.isEnabled = isEnabled
+            self.allowedCodes = allowedCodes
+            self.allowAllValues = allowAllValues
+            self.decidedCodes = decidedCodes
+            self.allowScanShortcut = allowScanShortcut
+            self.allowOnScreenAwareness = allowOnScreenAwareness
+            self.allowKnowledgeIndexing = allowKnowledgeIndexing
+            self.allowInAppSearch = allowInAppSearch
+        }
+
+        // Custom decoding so a blob persisted before a newer flag existed
+        // defaults that flag instead of failing to decode — which would
+        // otherwise reset every other Siri preference via the `try?` in
+        // `init?(rawValue:)`. `allowAllValues` defaults to `false`: a missing
+        // key must never silently grant access to every value. A missing
+        // `decidedCodes` defaults to empty, which is exactly correct: nothing
+        // has been decided yet, so existing values get one gentle prompt.
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            isEnabled = try container.decode(Bool.self, forKey: .isEnabled)
+            allowedCodes = try container.decode([String].self, forKey: .allowedCodes)
+            allowAllValues = try container.decodeIfPresent(Bool.self, forKey: .allowAllValues) ?? false
+            decidedCodes = try container.decodeIfPresent([String].self, forKey: .decidedCodes) ?? []
+            allowScanShortcut = try container.decode(Bool.self, forKey: .allowScanShortcut)
+            allowOnScreenAwareness = try container.decode(Bool.self, forKey: .allowOnScreenAwareness)
+            allowKnowledgeIndexing = try container.decode(Bool.self, forKey: .allowKnowledgeIndexing)
+            allowInAppSearch = try container.decodeIfPresent(Bool.self, forKey: .allowInAppSearch) ?? true
+        }
     }
 }
 

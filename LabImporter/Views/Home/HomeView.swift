@@ -110,10 +110,9 @@ struct HomeView: View {
             .presentationDragIndicator(.visible)
             .onAppear { searchPresentation.didPresentDetail() }
         }
-        .environment(searchPresentation)
+        .environment(searchPresentation).presentsSearchResults(reports: reports)
         // "Navigate back" also returns the iPad sidebar to the dashboard.
         .onChange(of: searchPresentation.navResetToken) { _, _ in sidebarSelection = .dashboard }
-        // The last onboarding gate releases anything that waited on onboarding.
         .onChange(of: onboardingComplete) { _, done in if done { flushPendingImport(); flushPendingDeepLink() } }
         .task {
             if ScreenshotMode.isActive {
@@ -400,11 +399,13 @@ private extension HomeView {
             }
             .transition(.opacity)
         } else if !hasChosenSiriIntelligence {
-            SiriIntelligenceOptInView { enabled, allowScanShortcut, allowOnScreenAwareness, allowKnowledgeIndexing in
+            SiriIntelligenceOptInView { enabled, allowAllValues, allowScanShortcut, allowOnScreenAwareness, allowKnowledgeIndexing, allowInAppSearch in
                 siriPrefs.isEnabled = enabled
+                siriPrefs.allowAllValues = allowAllValues
                 siriPrefs.allowScanShortcut = allowScanShortcut
                 siriPrefs.allowOnScreenAwareness = allowOnScreenAwareness
                 siriPrefs.allowKnowledgeIndexing = allowKnowledgeIndexing
+                siriPrefs.allowInAppSearch = allowInAppSearch
                 withAnimation(.smooth(duration: 0.35)) { hasChosenSiriIntelligence = true }
             }
             .transition(.opacity)

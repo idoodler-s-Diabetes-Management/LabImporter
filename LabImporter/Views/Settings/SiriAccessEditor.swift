@@ -30,20 +30,43 @@ struct SiriAccessEditor: View {
             Toggle(isOn: $prefs.allowKnowledgeIndexing) {
                 SettingsRowLabel("Add to Siri Suggestions", systemImage: "sparkles", color: .orange)
             }
+            Toggle(isOn: $prefs.allowInAppSearch) {
+                SettingsRowLabel("Search Your Values", systemImage: "magnifyingglass", color: .green)
+            }
         } footer: {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Say “Scan a lab report” to Siri to open the scanner — never touches a lab value.")
                 Text("While reviewing a report, let Siri see the values shown on screen — useful for hands-free corrections.")
                 Text("Let Siri suggest values you've allowed — names only, never a reading.")
+                Text("Let Siri or Spotlight's search jump straight to a tracked value's trend.")
             }
         }
     }
 
     // MARK: - Per-value access
 
+    private var accessModeSection: some View {
+        Section {
+            Picker("Value Access", selection: $prefs.allowAllValues) {
+                Text("All Values").tag(true)
+                Text("Selected Values").tag(false)
+            }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+        } footer: {
+            Text(prefs.allowAllValues
+                 ? "Siri may read back every value you track — including any you add later."
+                 : "Choose exactly which values Siri may read back below.")
+        }
+    }
+
     @ViewBuilder
     private var valuesSection: some View {
-        if allCodes.isEmpty {
+        accessModeSection
+
+        if prefs.allowAllValues {
+            EmptyView()
+        } else if allCodes.isEmpty {
             Section {
                 Text("Import a report to choose which values Siri can access.")
                     .foregroundStyle(.secondary)
@@ -71,11 +94,7 @@ struct SiriAccessEditor: View {
     private func allowedBinding(for code: String) -> Binding<Bool> {
         Binding(
             get: { prefs.allowedSet.contains(code) },
-            set: { isOn in
-                var codes = Set(prefs.allowedCodes)
-                if isOn { codes.insert(code) } else { codes.remove(code) }
-                prefs.allowedCodes = Array(codes)
-            }
+            set: { prefs.setAllowed($0, for: code) }
         )
     }
 }
@@ -94,6 +113,17 @@ struct SiriAccessEditor: View {
     @Previewable @State var prefs = SiriExposurePreferences()
     NavigationStack {
         SiriAccessEditor(prefs: $prefs, allCodes: [])
+    }
+}
+
+#Preview("All Values") {
+    @Previewable @State var prefs: SiriExposurePreferences = {
+        var prefs = SiriExposurePreferences()
+        prefs.allowAllValues = true
+        return prefs
+    }()
+    NavigationStack {
+        SiriAccessEditor(prefs: $prefs, allCodes: CodeName.sampleCodes)
     }
 }
 
