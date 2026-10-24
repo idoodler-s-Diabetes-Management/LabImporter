@@ -7,7 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		002FF15BE9F052637638C743 /* ReportTransferService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C3A56423879B13EECC5A2D /* ReportTransferService.swift */; };
+		1980424250185345862ABDA1 /* TestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B8C45505E8153833C8E6D73 /* TestSupport.swift */; };
+		19F32D60576BCE5E4F027EBD /* LabImporterShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DE0509DCBAD0DE0B9B9BFDB9 /* LabImporterShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1F71BBFA86E343E8030D4772 /* report.cda.xml in Resources */ = {isa = PBXBuildFile; fileRef = FD58767C7178A49BAB8FBE6B /* report.cda.xml */; };
+		2429A57046AF0C407704B1D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8697C8B69368D44D6635379B /* Foundation.framework */; };
+		402366324649FA7CCE9915EA /* CDAExportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D324A0B5E9721D89AFB660 /* CDAExportTests.swift */; };
+		496C508CF0C9E24DFCA3B773 /* FlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD24AABF9080FC1ABB8707AF /* FlowTests.swift */; };
+		4A2398D082C09285D2C39F94 /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B256B38BDF50DF9CBDFE493B /* ModelTests.swift */; };
+		55AD043FD51A83E346BFA65E /* ParseSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AC48436CB533C97960A62A4 /* ParseSchemaTests.swift */; };
 		636BA85E2FCC52EE006E8E71 /* HealthPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636BA85D2FCC52EE006E8E71 /* HealthPermissionView.swift */; };
+		80396BC045B0FE1CEEFB9AAE /* LaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E285DF31AC9A5A11C742F9F /* LaunchTests.swift */; };
+		8EDE12FEB078268601ECD96D /* ShareInbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347D4C1275881023AFBBE0AC /* ShareInbox.swift */; };
+		90E17444A6DE71E71633BD10 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39E6CDE0AAC7930FA57B0 /* ShareViewController.swift */; };
+		A7AB66CBD5805334A9273027 /* SharedCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794A5456843DA760D334FE72 /* SharedCore.swift */; };
+		A7EA43B1DB70508F02B1A197 /* ShareInbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347D4C1275881023AFBBE0AC /* ShareInbox.swift */; };
+		A964924DB8628B3BF19463FD /* ShareInboxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFE290841848738CAADD9E0 /* ShareInboxTests.swift */; };
 		AABB000000000000000040AA /* LabImporterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000020AA /* LabImporterApp.swift */; };
 		AABB000000000000000041AA /* LabValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000021AA /* LabValue.swift */; };
 		AABB000000000000000042AA /* LabMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000022AA /* LabMapping.swift */; };
@@ -15,37 +30,23 @@
 		AABB000000000000000044AA /* LabParserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000024AA /* LabParserService.swift */; };
 		AABB000000000000000045AA /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000025AA /* HealthKitService.swift */; };
 		AABB000000000000000046AA /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000026AA /* HomeView.swift */; };
-		AAEE000000000000000001AA /* HomeView+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE000000000000000002AA /* HomeView+Preview.swift */; };
-		AAEE000000000000000003AA /* HomeView+Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE000000000000000004AA /* HomeView+Onboarding.swift */; };
 		AABB000000000000000047AA /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000027AA /* ReviewView.swift */; };
 		AABB000000000000000048AA /* LabValueRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000028AA /* LabValueRowView.swift */; };
 		AABB000000000000000052AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000032AA /* Assets.xcassets */; };
-		AAIC000000000000000002AA /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AAIC000000000000000001AA /* AppIcon.icon */; };
 		AABB000000000000000053AA /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABB000000000000000035AA /* HealthKit.framework */; };
 		AABB000000000000000054AA /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABB000000000000000036AA /* Vision.framework */; };
 		AABB000000000000000055AA /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABB000000000000000037AA /* FoundationModels.framework */; };
 		AABB000000000000000056AA /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABB000000000000000038AA /* PhotosUI.framework */; };
 		AABB000000000000000057AA /* CDAExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000058AA /* CDAExportService.swift */; };
-		AAED000000000000000010AA /* PDFExportOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED000000000000000011AA /* PDFExportOptions.swift */; };
-		AAED000000000000000012AA /* PDFExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED000000000000000013AA /* PDFExportService.swift */; };
-		AAED000000000000000014AA /* PDFReportPageViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED000000000000000015AA /* PDFReportPageViews.swift */; };
-		AAED000000000000000016AA /* PDFExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED000000000000000017AA /* PDFExportView.swift */; };
-		AAED000000000000000018AA /* PDFReportComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED000000000000000019AA /* PDFReportComposer.swift */; };
-		AAED00000000000000001AAA /* PDFTrendPageViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED00000000000000001BAA /* PDFTrendPageViews.swift */; };
 		AABB000000000000000060AA /* LabReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000061AA /* LabReport.swift */; };
 		AABB000000000000000064AA /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000065AA /* HistoryView.swift */; };
-		AAEE000000000000000011AA /* NewReportImportButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE000000000000000012AA /* NewReportImportButton.swift */; };
 		AABB000000000000000066AA /* ReportDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000067AA /* ReportDetailView.swift */; };
 		AABB000000000000000068AA /* TrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000069AA /* TrendsView.swift */; };
-		AAEE000000000000000005AA /* TrendsView+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE000000000000000006AA /* TrendsView+Accessibility.swift */; };
 		AABB000000000000000070AA /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000071AA /* DashboardView.swift */; };
-		AABB0000000000000000CB01 /* CategoryBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB0000000000000000CB02 /* CategoryBackground.swift */; };
-		AABB0000000000000000HM01 /* HeroMetricCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB0000000000000000HM02 /* HeroMetricCard.swift */; };
 		AABB000000000000000072AA /* ImportLandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000073AA /* ImportLandingView.swift */; };
 		AABB000000000000000074AA /* LabDisplayPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000075AA /* LabDisplayPreferences.swift */; };
 		AABB000000000000000077AA /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000076AA /* Localizable.xcstrings */; };
 		AABB000000000000000078AA /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000079AA /* WelcomeView.swift */; };
-		AAEE000000000000000007AA /* OnboardingExtrasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE000000000000000008AA /* OnboardingExtrasView.swift */; };
 		AABB000000000000000080AA /* DocumentScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000081AA /* DocumentScannerView.swift */; };
 		AABB000000000000000082AA /* VisionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABB000000000000000083AA /* VisionKit.framework */; };
 		AABB000000000000000084AA /* PDFKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABB000000000000000085AA /* PDFKit.framework */; };
@@ -59,28 +60,41 @@
 		AABB0000000000000000C0AA /* MorphingCategoryBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB0000000000000000C1AA /* MorphingCategoryBackground.swift */; };
 		AABB0000000000000000C0DE /* CodePickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB0000000000000000C1DE /* CodePickerSheet.swift */; };
 		AABB0000000000000000C2DE /* UnsupportedDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB0000000000000000C3DE /* UnsupportedDeviceView.swift */; };
+		AABB0000000000000000CB01 /* CategoryBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB0000000000000000CB02 /* CategoryBackground.swift */; };
 		AABB0000000000000000CC01 /* MetricCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB0000000000000000CC02 /* MetricCard.swift */; };
 		AABB0000000000000000D1AA /* CloudSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB0000000000000000D0AA /* CloudSyncService.swift */; };
-		AASP000000000000000001AA /* SpotlightIndexService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AASP000000000000000002AA /* SpotlightIndexService.swift */; };
-		AASP000000000000000005AA /* SearchPresentationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AASP000000000000000006AA /* SearchPresentationCoordinator.swift */; };
 		AABB0000000000000000E1AA /* DisclaimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB0000000000000000E2AA /* DisclaimerView.swift */; };
 		AABB0000000000000000F1AA /* LabImportEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB0000000000000000F2AA /* LabImportEngine.swift */; };
-		AABB0000000000000000F7AA /* ProcessingHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB0000000000000000F8AA /* ProcessingHUD.swift */; };
 		AABB0000000000000000F3AA /* AddValueSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB0000000000000000F4AA /* AddValueSheet.swift */; };
 		AABB0000000000000000F5AA /* OnboardingScaffold.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB0000000000000000F6AA /* OnboardingScaffold.swift */; };
+		AABB0000000000000000F7AA /* ProcessingHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB0000000000000000F8AA /* ProcessingHUD.swift */; };
+		AABB0000000000000000HM01 /* HeroMetricCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB0000000000000000HM02 /* HeroMetricCard.swift */; };
 		AABBCC0000000000000001AA /* LabSortEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABBCC0000000000000002AA /* LabSortEditor.swift */; };
 		AABBCC0000000000000003AA /* RenameLabAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABBCC0000000000000004AA /* RenameLabAlert.swift */; };
 		AABBCC0000000000000005AA /* BuildInfoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABBCC0000000000000006AA /* BuildInfoCard.swift */; };
 		AACC000000000000000001AA /* ReviewView+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACC000000000000000002AA /* ReviewView+Preview.swift */; };
 		AACC000000000000000003AA /* PreviewSampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACC000000000000000004AA /* PreviewSampleData.swift */; };
+		AAED000000000000000010AA /* PDFExportOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED000000000000000011AA /* PDFExportOptions.swift */; };
+		AAED000000000000000012AA /* PDFExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED000000000000000013AA /* PDFExportService.swift */; };
+		AAED000000000000000014AA /* PDFReportPageViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED000000000000000015AA /* PDFReportPageViews.swift */; };
+		AAED000000000000000016AA /* PDFExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED000000000000000017AA /* PDFExportView.swift */; };
+		AAED000000000000000018AA /* PDFReportComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED000000000000000019AA /* PDFReportComposer.swift */; };
+		AAED00000000000000001AAA /* PDFTrendPageViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAED00000000000000001BAA /* PDFTrendPageViews.swift */; };
+		AAEE000000000000000001AA /* HomeView+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE000000000000000002AA /* HomeView+Preview.swift */; };
+		AAEE000000000000000003AA /* HomeView+Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE000000000000000004AA /* HomeView+Onboarding.swift */; };
+		AAEE000000000000000005AA /* TrendsView+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE000000000000000006AA /* TrendsView+Accessibility.swift */; };
+		AAEE000000000000000007AA /* OnboardingExtrasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE000000000000000008AA /* OnboardingExtrasView.swift */; };
+		AAEE000000000000000009AA /* CardSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE000000000000000010AA /* CardSurface.swift */; };
+		AAEE000000000000000011AA /* NewReportImportButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE000000000000000012AA /* NewReportImportButton.swift */; };
+		AAEE0000000000000000F1AA /* EdgeFadeScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0000000000000000F2AA /* EdgeFadeScroll.swift */; };
 		AAFF0000000000000000F102 /* ReferenceRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF0000000000000000F101 /* ReferenceRange.swift */; };
 		AAFF0000000000000000F202 /* RangeStatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF0000000000000000F201 /* RangeStatusBadge.swift */; };
-		AAEE000000000000000009AA /* CardSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE000000000000000010AA /* CardSurface.swift */; };
-		AAEE0000000000000000F1AA /* EdgeFadeScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0000000000000000F2AA /* EdgeFadeScroll.swift */; };
 		AAFF0000000000000000F302 /* ReferenceRangeEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF0000000000000000F301 /* ReferenceRangeEditor.swift */; };
 		AAFF0000000000000000F402 /* ValueDescriptionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF0000000000000000F401 /* ValueDescriptionCard.swift */; };
 		AAFF0000000000000000F502 /* TrendWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF0000000000000000F501 /* TrendWindow.swift */; };
-		D24B3094F0FD8A93BB70A34F /* ScreenshotMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C897701053C6666E95989E84 /* ScreenshotMode.swift */; };
+		AAIC000000000000000002AA /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = AAIC000000000000000001AA /* AppIcon.icon */; };
+		AAMS000000000000000001AA /* MetricSearchResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAMS000000000000000002AA /* MetricSearchResultsView.swift */; };
+		AANV000000000000000001AA /* NewValuesSiriPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AANV000000000000000002AA /* NewValuesSiriPromptView.swift */; };
 		AASI000000000000000001AA /* SiriExposurePreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = AASI000000000000000002AA /* SiriExposurePreferences.swift */; };
 		AASI000000000000000003AA /* SiriOnScreenContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = AASI000000000000000004AA /* SiriOnScreenContext.swift */; };
 		AASI000000000000000005AA /* SiriActionBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AASI000000000000000006AA /* SiriActionBridge.swift */; };
@@ -91,13 +105,72 @@
 		AASI000000000000000017AA /* SiriAccessEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AASI000000000000000018AA /* SiriAccessEditor.swift */; };
 		AASI000000000000000020AA /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = AASI000000000000000021AA /* AppInfo.swift */; };
 		AASI000000000000000022AA /* SidebarSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AASI000000000000000023AA /* SidebarSection.swift */; };
-		AAMS000000000000000001AA /* MetricSearchResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAMS000000000000000002AA /* MetricSearchResultsView.swift */; };
-		AANV000000000000000001AA /* NewValuesSiriPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AANV000000000000000002AA /* NewValuesSiriPromptView.swift */; };
 		AASI000000000000000025AA /* SearchLabValuesIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AASI000000000000000026AA /* SearchLabValuesIntent.swift */; };
+		AASP000000000000000001AA /* SpotlightIndexService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AASP000000000000000002AA /* SpotlightIndexService.swift */; };
+		AASP000000000000000005AA /* SearchPresentationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AASP000000000000000006AA /* SearchPresentationCoordinator.swift */; };
+		B0427DF4A38E515AE6440B76 /* ShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D084E33B414D911400410893 /* ShareView.swift */; };
+		B74DCE6EB259FAA3137014AE /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AABB000000000000000076AA /* Localizable.xcstrings */; };
+		CA2558B52241BD4D242D483D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8697C8B69368D44D6635379B /* Foundation.framework */; };
+		D24B3094F0FD8A93BB70A34F /* ScreenshotMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C897701053C6666E95989E84 /* ScreenshotMode.swift */; };
+		D4991EEE3D0EAEDA34E1C0F5 /* LabParserErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0D199B97E02563880F592E /* LabParserErrorTests.swift */; };
+		E1E847C11A691C48C4A4BD9B /* SharedCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672B9FA541A85096FBFECE89 /* SharedCoreTests.swift */; };
+		F8B09378829F851A451D0C6A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8697C8B69368D44D6635379B /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		04B081A43427043EAFCB27C6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AABB000000000000000001AA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FBD5860EFBA755CA7140ED32;
+			remoteInfo = LabImporterShare;
+		};
+		5F67C84EFFA4375319499746 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AABB000000000000000001AA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AABB000000000000000005AA;
+			remoteInfo = LabImporter;
+		};
+		B83B7AAA4536391DA61CE7B4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AABB000000000000000001AA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AABB000000000000000005AA;
+			remoteInfo = LabImporter;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A46B376A93EB4A382ADABDA5 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				19F32D60576BCE5E4F027EBD /* LabImporterShare.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		1FFE290841848738CAADD9E0 /* ShareInboxTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShareInboxTests.swift; sourceTree = "<group>"; };
+		347D4C1275881023AFBBE0AC /* ShareInbox.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShareInbox.swift; sourceTree = "<group>"; };
+		3B41D7BB510B15B47C17F1B2 /* LabImporterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LabImporterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E285DF31AC9A5A11C742F9F /* LaunchTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LaunchTests.swift; sourceTree = "<group>"; };
 		636BA85D2FCC52EE006E8E71 /* HealthPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthPermissionView.swift; sourceTree = "<group>"; };
+		672B9FA541A85096FBFECE89 /* SharedCoreTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SharedCoreTests.swift; sourceTree = "<group>"; };
+		74513630FCB091D21B39F7C2 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		794A5456843DA760D334FE72 /* SharedCore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SharedCore.swift; sourceTree = "<group>"; };
+		7CC9022D4642CE32D74F146D /* LabImporterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LabImporterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8697C8B69368D44D6635379B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		92C3A56423879B13EECC5A2D /* ReportTransferService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReportTransferService.swift; sourceTree = "<group>"; };
+		9AC48436CB533C97960A62A4 /* ParseSchemaTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ParseSchemaTests.swift; sourceTree = "<group>"; };
+		9AF39E6CDE0AAC7930FA57B0 /* ShareViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		9B8C45505E8153833C8E6D73 /* TestSupport.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TestSupport.swift; sourceTree = "<group>"; };
+		9E404ED15E76CE89D2D8ABB6 /* LabImporterShare.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = LabImporterShare.entitlements; sourceTree = "<group>"; };
 		AABB000000000000000019AA /* LabImporter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LabImporter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AABB000000000000000020AA /* LabImporterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabImporterApp.swift; sourceTree = "<group>"; };
 		AABB000000000000000021AA /* LabValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabValue.swift; sourceTree = "<group>"; };
@@ -106,12 +179,9 @@
 		AABB000000000000000024AA /* LabParserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabParserService.swift; sourceTree = "<group>"; };
 		AABB000000000000000025AA /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
 		AABB000000000000000026AA /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		AAEE000000000000000002AA /* HomeView+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeView+Preview.swift"; sourceTree = "<group>"; };
-		AAEE000000000000000004AA /* HomeView+Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeView+Onboarding.swift"; sourceTree = "<group>"; };
 		AABB000000000000000027AA /* ReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
 		AABB000000000000000028AA /* LabValueRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabValueRowView.swift; sourceTree = "<group>"; };
 		AABB000000000000000032AA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		AAIC000000000000000001AA /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		AABB000000000000000033AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AABB000000000000000034AA /* LabImporter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LabImporter.entitlements; sourceTree = "<group>"; };
 		AABB000000000000000035AA /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
@@ -120,24 +190,15 @@
 		AABB000000000000000038AA /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		AABB000000000000000039AA /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = SOURCE_ROOT; };
 		AABB000000000000000058AA /* CDAExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDAExportService.swift; sourceTree = "<group>"; };
-		AAED000000000000000011AA /* PDFExportOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExportOptions.swift; sourceTree = "<group>"; };
-		AAED000000000000000013AA /* PDFExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExportService.swift; sourceTree = "<group>"; };
-		AAED000000000000000015AA /* PDFReportPageViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFReportPageViews.swift; sourceTree = "<group>"; };
-		AAED000000000000000017AA /* PDFExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExportView.swift; sourceTree = "<group>"; };
-		AAED000000000000000019AA /* PDFReportComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFReportComposer.swift; sourceTree = "<group>"; };
-		AAED00000000000000001BAA /* PDFTrendPageViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFTrendPageViews.swift; sourceTree = "<group>"; };
 		AABB000000000000000061AA /* LabReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabReport.swift; sourceTree = "<group>"; };
 		AABB000000000000000065AA /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
-		AAEE000000000000000012AA /* NewReportImportButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReportImportButton.swift; sourceTree = "<group>"; };
 		AABB000000000000000067AA /* ReportDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDetailView.swift; sourceTree = "<group>"; };
 		AABB000000000000000069AA /* TrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendsView.swift; sourceTree = "<group>"; };
-		AAEE000000000000000006AA /* TrendsView+Accessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrendsView+Accessibility.swift"; sourceTree = "<group>"; };
 		AABB000000000000000071AA /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		AABB000000000000000073AA /* ImportLandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportLandingView.swift; sourceTree = "<group>"; };
 		AABB000000000000000075AA /* LabDisplayPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabDisplayPreferences.swift; sourceTree = "<group>"; };
 		AABB000000000000000076AA /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		AABB000000000000000079AA /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
-		AAEE000000000000000008AA /* OnboardingExtrasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingExtrasView.swift; sourceTree = "<group>"; };
 		AABB000000000000000081AA /* DocumentScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentScannerView.swift; sourceTree = "<group>"; };
 		AABB000000000000000083AA /* VisionKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisionKit.framework; path = System/Library/Frameworks/VisionKit.framework; sourceTree = SDKROOT; };
 		AABB000000000000000085AA /* PDFKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PDFKit.framework; path = System/Library/Frameworks/PDFKit.framework; sourceTree = SDKROOT; };
@@ -168,30 +229,41 @@
 		AABB0000000000000000C1AA /* MorphingCategoryBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorphingCategoryBackground.swift; sourceTree = "<group>"; };
 		AABB0000000000000000C1DE /* CodePickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodePickerSheet.swift; sourceTree = "<group>"; };
 		AABB0000000000000000C3DE /* UnsupportedDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsupportedDeviceView.swift; sourceTree = "<group>"; };
-		AABB0000000000000000CC02 /* MetricCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricCard.swift; sourceTree = "<group>"; };
 		AABB0000000000000000CB02 /* CategoryBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBackground.swift; sourceTree = "<group>"; };
-		AABB0000000000000000HM02 /* HeroMetricCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroMetricCard.swift; sourceTree = "<group>"; };
+		AABB0000000000000000CC02 /* MetricCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricCard.swift; sourceTree = "<group>"; };
 		AABB0000000000000000D0AA /* CloudSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncService.swift; sourceTree = "<group>"; };
-		AASP000000000000000002AA /* SpotlightIndexService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotlightIndexService.swift; sourceTree = "<group>"; };
-		AASP000000000000000006AA /* SearchPresentationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPresentationCoordinator.swift; sourceTree = "<group>"; };
 		AABB0000000000000000E2AA /* DisclaimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerView.swift; sourceTree = "<group>"; };
 		AABB0000000000000000F2AA /* LabImportEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabImportEngine.swift; sourceTree = "<group>"; };
-		AABB0000000000000000F8AA /* ProcessingHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingHUD.swift; sourceTree = "<group>"; };
 		AABB0000000000000000F4AA /* AddValueSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddValueSheet.swift; sourceTree = "<group>"; };
 		AABB0000000000000000F6AA /* OnboardingScaffold.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingScaffold.swift; sourceTree = "<group>"; };
+		AABB0000000000000000F8AA /* ProcessingHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingHUD.swift; sourceTree = "<group>"; };
+		AABB0000000000000000HM02 /* HeroMetricCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroMetricCard.swift; sourceTree = "<group>"; };
 		AABBCC0000000000000002AA /* LabSortEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabSortEditor.swift; sourceTree = "<group>"; };
 		AABBCC0000000000000004AA /* RenameLabAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameLabAlert.swift; sourceTree = "<group>"; };
 		AABBCC0000000000000006AA /* BuildInfoCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildInfoCard.swift; sourceTree = "<group>"; };
 		AACC000000000000000002AA /* ReviewView+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReviewView+Preview.swift"; sourceTree = "<group>"; };
 		AACC000000000000000004AA /* PreviewSampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSampleData.swift; sourceTree = "<group>"; };
+		AAED000000000000000011AA /* PDFExportOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExportOptions.swift; sourceTree = "<group>"; };
+		AAED000000000000000013AA /* PDFExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExportService.swift; sourceTree = "<group>"; };
+		AAED000000000000000015AA /* PDFReportPageViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFReportPageViews.swift; sourceTree = "<group>"; };
+		AAED000000000000000017AA /* PDFExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExportView.swift; sourceTree = "<group>"; };
+		AAED000000000000000019AA /* PDFReportComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFReportComposer.swift; sourceTree = "<group>"; };
+		AAED00000000000000001BAA /* PDFTrendPageViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFTrendPageViews.swift; sourceTree = "<group>"; };
+		AAEE000000000000000002AA /* HomeView+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeView+Preview.swift"; sourceTree = "<group>"; };
+		AAEE000000000000000004AA /* HomeView+Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeView+Onboarding.swift"; sourceTree = "<group>"; };
+		AAEE000000000000000006AA /* TrendsView+Accessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrendsView+Accessibility.swift"; sourceTree = "<group>"; };
+		AAEE000000000000000008AA /* OnboardingExtrasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingExtrasView.swift; sourceTree = "<group>"; };
+		AAEE000000000000000010AA /* CardSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSurface.swift; sourceTree = "<group>"; };
+		AAEE000000000000000012AA /* NewReportImportButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReportImportButton.swift; sourceTree = "<group>"; };
+		AAEE0000000000000000F2AA /* EdgeFadeScroll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeFadeScroll.swift; sourceTree = "<group>"; };
 		AAFF0000000000000000F101 /* ReferenceRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferenceRange.swift; sourceTree = "<group>"; };
 		AAFF0000000000000000F201 /* RangeStatusBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeStatusBadge.swift; sourceTree = "<group>"; };
-		AAEE000000000000000010AA /* CardSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSurface.swift; sourceTree = "<group>"; };
-		AAEE0000000000000000F2AA /* EdgeFadeScroll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeFadeScroll.swift; sourceTree = "<group>"; };
 		AAFF0000000000000000F301 /* ReferenceRangeEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferenceRangeEditor.swift; sourceTree = "<group>"; };
 		AAFF0000000000000000F401 /* ValueDescriptionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueDescriptionCard.swift; sourceTree = "<group>"; };
 		AAFF0000000000000000F501 /* TrendWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendWindow.swift; sourceTree = "<group>"; };
-		C897701053C6666E95989E84 /* ScreenshotMode.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ScreenshotMode.swift; sourceTree = "<group>"; };
+		AAIC000000000000000001AA /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
+		AAMS000000000000000002AA /* MetricSearchResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricSearchResultsView.swift; sourceTree = "<group>"; };
+		AANV000000000000000002AA /* NewValuesSiriPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewValuesSiriPromptView.swift; sourceTree = "<group>"; };
 		AASI000000000000000002AA /* SiriExposurePreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriExposurePreferences.swift; sourceTree = "<group>"; };
 		AASI000000000000000004AA /* SiriOnScreenContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriOnScreenContext.swift; sourceTree = "<group>"; };
 		AASI000000000000000006AA /* SiriActionBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriActionBridge.swift; sourceTree = "<group>"; };
@@ -203,12 +275,36 @@
 		AASI000000000000000021AA /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		AASI000000000000000023AA /* SidebarSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarSection.swift; sourceTree = "<group>"; };
 		AASI000000000000000024AA /* build_pr.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = build_pr.yml; sourceTree = "<group>"; };
-		AAMS000000000000000002AA /* MetricSearchResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricSearchResultsView.swift; sourceTree = "<group>"; };
-		AANV000000000000000002AA /* NewValuesSiriPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewValuesSiriPromptView.swift; sourceTree = "<group>"; };
 		AASI000000000000000026AA /* SearchLabValuesIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLabValuesIntent.swift; sourceTree = "<group>"; };
+		AASP000000000000000002AA /* SpotlightIndexService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotlightIndexService.swift; sourceTree = "<group>"; };
+		AASP000000000000000006AA /* SearchPresentationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPresentationCoordinator.swift; sourceTree = "<group>"; };
+		B256B38BDF50DF9CBDFE493B /* ModelTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
+		C3D324A0B5E9721D89AFB660 /* CDAExportTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CDAExportTests.swift; sourceTree = "<group>"; };
+		C897701053C6666E95989E84 /* ScreenshotMode.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ScreenshotMode.swift; sourceTree = "<group>"; };
+		D084E33B414D911400410893 /* ShareView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShareView.swift; sourceTree = "<group>"; };
+		DE0509DCBAD0DE0B9B9BFDB9 /* LabImporterShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LabImporterShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		FD24AABF9080FC1ABB8707AF /* FlowTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FlowTests.swift; sourceTree = "<group>"; };
+		FD58767C7178A49BAB8FBE6B /* report.cda.xml */ = {isa = PBXFileReference; includeInIndex = 1; path = report.cda.xml; sourceTree = "<group>"; };
+		FE0D199B97E02563880F592E /* LabParserErrorTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LabParserErrorTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		06D50CF30A7B7BB76994B91E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F8B09378829F851A451D0C6A /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		252ADDFDC38AAF1DFE286F16 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2429A57046AF0C407704B1D1 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AABB000000000000000017AA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -223,9 +319,49 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BF5A58BA8620707F2BD3E3CA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA2558B52241BD4D242D483D /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A1ED1104428D91DF1FF9462 /* Golden */ = {
+			isa = PBXGroup;
+			children = (
+				FD58767C7178A49BAB8FBE6B /* report.cda.xml */,
+			);
+			name = Golden;
+			path = shared/src/jvmTest/golden;
+			sourceTree = "<group>";
+		};
+		244E7CAD889A98E0AD4D4E53 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				8697C8B69368D44D6635379B /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		8B85208B717EA34074BB2027 /* LabImporterTests */ = {
+			isa = PBXGroup;
+			children = (
+				C3D324A0B5E9721D89AFB660 /* CDAExportTests.swift */,
+				B256B38BDF50DF9CBDFE493B /* ModelTests.swift */,
+				9B8C45505E8153833C8E6D73 /* TestSupport.swift */,
+				672B9FA541A85096FBFECE89 /* SharedCoreTests.swift */,
+				9AC48436CB533C97960A62A4 /* ParseSchemaTests.swift */,
+				FE0D199B97E02563880F592E /* LabParserErrorTests.swift */,
+				1FFE290841848738CAADD9E0 /* ShareInboxTests.swift */,
+			);
+			name = LabImporterTests;
+			path = LabImporterTests;
+			sourceTree = "<group>";
+		};
 		AABB000000000000000009AA = {
 			isa = PBXGroup;
 			children = (
@@ -233,6 +369,10 @@
 				AABB0000000000000000A8AA /* Project Files */,
 				AABB000000000000000015AA /* Frameworks */,
 				AABB000000000000000010AA /* Products */,
+				8B85208B717EA34074BB2027 /* LabImporterTests */,
+				DC24B3BAE3CEC68FBD9243CB /* LabImporterUITests */,
+				0A1ED1104428D91DF1FF9462 /* Golden */,
+				F5271A53A87D105C9A49D46A /* LabImporterShare */,
 			);
 			sourceTree = "<group>";
 		};
@@ -240,6 +380,9 @@
 			isa = PBXGroup;
 			children = (
 				AABB000000000000000019AA /* LabImporter.app */,
+				3B41D7BB510B15B47C17F1B2 /* LabImporterTests.xctest */,
+				7CC9022D4642CE32D74F146D /* LabImporterUITests.xctest */,
+				DE0509DCBAD0DE0B9B9BFDB9 /* LabImporterShare.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -288,6 +431,9 @@
 				AABB000000000000000090AA /* LoincDirectory.swift */,
 				AABB0000000000000000D0AA /* CloudSyncService.swift */,
 				AASP000000000000000002AA /* SpotlightIndexService.swift */,
+				794A5456843DA760D334FE72 /* SharedCore.swift */,
+				347D4C1275881023AFBBE0AC /* ShareInbox.swift */,
+				92C3A56423879B13EECC5A2D /* ReportTransferService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -308,20 +454,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		AASI000000000000000019AA /* Intents */ = {
-			isa = PBXGroup;
-			children = (
-				AASI000000000000000014AA /* LabImporterShortcuts.swift */,
-				AASI000000000000000010AA /* AskLabValueIntent.swift */,
-				AASI000000000000000012AA /* StartLabScanIntent.swift */,
-				AASI000000000000000026AA /* SearchLabValuesIntent.swift */,
-				AASI000000000000000008AA /* LabMetricEntity.swift */,
-				AASI000000000000000004AA /* SiriOnScreenContext.swift */,
-				AASI000000000000000006AA /* SiriActionBridge.swift */,
-			);
-			path = Intents;
-			sourceTree = "<group>";
-		};
 		AABB000000000000000015AA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -332,6 +464,7 @@
 				AABB000000000000000083AA /* VisionKit.framework */,
 				AABB000000000000000085AA /* PDFKit.framework */,
 				AABB000000000000000092AA /* libsqlite3.tbd */,
+				244E7CAD889A98E0AD4D4E53 /* iOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -440,17 +573,6 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
-		AAED0000000000000000E0AA /* Export */ = {
-			isa = PBXGroup;
-			children = (
-				AAED000000000000000017AA /* PDFExportView.swift */,
-				AAED000000000000000015AA /* PDFReportPageViews.swift */,
-				AAED000000000000000019AA /* PDFReportComposer.swift */,
-				AAED00000000000000001BAA /* PDFTrendPageViews.swift */,
-			);
-			path = Export;
-			sourceTree = "<group>";
-		};
 		AABB0000000000000000A8AA /* Project Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -525,28 +647,131 @@
 			path = hooks;
 			sourceTree = "<group>";
 		};
+		AAED0000000000000000E0AA /* Export */ = {
+			isa = PBXGroup;
+			children = (
+				AAED000000000000000017AA /* PDFExportView.swift */,
+				AAED000000000000000015AA /* PDFReportPageViews.swift */,
+				AAED000000000000000019AA /* PDFReportComposer.swift */,
+				AAED00000000000000001BAA /* PDFTrendPageViews.swift */,
+			);
+			path = Export;
+			sourceTree = "<group>";
+		};
+		AASI000000000000000019AA /* Intents */ = {
+			isa = PBXGroup;
+			children = (
+				AASI000000000000000014AA /* LabImporterShortcuts.swift */,
+				AASI000000000000000010AA /* AskLabValueIntent.swift */,
+				AASI000000000000000012AA /* StartLabScanIntent.swift */,
+				AASI000000000000000026AA /* SearchLabValuesIntent.swift */,
+				AASI000000000000000008AA /* LabMetricEntity.swift */,
+				AASI000000000000000004AA /* SiriOnScreenContext.swift */,
+				AASI000000000000000006AA /* SiriActionBridge.swift */,
+			);
+			path = Intents;
+			sourceTree = "<group>";
+		};
+		DC24B3BAE3CEC68FBD9243CB /* LabImporterUITests */ = {
+			isa = PBXGroup;
+			children = (
+				4E285DF31AC9A5A11C742F9F /* LaunchTests.swift */,
+				FD24AABF9080FC1ABB8707AF /* FlowTests.swift */,
+			);
+			name = LabImporterUITests;
+			path = LabImporterUITests;
+			sourceTree = "<group>";
+		};
+		F5271A53A87D105C9A49D46A /* LabImporterShare */ = {
+			isa = PBXGroup;
+			children = (
+				D084E33B414D911400410893 /* ShareView.swift */,
+				9AF39E6CDE0AAC7930FA57B0 /* ShareViewController.swift */,
+				74513630FCB091D21B39F7C2 /* Info.plist */,
+				9E404ED15E76CE89D2D8ABB6 /* LabImporterShare.entitlements */,
+			);
+			name = LabImporterShare;
+			path = LabImporterShare;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		5052CDF32644F8A1AB7A4F39 /* LabImporterTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EEDB56D61FD9B93E294ADD48 /* Build configuration list for PBXNativeTarget "LabImporterTests" */;
+			buildPhases = (
+				18FFB158A2F392DC0F1C7594 /* Sources */,
+				252ADDFDC38AAF1DFE286F16 /* Frameworks */,
+				2F3DF15D489B11F2B652FB40 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FFF7C3FC41A05E16293B997A /* PBXTargetDependency */,
+			);
+			name = LabImporterTests;
+			productName = LabImporterTests;
+			productReference = 3B41D7BB510B15B47C17F1B2 /* LabImporterTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		863CCDC4183FFEB091CEE6D1 /* LabImporterUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5054BF8AD6B8E135A5B1B611 /* Build configuration list for PBXNativeTarget "LabImporterUITests" */;
+			buildPhases = (
+				4025428BD0FC2A723D142336 /* Sources */,
+				BF5A58BA8620707F2BD3E3CA /* Frameworks */,
+				FB2B82010F1941D0B1A1E132 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D002EBD367F0E7F6C66E0DBE /* PBXTargetDependency */,
+			);
+			name = LabImporterUITests;
+			productName = LabImporterUITests;
+			productReference = 7CC9022D4642CE32D74F146D /* LabImporterUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		AABB000000000000000005AA /* LabImporter */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = AABB000000000000000008AA /* Build configuration list for PBXNativeTarget "LabImporter" */;
 			buildPhases = (
+				4B1D0000000000000000C0DE /* Build shared Kotlin (LabImporterCore) */,
 				AABB000000000000000016AA /* Sources */,
 				AABB000000000000000017AA /* Frameworks */,
 				AABB000000000000000018AA /* Resources */,
 				AABB000000000000000089AA /* Generate LOINC resource */,
 				AABB0000000000000000ABAA /* Copy LICENSE */,
 				AABB000000000000000088AA /* Embed Build Metadata */,
+				A46B376A93EB4A382ADABDA5 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				503E68440D20F4BD76B17484 /* PBXTargetDependency */,
 			);
 			name = LabImporter;
 			productName = LabImporter;
 			productReference = AABB000000000000000019AA /* LabImporter.app */;
 			productType = "com.apple.product-type.application";
+		};
+		FBD5860EFBA755CA7140ED32 /* LabImporterShare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1CB3A1C9CE200943BD1738A2 /* Build configuration list for PBXNativeTarget "LabImporterShare" */;
+			buildPhases = (
+				C5171C2C71C1F3615F768755 /* Sources */,
+				06D50CF30A7B7BB76994B91E /* Frameworks */,
+				F8A8F28EDEC29CE2BD8A1C5C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LabImporterShare;
+			productName = LabImporterShare;
+			productReference = DE0509DCBAD0DE0B9B9BFDB9 /* LabImporterShare.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -577,11 +802,22 @@
 			projectRoot = "";
 			targets = (
 				AABB000000000000000005AA /* LabImporter */,
+				5052CDF32644F8A1AB7A4F39 /* LabImporterTests */,
+				863CCDC4183FFEB091CEE6D1 /* LabImporterUITests */,
+				FBD5860EFBA755CA7140ED32 /* LabImporterShare */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2F3DF15D489B11F2B652FB40 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1F71BBFA86E343E8030D4772 /* report.cda.xml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AABB000000000000000018AA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -592,9 +828,39 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F8A8F28EDEC29CE2BD8A1C5C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B74DCE6EB259FAA3137014AE /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FB2B82010F1941D0B1A1E132 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4B1D0000000000000000C0DE /* Build shared Kotlin (LabImporterCore) */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build shared Kotlin (LabImporterCore)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n# Builds the shared Kotlin Multiplatform module (shared/) as the static\n# LabImporterCore framework for the current SDK/arch/configuration.\nif [ \"YES\" = \"${OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED:-}\" ]; then exit 0; fi\ncd \"${SRCROOT}\"\n# Xcode doesn't inherit your shell environment: find a JDK (17+).\nif [ -z \"${JAVA_HOME:-}\" ] || [ ! -x \"${JAVA_HOME}/bin/java\" ]; then\n  for candidate in \"$(/usr/libexec/java_home 2>/dev/null)\" /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home /opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home \"${JAVA_HOME_21_arm64:-}\" \"${JAVA_HOME_17_arm64:-}\"; do\n    if [ -n \"$candidate\" ] && [ -x \"$candidate/bin/java\" ]; then export JAVA_HOME=\"$candidate\"; break; fi\n  done\nfi\n./gradlew :shared:embedAndSignAppleFrameworkForXcode\n";
+		};
 		AABB000000000000000088AA /* Embed Build Metadata */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -643,6 +909,29 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		18FFB158A2F392DC0F1C7594 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				402366324649FA7CCE9915EA /* CDAExportTests.swift in Sources */,
+				4A2398D082C09285D2C39F94 /* ModelTests.swift in Sources */,
+				1980424250185345862ABDA1 /* TestSupport.swift in Sources */,
+				E1E847C11A691C48C4A4BD9B /* SharedCoreTests.swift in Sources */,
+				55AD043FD51A83E346BFA65E /* ParseSchemaTests.swift in Sources */,
+				D4991EEE3D0EAEDA34E1C0F5 /* LabParserErrorTests.swift in Sources */,
+				A964924DB8628B3BF19463FD /* ShareInboxTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4025428BD0FC2A723D142336 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80396BC045B0FE1CEEFB9AAE /* LaunchTests.swift in Sources */,
+				496C508CF0C9E24DFCA3B773 /* FlowTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AABB000000000000000016AA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -724,12 +1013,175 @@
 				AASI000000000000000025AA /* SearchLabValuesIntent.swift in Sources */,
 				AAMS000000000000000001AA /* MetricSearchResultsView.swift in Sources */,
 				AANV000000000000000001AA /* NewValuesSiriPromptView.swift in Sources */,
+				A7AB66CBD5805334A9273027 /* SharedCore.swift in Sources */,
+				8EDE12FEB078268601ECD96D /* ShareInbox.swift in Sources */,
+				002FF15BE9F052637638C743 /* ReportTransferService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C5171C2C71C1F3615F768755 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0427DF4A38E515AE6440B76 /* ShareView.swift in Sources */,
+				90E17444A6DE71E71633BD10 /* ShareViewController.swift in Sources */,
+				A7EA43B1DB70508F02B1A197 /* ShareInbox.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		503E68440D20F4BD76B17484 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = LabImporterShare;
+			target = FBD5860EFBA755CA7140ED32 /* LabImporterShare */;
+			targetProxy = 04B081A43427043EAFCB27C6 /* PBXContainerItemProxy */;
+		};
+		D002EBD367F0E7F6C66E0DBE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = LabImporter;
+			target = AABB000000000000000005AA /* LabImporter */;
+			targetProxy = B83B7AAA4536391DA61CE7B4 /* PBXContainerItemProxy */;
+		};
+		FFF7C3FC41A05E16293B997A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = LabImporter;
+			target = AABB000000000000000005AA /* LabImporter */;
+			targetProxy = 5F67C84EFFA4375319499746 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		1DE3D808F56A1D54984D0F84 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AABB000000000000000039AA /* Config.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = LabImporterShare/LabImporterShare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LabImporterShare/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_IDENTIFIER).share";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1F0D77EA2CF30711D6E921EE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AABB000000000000000039AA /* Config.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_IDENTIFIER).tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LabImporter.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LabImporter";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2937AFB7C70B24961A375429 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AABB000000000000000039AA /* Config.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_IDENTIFIER).tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LabImporter.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LabImporter";
+			};
+			name = Debug;
+		};
+		5F818A6A088FD7C10FF84481 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AABB000000000000000039AA /* Config.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_IDENTIFIER).uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = LabImporter;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8A541951AAE6A7FD6321CD62 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AABB000000000000000039AA /* Config.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_IDENTIFIER).uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = LabImporter;
+			};
+			name = Debug;
+		};
+		979A1FEFFB21C24B04600BDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AABB000000000000000039AA /* Config.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = LabImporterShare/LabImporterShare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LabImporterShare/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_IDENTIFIER).share";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		AABB000000000000000002AA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -764,6 +1216,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -827,6 +1280,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -857,10 +1311,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = LabImporter/LabImporter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = x86_64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
+				);
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = LabImporter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
@@ -868,7 +1326,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					LabImporterCore,
+					"-lsqlite3",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
@@ -888,10 +1351,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = LabImporter/LabImporter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = x86_64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
+				);
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = LabImporter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
@@ -899,7 +1366,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					LabImporterCore,
+					"-lsqlite3",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
@@ -914,6 +1386,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1CB3A1C9CE200943BD1738A2 /* Build configuration list for PBXNativeTarget "LabImporterShare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				979A1FEFFB21C24B04600BDE /* Release */,
+				1DE3D808F56A1D54984D0F84 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5054BF8AD6B8E135A5B1B611 /* Build configuration list for PBXNativeTarget "LabImporterUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5F818A6A088FD7C10FF84481 /* Release */,
+				8A541951AAE6A7FD6321CD62 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		AABB000000000000000004AA /* Build configuration list for PBXProject "LabImporter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -928,6 +1418,15 @@
 			buildConfigurations = (
 				AABB000000000000000006AA /* Debug */,
 				AABB000000000000000007AA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EEDB56D61FD9B93E294ADD48 /* Build configuration list for PBXNativeTarget "LabImporterTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1F0D77EA2CF30711D6E921EE /* Release */,
+				2937AFB7C70B24961A375429 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

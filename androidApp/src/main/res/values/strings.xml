@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  English source strings. Where a string is identical to a key in the iOS
+  LabImporter/Localizable.xcstrings, tools/xcstrings_to_android.py copies its
+  existing translations into values-<lang>/strings.xml (generated — don't
+  edit those by hand). Android-only strings still need translating.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" translatable="false">LabImporter</string>
+
+    <!-- Navigation -->
+    <string name="tab_settings">Settings</string>
+    <string name="back">Back</string>
+    <string name="more">More</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="ok">OK</string>
+    <string name="continue_label">Continue</string>
+    <string name="not_now">Not Now</string>
+    <string name="reset">Reset to Default</string>
+    <string name="search">Search</string>
+    <string name="remove">Remove</string>
+    <string name="confirm">Confirm</string>
+
+    <!-- Onboarding -->
+    <string name="welcome_title" translatable="false">LabImporter</string>
+    <string name="welcome_subtitle">Scan or import your lab report and save it directly to Health Connect.</string>
+    <string name="feature_scan">Scan, photograph, paste or open any lab report.</string>
+    <string name="feature_ai">Values are extracted by on-device AI and matched to LOINC codes.</string>
+    <string name="feature_private">Everything runs on-device. LabImporter never transmits your lab data.</string>
+    <string name="get_started">Get Started</string>
+    <string name="disclaimer_title">Not Medical Advice</string>
+    <string name="disclaimer_body">LabImporter is not a medical device and does not provide medical advice, diagnosis, or treatment. Extracted values may be inaccurate or incomplete — always verify them against your original report. Never make medical decisions based on this app; consult a qualified healthcare professional about your results.</string>
+    <string name="disclaimer_accept">I Understand</string>
+    <string name="onboarding_hc_message">Save your reports to Health Connect so they live with the rest of your health data. Lab results are stored as standard FHIR records on this device.</string>
+    <string name="onboarding_hc_connected">Connected. Your reports will be saved to Health Connect as lab results.</string>
+    <string name="onboarding_hc_unavailable">Health Connect medical records aren\'t available on this device, so your reports are stored privately in LabImporter on this device. You can switch later in Settings.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_empty_title">No Reports Yet</string>
+    <string name="import_report">Import Report</string>
+    <string name="search_metrics">Search Your Lab Values</string>
+    <string name="pinned">Pinned</string>
+    <string name="pin">Pin to Top</string>
+    <string name="unpin">Unpin</string>
+    <string name="rename">Rename</string>
+    <string name="rename_hint">Shown everywhere instead of the catalog name. Never exported.</string>
+    <string name="reference_range">Reference Range</string>
+    <string name="reference_range_hint">Values outside this range are flagged. Leave a field empty for a one-sided limit.</string>
+    <string name="range_lower">Lower limit</string>
+    <string name="range_upper">Upper limit</string>
+    <string name="range_high">High</string>
+    <string name="range_low">Low</string>
+    <string name="hide_from_dashboard">Hide</string>
+    <string name="show_on_dashboard">Show on Dashboard</string>
+    <string name="open_loinc">View on loinc.org</string>
+    <string name="readings">Readings</string>
+    <plurals name="metric_count">
+        <item quantity="one">%d value tracked</item>
+        <item quantity="other">%d values tracked</item>
+    </plurals>
+
+    <!-- Categories -->
+    <string name="category_glycemic">Glucose</string>
+    <string name="category_lipids">Lipids</string>
+    <string name="category_cardiac">Cardiac</string>
+    <string name="category_renal">Kidney</string>
+    <string name="category_hepatic">Liver</string>
+    <string name="category_endocrine">Hormones</string>
+    <string name="category_electrolytes">Electrolytes</string>
+    <string name="category_blood_gas">Blood Gas</string>
+    <string name="category_hematology">Blood Count</string>
+    <string name="category_coagulation">Coagulation</string>
+    <string name="category_nutrition">Vitamins &amp; Minerals</string>
+    <string name="category_microbiology">Microbiology</string>
+    <string name="category_urinalysis">Urinalysis</string>
+    <string name="category_drug">Medication</string>
+    <string name="category_other">Other</string>
+
+    <!-- History -->
+    <string name="history_empty_title">No Reports Yet</string>
+    <string name="history_empty_message">Import a lab report to see it here.</string>
+    <string name="share_cda">Share CDA File</string>
+    <string name="delete_report_title">Delete Report?</string>
+    <string name="delete_report_message">This report will be permanently removed.</string>
+    <string name="report_deleted">Report deleted</string>
+    <string name="patient_label">Patient: %1$s</string>
+    <plurals name="value_count">
+        <item quantity="one">%d value</item>
+        <item quantity="other">%d values</item>
+    </plurals>
+
+    <!-- Import -->
+    <string name="import_title">Import Any Lab Report</string>
+    <string name="import_subtitle">Photograph, paste, or scan a report to extract your values.</string>
+    <string name="import_scan">Scan Document</string>
+    <string name="import_scan_detail">Camera scan with automatic edge detection</string>
+    <string name="import_file">Choose File</string>
+    <string name="import_file_detail">PDF or image</string>
+    <string name="import_paste">Paste Text</string>
+    <string name="import_manual">Enter Manually</string>
+    <string name="paste_placeholder">Paste the text of your lab report here</string>
+    <string name="analyze">Analyze</string>
+    <string name="processing_reading">Reading document…</string>
+    <string name="processing_parsing">Analyzing lab report…</string>
+    <string name="processing_preparing">Downloading Gemini Nano…</string>
+    <string name="processing_preparing_detail">Your report will be read as soon as the on-device AI is ready.</string>
+    <plurals name="values_found">
+        <item quantity="one">%d value found</item>
+        <item quantity="other">%d values found</item>
+    </plurals>
+    <string name="import_failed">Import Failed</string>
+    <string name="error_read_document">Could not load the selected file.</string>
+    <string name="error_no_text">No text was found in this document.</string>
+    <string name="error_no_values">No lab values were found. Try scanning the full report, or enter values manually.</string>
+    <string name="error_parse">The on-device AI couldn\'t process this document. Make sure it\'s a lab report and try again.</string>
+    <!-- On-device AI problems (wording shared with iOS where iOS has the case) -->
+    <string name="ai_problem_too_long">This report is too long for the on-device AI to read at once. Try importing fewer pages, or one report at a time.</string>
+    <string name="ai_problem_busy">The on-device AI is busy right now. Wait a moment and try again.</string>
+    <string name="ai_problem_quota">LabImporter has reached Android\'s limit for on-device AI use for now. Try again later.</string>
+    <string name="ai_problem_background">Keep LabImporter open while it reads a report — Android only runs the on-device AI for the app on screen.</string>
+    <string name="ai_problem_storage">There isn\'t enough free storage to download the on-device AI. Free up some space and try again.</string>
+    <string name="ai_problem_download">The on-device AI couldn\'t be downloaded. Check your internet connection and try again.</string>
+    <string name="ai_problem_unavailable">The on-device AI isn\'t available right now. Make sure your device is up to date and try again.</string>
+    <string name="ai_problem_load_failed">The downloaded AI model couldn\'t be loaded on this phone. Try again, or delete it in Settings to free up the space.</string>
+    <string name="ai_available_gemma">Ready. Reports are read by the downloaded Gemma model, entirely on this device.</string>
+    <string name="processing_downloading">Downloading %1$s…</string>
+    <string name="model_download_notification">LabImporter AI model</string>
+    <string name="model_progress">%1$s of %2$s</string>
+    <string name="model_waiting_wifi">Waiting for Wi-Fi to download the AI model…</string>
+    <string name="model_waiting_network">Waiting for an internet connection to download the AI model…</string>
+    <string name="model_verifying">Checking the downloaded AI model…</string>
+    <string name="model_offer_title">Download the On-Device AI</string>
+    <string name="model_offer_message">Gemini Nano isn\'t available to apps on this phone. Instead, LabImporter can download Google\'s open Gemma model once and read your reports with it — entirely on this phone.</string>
+    <string name="model_fact_size_title">%1$s Download</string>
+    <string name="model_fact_size_detail">Downloads once, in the background — also while you use other apps — and stays on this phone. Needs %1$s of free storage.</string>
+    <string name="model_fact_privacy_title">Your Reports Stay Here</string>
+    <string name="model_fact_privacy_detail">Only the model file is fetched, from %1$s. Nothing about you or your reports is sent — they\'re read on this phone.</string>
+    <string name="model_fact_license_title">%1$s by Google</string>
+    <string name="model_fact_license_detail">An open model, licensed under %1$s.</string>
+    <string name="model_details">Model Details</string>
+    <string name="model_download">Download %1$s</string>
+    <string name="model_allow_mobile_data">Allow Mobile Data</string>
+    <string name="model_allow_mobile_data_detail">Otherwise the download waits for Wi-Fi. Mobile data may cost extra.</string>
+    <string name="model_settings_title">Downloaded Model</string>
+    <string name="model_settings_summary">%1$s · %2$s · %3$s license</string>
+    <string name="model_not_needed">Gemini Nano reads your reports now, so the downloaded model is no longer needed.</string>
+    <string name="model_delete">Delete Model</string>
+    <string name="model_delete_title">Delete the Downloaded Model?</string>
+    <string name="model_delete_message">This frees %1$s. LabImporter can\'t read reports on this phone until you download it again.</string>
+    <string name="model_delete_message_unneeded">This frees %1$s. Gemini Nano keeps reading your reports.</string>
+    <string name="model_cancel_download">Cancel Download</string>
+    <string name="model_use_mobile_data">Use Mobile Data</string>
+    <string name="model_channel">AI model download</string>
+    <string name="model_channel_description">What the download of the on-device AI model is doing while you\'re not in LabImporter.</string>
+    <string name="model_ready_title">AI Model Ready</string>
+    <string name="model_ready_text">LabImporter can now read your lab reports, entirely on this phone.</string>
+    <string name="model_failed_title">AI Model Not Downloaded</string>
+    <string name="error_scanner">Document scanning isn\'t available on this device.</string>
+    <string name="error_save">Saving failed: %1$s</string>
+
+    <!-- Review -->
+    <string name="review_title">Review Values</string>
+    <string name="edit_report">Edit Report</string>
+    <string name="lab_or_doctor">Lab / Doctor</string>
+    <string name="patient">Patient</string>
+    <string name="value">Value</string>
+    <string name="unit">Unit</string>
+    <string name="add_value">Add Value</string>
+    <string name="new_value">New value</string>
+    <string name="choose_loinc">Choose a lab test</string>
+    <string name="search_loinc">Search lab tests</string>
+    <string name="loinc_suggested">Suggested: %1$s</string>
+    <string name="loinc_duplicate">Duplicate: %1$s</string>
+    <string name="engine_gemini" translatable="false">Gemini Nano</string>
+    <plurals name="exportable_count">
+        <item quantity="one">%1$d of %2$d values ready to save</item>
+        <item quantity="other">%1$d of %2$d values ready to save</item>
+    </plurals>
+    <plurals name="saved_values">
+        <item quantity="one">Saved %d value</item>
+        <item quantity="other">Saved %d values</item>
+    </plurals>
+
+    <!-- Device not supported (like iOS: no on-device AI, no app) -->
+    <string name="unsupported_title">Device Not Supported</string>
+    <string name="unsupported_message">LabImporter needs Gemini Nano, Android\'s on-device AI, to read your lab reports privately on your device.</string>
+    <string name="unsupported_unknown_title">Couldn\'t Check On-Device AI</string>
+    <string name="unsupported_unknown_message">LabImporter couldn\'t get an answer from Android\'s on-device AI service (AICore). Make sure Google Play services and AICore are up to date, then check again.</string>
+    <string name="supported_phones">Supported Phones</string>
+    <string name="unsupported_update_message">LabImporter needs a newer version of Android\'s on-device AI. Update your device, then check again.</string>
+    <string name="requirement_device_title">Device with Gemini Nano</string>
+    <string name="requirement_device_detail">Google lets apps use Gemini Nano only on selected phones, for example Pixel 9 and 10, Galaxy S26 and Galaxy Z Fold7. Some phones use it only for their own features.</string>
+    <string name="requirement_update_title">Latest OS</string>
+    <string name="requirement_update_detail">Keep Android, Google Play services and AICore up to date. On a newly set-up phone, Gemini Nano can take a while to become available.</string>
+    <string name="check_again">Check Again</string>
+
+    <!-- Settings -->
+    <string name="settings_patient">Patient</string>
+    <string name="patient_hint">Filled in for new reports. A different name found in a report is offered as a suggestion.</string>
+    <string name="settings_storage">Storage</string>
+    <string name="settings_ai">On-Device AI</string>
+    <string name="hidden">Hidden</string>
+    <string name="settings_about">About</string>
+    <string name="hc_title" translatable="false">Health Connect</string>
+    <string name="hc_connect">Connect to Health Connect</string>
+    <string name="hc_in_use">Reports are saved to Health Connect as FHIR lab results.</string>
+    <string name="hc_available">Available. Connect to save reports to Health Connect instead of only in LabImporter.</string>
+    <string name="hc_ready_title">Health Connect Is Available</string>
+    <string name="hc_ready_message">Your reports are kept only in LabImporter. Connect to move them to Health Connect, where they\'re stored with the rest of your health data.</string>
+    <string name="hc_local_selected">Connected, but reports are currently saved in LabImporter only.</string>
+    <string name="hc_update_required">Update Health Connect from the Play Store to save reports there.</string>
+    <string name="hc_medical_unsupported">Health Connect medical records need Android 16 or later. Reports are stored privately in LabImporter on this device.</string>
+    <string name="hc_not_installed">Health Connect isn\'t available. Reports are stored privately in LabImporter on this device.</string>
+    <plurals name="hc_moved_reports">
+        <item quantity="one">Moved %d report to Health Connect</item>
+        <item quantity="other">Moved %d reports to Health Connect</item>
+    </plurals>
+    <string name="ai_title" translatable="false">Gemini Nano</string>
+    <string name="ai_available">Ready. Reports are read by Gemini Nano, entirely on this device.</string>
+    <string name="ai_checking">Checking…</string>
+    <string name="try_again">Try Again</string>
+    <!-- Transfer (iPhone ⇄ Android) -->
+    <string name="transfer_title">Transfer</string>
+    <string name="transfer_export">Export All Reports</string>
+    <string name="transfer_export_detail">Save every report as one file, for example to move them to another phone.</string>
+    <string name="transfer_import">Import Reports</string>
+    <string name="transfer_import_detail">From a LabImporter file exported on iPhone or Android. Reports that are already here are skipped.</string>
+    <string name="transfer_unsupported">This file doesn\'t contain LabImporter reports.</string>
+    <string name="transfer_summary">New reports: %1$d · Already present: %2$d</string>
+    <string name="privacy_title">Private by Design</string>
+    <string name="privacy_message">Everything runs on-device. LabImporter never transmits your lab data.</string>
+    <string name="loinc_catalog">LOINC catalog</string>
+    <string name="loinc_catalog_detail" translatable="false">LOINC %1$s · %2$s</string>
+
+    <!-- Redesign (sources reuse iOS keys where possible) -->
+    <string name="dashboard_title">Lab Results</string>
+    <string name="history_title">Reports</string>
+    <string name="filter_all">All</string>
+    <string name="stat_min">Min</string>
+    <string name="stat_max">Max</string>
+    <string name="stat_avg">Avg</string>
+    <string name="stat_reports">Reports</string>
+    <string name="stat_values">Lab Values</string>
+    <string name="stat_categories">Categories</string>
+    <string name="last_updated">Last updated %1$s</string>
+    <string name="window_3m">3M</string>
+    <string name="window_6m">6M</string>
+    <string name="window_1y">1Y</string>
+    <string name="window_all">All</string>
+    <string name="reference_range_value">Reference range %1$s</string>
+    <string name="trend_up">Trending up</string>
+    <string name="trend_down">Trending down</string>
+    <string name="trend_flat">No change</string>
+    <string name="lab_report">Lab Report</string>
+    <string name="lab_values">Lab Values</string>
+    <string name="ready_to_save">Ready to save</string>
+    <string name="duplicates_short">Duplicate</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="step_of">Step %1$d of %2$d</string>
+    <string name="version">Version</string>
+
+    <!-- PDF export (iOS wording, so the iOS catalog translates it) -->
+    <string name="window_2y">2Y</string>
+    <string name="pdf_export">Export PDF</string>
+    <string name="pdf_appearance">Appearance</string>
+    <string name="pdf_color_mode">Color Mode</string>
+    <string name="pdf_color">Color</string>
+    <string name="pdf_monochrome">Black &amp; White</string>
+    <string name="pdf_page_size">Page Size</string>
+    <string name="pdf_sections">Sections</string>
+    <string name="pdf_summary_page">Summary Page</string>
+    <string name="pdf_latest_results">Latest Results</string>
+    <string name="pdf_trend_charts">Trend Charts</string>
+    <string name="pdf_trend_footer">Trend charts appear for values with at least two readings in the selected range.</string>
+    <string name="pdf_trend_time_range">Trend Time Range</string>
+    <string name="pdf_included_values">Included Values</string>
+    <string name="select_all">Select All</string>
+    <string name="deselect_all">Deselect All</string>
+    <!-- A ratio ("3 of 5 selected"), worded to read right for any count in every language. -->
+    <string name="pdf_selected_count" tools:ignore="PluralsCandidate">%1$d of %2$d selected</string>
+    <string name="pdf_generate">Generate</string>
+    <string name="pdf_export_error">Export Error</string>
+    <string name="pdf_failed">The PDF could not be generated. Please try again.</string>
+    <string name="pdf_select_one">Select at least one value to include in the PDF.</string>
+    <string name="pdf_last_3_months">Last 3 months</string>
+    <string name="pdf_last_6_months">Last 6 months</string>
+    <string name="pdf_last_12_months">Last 12 months</string>
+    <string name="pdf_last_2_years">Last 2 years</string>
+    <string name="pdf_all_time">All time</string>
+    <string name="pdf_generated">Generated %1$s</string>
+    <string name="pdf_page_of">Page %1$d of %2$d</string>
+    <string name="pdf_author">Author</string>
+    <string name="pdf_period_covered">Period Covered</string>
+    <string name="pdf_metrics">Metrics</string>
+    <string name="pdf_out_of_range">Out of Range</string>
+    <string name="pdf_trend_range">Trend Range</string>
+    <string name="pdf_included_categories">Included Categories</string>
+    <string name="pdf_latest_subtitle">Most recent reading for each value</string>
+    <string name="pdf_column_test">Test</string>
+    <string name="pdf_column_result">Result</string>
+    <string name="pdf_column_reference">Reference</string>
+    <string name="pdf_column_date">Date</string>
+    <string name="pdf_trends">Trends</string>
+    <string name="pdf_change">Change</string>
+    <string name="pdf_disclaimer">This report was generated by LabImporter from data stored on this device. It is for personal reference only — it is not a medical document and is not a substitute for professional medical advice.</string>
+    <string name="pdf_page_a4" translatable="false">A4</string>
+    <string name="pdf_page_letter" translatable="false">US Letter</string>
+    <string name="pdf_page_legal" translatable="false">Legal</string>
+
+    <!-- Patient details (Health Connect has no date of birth or sex; iOS reads them from Apple Health) -->
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="pdf_age">Age %1$d</string>
+    <string name="sex">Sex</string>
+    <string name="sex_female">Female</string>
+    <string name="sex_male">Male</string>
+    <string name="sex_other">Other</string>
+    <string name="not_set">Not Set</string>
+    <string name="clear">Clear</string>
+    <string name="patient_details_hint">Shown on the cover of PDF exports.</string>
+
+    <!-- Sort & Visibility (iOS wording) -->
+    <string name="settings_dashboard">Dashboard</string>
+    <string name="sort_visibility">Sort &amp; Visibility</string>
+    <string name="visible">Visible</string>
+    <string name="restore">Restore</string>
+    <string name="details">Details</string>
+    <string name="hide">Hide</string>
+    <string name="move_up">Move Up</string>
+    <string name="move_down">Move Down</string>
+
+    <!-- LOINC catalog and term details (iOS wording) -->
+    <string name="settings_loinc">LOINC</string>
+    <string name="browse_catalog">Browse Catalog</string>
+    <string name="loinc_license">LOINC License</string>
+    <string name="search_lab_tests">Search lab tests</string>
+    <string name="no_results">No Results</string>
+    <string name="about_this_value">About this value</string>
+    <string name="nickname">Nickname</string>
+    <string name="set_reference_range">Set Reference Range</string>
+    <string name="loinc_code">LOINC Code</string>
+    <string name="loinc_component">Component</string>
+    <string name="loinc_property">Property</string>
+    <string name="loinc_timing">Timing</string>
+    <string name="loinc_system">System</string>
+    <string name="loinc_scale">Scale</string>
+    <string name="loinc_method">Method</string>
+    <string name="loinc_class">Class</string>
+    <string name="loinc_status">Status</string>
+    <string name="loinc_long_name">Long name</string>
+    <string name="loinc_short_name">Short name</string>
+    <string name="loinc_units">Units</string>
+    <string name="loinc_link_footer">Opens the full description and references on loinc.org.</string>
+
+    <!-- Selecting and deleting several reports -->
+    <string name="done">Done</string>
+    <plurals name="selected_count">
+        <item quantity="one">%d Selected</item>
+        <item quantity="other">%d Selected</item>
+    </plurals>
+    <string name="delete_all">Delete All</string>
+    <string name="delete_reports_title">Delete Reports?</string>
+    <plurals name="delete_reports_message">
+        <item quantity="one">%d report will be permanently removed.</item>
+        <item quantity="other">%d reports will be permanently removed.</item>
+    </plurals>
+    <plurals name="reports_deleted">
+        <item quantity="one">%d report deleted</item>
+        <item quantity="other">%d reports deleted</item>
+    </plurals>
+    <string name="delete_some_failed">Some reports couldn\'t be removed.</string>
+
+    <!-- Review suggestions (iOS wording) -->
+    <string name="detected_in_report">Detected in report: \"%1$s\"</string>
+    <string name="use">Use</string>
+    <string name="welcome_back">Welcome back, %1$s</string>
+
+    <!-- About & support (iOS wording) -->
+    <string name="license">License</string>
+    <string name="view_on_github">View on GitHub</string>
+    <string name="report_issue">Report an Issue</string>
+    <string name="support">Support</string>
+    <string name="support_footer">LabImporter is free and open source. If you find it useful, you can support its development.</string>
+
+    <!-- Launcher shortcuts and search (iOS wording where shared) -->
+    <string name="scan_shortcut">Scan a Lab Report</string>
+    <string name="show_latest_in_search">Show Latest Value in Search</string>
+    <string name="show_latest_in_search_footer">Let each value\'s most recent reading appear in launcher shortcuts and search. When off, only the value\'s name is shown — never a reading.</string>
+
+    <!-- Chart accessibility (TalkBack) -->
+    <string name="chart_summary">%1$s chart: %2$s from %3$s to %4$s. Lowest %5$s, highest %6$s, latest %7$s.</string>
+    <plurals name="chart_readings">
+        <item quantity="one">%d reading</item>
+        <item quantity="other">%d readings</item>
+    </plurals>
+</resources>

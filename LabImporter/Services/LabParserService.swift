@@ -1,5 +1,6 @@
 import Foundation
 import FoundationModels
+import LabImporterCore
 
 // MARK: - Generable types for structured AI output
 
@@ -37,6 +38,16 @@ struct AILabEntry {
     var unit: String
 }
 
+extension AILabReport {
+    /// The same fields, as the shared module's type.
+    var shared: LabImporterCore.AiLabReport {
+        LabImporterCore.AiLabReport(
+            entries: entries.map { LabImporterCore.AiLabEntry(code: $0.code, name: $0.name, rawValue: $0.rawValue, unit: $0.unit) },
+            reportDate: reportDate, patientName: patientName, authorName: authorName, reportLanguage: reportLanguage
+        )
+    }
+}
+
 // MARK: - Result
 
 struct ParseResult {
@@ -64,18 +75,35 @@ struct ParseProgress: Equatable, Sendable {
 /// unsupported language or locale was used"). Leaking that verbatim into the
 /// UI is confusing — especially in a non-English app — so we translate the
 /// cases we care about into clear, localized, actionable messages.
-enum LabParserError: LocalizedError {
+enum LabParserError: LocalizedError, Equatable {
+    /// Apple Intelligence is switched off in Settings.
+    case appleIntelligenceOff
+    /// The model is still being prepared (downloading) or its assets are missing.
+    case modelNotReady
+    /// Too many requests right now (rate limit or another request in flight).
+    case busy
     /// The on-device model couldn't classify the report's language as supported.
     case unsupportedLanguageOrLocale
     /// The document was too large for the model's context window.
     case documentTooLong
     /// The model's safety guardrails blocked the request.
     case contentBlocked
-    /// Any other generation failure — carries the system description as-is.
-    case generationFailed(String)
+    /// Any other generation failure (the system's own text is English-only and
+    /// opaque, e.g. "GenerationError -1", so the user gets a clear message instead).
+    case generationFailed
 
     var errorDescription: String? {
         switch self {
+        case .appleIntelligenceOff:
+            return String(localized: """
+            Turn on Apple Intelligence in Settings to let LabImporter read your lab reports on this device.
+            """)
+        case .modelNotReady:
+            return String(localized: """
+            Apple Intelligence is still getting ready on this device. Try again once it has finished downloading.
+            """)
+        case .busy:
+            return String(localized: "The on-device AI is busy right now. Wait a moment and try again.")
         case .unsupportedLanguageOrLocale:
             return String(localized: """
             The on-device AI couldn't recognize the language of this report. This can happen \
@@ -87,13 +115,24 @@ enum LabParserError: LocalizedError {
             This report is too long for the on-device AI to read at once. \
             Try importing fewer pages, or one report at a time.
             """)
-        case .contentBlocked:
+        case .contentBlocked, .generationFailed:
             return String(localized: """
             The on-device AI couldn't process this document. \
             Make sure it's a lab report and try again.
             """)
-        case .generationFailed(let detail):
-            return detail
+        }
+    }
+
+    /// Why the system model can't be used right now, or nil when it's available.
+    /// (Ineligible hardware never gets here: the app shows "Device Not Supported".)
+    init?(_ availability: SystemLanguageModel.Availability) {
+        switch availability {
+        case .available:
+            return nil
+        case .unavailable(.appleIntelligenceNotEnabled):
+            self = .appleIntelligenceOff
+        case .unavailable:
+            self = .modelNotReady
         }
     }
 
@@ -104,10 +143,14 @@ enum LabParserError: LocalizedError {
             self = .unsupportedLanguageOrLocale
         case .exceededContextWindowSize:
             self = .documentTooLong
-        case .guardrailViolation:
+        case .guardrailViolation, .refusal:
             self = .contentBlocked
+        case .assetsUnavailable:
+            self = .modelNotReady
+        case .rateLimited, .concurrentRequests:
+            self = .busy
         default:
-            self = .generationFailed(generationError.localizedDescription)
+            self = .generationFailed
         }
     }
 }
@@ -135,81 +178,25 @@ actor LabParserService {
         onProgress: (@Sendable (ParseProgress) -> Void)? = nil
     ) async throws -> ParseResult {
         let report = try await parseWithFoundationModels(text: text, onProgress: onProgress)
-        let entries = report.entries
-        let reportDate = parseDate(report.reportDate)
-        let patientName = report.patientName.isEmpty ? nil : report.patientName
-        let authorName = report.authorName.isEmpty ? nil : report.authorName
-
-        let values = entries.map { entry in
-            let normalizedValue = entry.rawValue
-                .trimmingCharacters(in: .whitespaces)
-                .replacingOccurrences(of: ",", with: ".")
-
-            let numericValue: Double? = entry.rawValue == "-" ? nil : Double(normalizedValue)
-
-            // Resolve the printed code to LOINC, the app's canonical identity.
-            let (code, suggested) = resolveLoinc(printed: entry.code, name: entry.name, language: report.reportLanguage)
-
-            return LabValue(
-                code: code,
-                name: LabMapping.displayName(for: code),
-                displayValue: entry.rawValue,
-                numericValue: numericValue,
-                unit: entry.unit,
-                isSuggestedCode: suggested
-            )
-        }
-
-        // A printed report can list the same test twice (e.g. a value and its
-        // recalculation), and two terse names can resolve to the same LOINC —
-        // keep a single entry per LOINC, the app's canonical identity.
-        return ParseResult(values: values.deduplicatedByLoinc(), reportDate: reportDate, patientName: patientName, authorName: authorName)
-    }
-
-    // Resolves a parsed entry to a LOINC code entirely from the bundled catalog.
-    // An already-valid LOINC code (pasted in or printed verbatim) is canonical and
-    // returned as-is; otherwise the AI's test name is matched against the catalog
-    // in the report's own language (with English as a fallback) and the top hit is
-    // returned as a *suggestion* the user confirms. Unresolved entries keep the
-    // printed text so they can be mapped manually in the review sheet.
-    private func resolveLoinc(printed: String, name: String, language: String) -> (code: String, suggested: Bool) {
-        let directory = LoincDirectory.shared
-        let trimmedPrinted = printed.trimmingCharacters(in: .whitespaces)
-        if directory.isKnownLoinc(trimmedPrinted) {
-            return (trimmedPrinted, false)
-        }
-        let resolvedLanguage = directory.resolvedLanguage(for: language)
-        for query in [name, printed] {
-            let trimmed = query.trimmingCharacters(in: .whitespaces)
-            guard !trimmed.isEmpty else { continue }
-            if let match = directory.search(trimmed, language: resolvedLanguage, limit: 1).first {
-                return (match.code, true)
-            }
-        }
-        return (printed, false)
+        // Number parsing, LOINC resolution (in the report's own language), date
+        // validation against the text and de-duplication are shared with Android so both apps turn
+        // the same model output into the same values (LabImporterCore.LabParsePipeline).
+        SharedCore.start()
+        let result = LabParsePipeline.shared.postProcess(report: report.shared, sourceText: text)
+        return ParseResult(
+            values: result.values.map(LabValue.init(shared:)),
+            reportDate: result.reportDate.map(Date.init(shared:)),
+            patientName: result.patientName,
+            authorName: result.authorName
+        )
     }
 
     // MARK: - Foundation Models path
 
     private static func makeSession() -> LanguageModelSession {
-        LanguageModelSession(
-            instructions: """
-            You are a medical lab report parser. Extract every lab test entry from the provided text.
-            Lab reports follow the pattern: CODE: value unit; CODE2: value2 unit2; ...
-            Preserve codes exactly as printed in `code`. For each entry, also give the test's standard name in the
-            report's own language (do NOT translate it) so it can be matched to a coding system in that language.
-            German practice software (e.g. PatMed) prints terse vendor mnemonics like KREA, MALB-U, MDRD, HB-A1C,
-            C-PEPT, GADAAK or TSH-0 — keep the mnemonic in `code`, but always expand it to its full standard
-            clinical name in `name`; never leave `name` as the raw mnemonic.
-            Do NOT emit specimen, material, or annotation labels as entries — a "value" of 'Serum', 'EDTA-Plasma',
-            'Vollblut' or a standalone method tag (e.g. 'JDF-E.') is not a measured test and must be skipped.
-            Detect the language of the report and return it as a BCP-47 code (e.g. 'de', 'en') in reportLanguage.
-            Use '-' as rawValue when the result is negative or not detected.
-            If you can see a report date or blood draw date, return it in yyyy-MM-dd format; otherwise return an empty string.
-            Extract the patient's full name if visible; otherwise return an empty string for patientName.
-            Extract the lab or doctor name if visible; otherwise return an empty string for authorName.
-            """
-        )
+        // The instructions are shared with Android's Gemini Nano path
+        // (LabImporterCore `LabParsePrompt`), so both platforms extract alike.
+        LanguageModelSession(instructions: LabParsePrompt.shared.instructions)
     }
 
     /// Consumes the prewarmed session if one is waiting, else creates a fresh
@@ -224,6 +211,11 @@ actor LabParserService {
         text: String,
         onProgress: (@Sendable (ParseProgress) -> Void)?
     ) async throws -> AILabReport {
+        // Say why the model can't be used (Apple Intelligence off, still
+        // downloading) instead of letting the session fail with an opaque error.
+        if let unavailable = LabParserError(SystemLanguageModel.default.availability) {
+            throw unavailable
+        }
         let session = takeSession()
 
         // Foundation Models detects the language of the *prompt* and refuses
@@ -234,13 +226,7 @@ actor LabParserService {
         // language is fully supported. Wrapping the report in a few sentences of
         // plain English gives the detector a reliable anchor without changing
         // what we ask it to extract (names stay in the report's own language).
-        let prompt = """
-        You are reading a laboratory test report. The report text below may be very short \
-        and consist mostly of abbreviated test codes, numbers and units. Read it carefully \
-        and extract every laboratory test value it contains. Here is the report text:
-
-        \(text)
-        """
+        let prompt = LabParsePrompt.shared.prompt(reportText: text)
 
         do {
             // Stream the structured response instead of awaiting it whole:
@@ -291,15 +277,5 @@ actor LabParserService {
             authorName: partial?.authorName ?? "",
             reportLanguage: partial?.reportLanguage ?? ""
         )
-    }
-
-    // MARK: - Date helpers
-
-    private func parseDate(_ string: String) -> Date? {
-        guard !string.isEmpty else { return nil }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        return formatter.date(from: string)
     }
 }
